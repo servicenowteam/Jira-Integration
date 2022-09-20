@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="DELETE">
+        <category>custom</category>
+        <client_script><![CDATA[function($window) {
+  /* widget controller */
+  var c = this;
+	
+	c.onGoBack = function() {
+		if ($window.history) {
+			$window.history.back();
+		} else {
+			$window.location.href = '/sp';
+		}
+	}
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.center {&#13;
+  align-items: center;&#13;
+  justify-content: center;&#13;
+  vertical-align: middle;&#13;
+  text-align: center;&#13;
+}&#13;
+&#13;
+.btn.btn-go-back {&#13;
+  border: none;&#13;
+  display: flex;&#13;
+  color: $sp-disabled-breadcrumb;&#13;
+  background-color: transparent;&#13;
+  -webkit-transition: all .3s ease-out;&#13;
+  -moz-transition: all .3s ease-out;&#13;
+  -ms-transition: all .3s ease-out;&#13;
+  transition: all .3s ease-out;&#13;
+}&#13;
+&#13;
+.btn.btn-go-back span.glyphicon {&#13;
+  top: 0px;&#13;
+  line-height: inherit;&#13;
+}&#13;
+&#13;
+.btn.btn-go-back:focus,&#13;
+.btn.btn-go-back:hover {&#13;
+  outline: none;&#13;
+  color: $brand-primary;&#13;
+  background-color: transparent;&#13;
+  box-shadow: transparent;&#13;
+  -webkit-transition: all .3s ease-out;&#13;
+  -moz-transition: all .3s ease-out;&#13;
+  -ms-transition: all .3s ease-out;&#13;
+  transition: all .3s ease-out;&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>go_back_button</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Go Back Button</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {  /* populate the 'data' object */  /* e.g., data.table = $sp.getValue('table'); */})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 14:27:43</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>56059bf3db5e0c10f25513296896199e</sys_id>
+        <sys_mod_count>19</sys_mod_count>
+        <sys_name>Go Back Button</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_56059bf3db5e0c10f25513296896199e</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 15:29:11</sys_updated_on>
+        <template><![CDATA[<!--<div class="d-flex center">
+	<button type="button" class="btn btn-default btn-lg btn-go-back" ng-click="c.onGoBack()">
+    <span class="glyphicon glyphicon-chevron-left"></span><span>Go back</span>
+  </button>
+</div>-->]]></template>
+    </sp_widget>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sp_widget_56059bf3db5e0c10f25513296896199e</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sp_widget"&gt;&lt;sp_widget action="INSERT_OR_UPDATE"&gt;&lt;category&gt;custom&lt;/category&gt;&lt;client_script&gt;&lt;![CDATA[function($window) {
+  /* widget controller */
+  var c = this;
+	
+	c.onGoBack = function() {
+		if ($window.history) {
+			$window.history.back();
+		} else {
+			$window.location.href = '/sp';
+		}
+	}
+}]]&gt;&lt;/client_script&gt;&lt;controller_as&gt;c&lt;/controller_as&gt;&lt;css&gt;.center {&amp;#13;
+  align-items: center;&amp;#13;
+  justify-content: center;&amp;#13;
+  vertical-align: middle;&amp;#13;
+  text-align: center;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.btn.btn-go-back {&amp;#13;
+  border: none;&amp;#13;
+  display: flex;&amp;#13;
+  color: $sp-disabled-breadcrumb;&amp;#13;
+  background-color: transparent;&amp;#13;
+  -webkit-transition: all .3s ease-out;&amp;#13;
+  -moz-transition: all .3s ease-out;&amp;#13;
+  -ms-transition: all .3s ease-out;&amp;#13;
+  transition: all .3s ease-out;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.btn.btn-go-back span.glyphicon {&amp;#13;
+  top: 0px;&amp;#13;
+  line-height: inherit;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.btn.btn-go-back:focus,&amp;#13;
+.btn.btn-go-back:hover {&amp;#13;
+  outline: none;&amp;#13;
+  color: $brand-primary;&amp;#13;
+  background-color: transparent;&amp;#13;
+  box-shadow: transparent;&amp;#13;
+  -webkit-transition: all .3s ease-out;&amp;#13;
+  -moz-transition: all .3s ease-out;&amp;#13;
+  -ms-transition: all .3s ease-out;&amp;#13;
+  transition: all .3s ease-out;&amp;#13;
+}&lt;/css&gt;&lt;data_table&gt;sp_instance&lt;/data_table&gt;&lt;demo_data/&gt;&lt;description/&gt;&lt;docs/&gt;&lt;field_list/&gt;&lt;has_preview&gt;false&lt;/has_preview&gt;&lt;id&gt;go_back_button&lt;/id&gt;&lt;internal&gt;false&lt;/internal&gt;&lt;link&gt;&lt;![CDATA[function link(scope, element, attrs, controller) {  }]]&gt;&lt;/link&gt;&lt;name&gt;Go Back Button&lt;/name&gt;&lt;option_schema/&gt;&lt;public&gt;false&lt;/public&gt;&lt;roles/&gt;&lt;script&gt;&lt;![CDATA[(function() {  /* populate the 'data' object */  /* e.g., data.table = $sp.getValue('table'); */})();]]&gt;&lt;/script&gt;&lt;servicenow&gt;false&lt;/servicenow&gt;&lt;sys_class_name&gt;sp_widget&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg@movement.com&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-01-19 14:27:43&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;56059bf3db5e0c10f25513296896199e&lt;/sys_id&gt;&lt;sys_mod_count&gt;19&lt;/sys_mod_count&gt;&lt;sys_name&gt;Go Back Button&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sp_widget_56059bf3db5e0c10f25513296896199e&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg@movement.com&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-01-19 15:29:11&lt;/sys_updated_on&gt;&lt;template&gt;&lt;![CDATA[&lt;!--&lt;div class="d-flex center"&gt;
+	&lt;button type="button" class="btn btn-default btn-lg btn-go-back" ng-click="c.onGoBack()"&gt;
+    &lt;span class="glyphicon glyphicon-chevron-left"&gt;&lt;/span&gt;&lt;span&gt;Go back&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/div&gt;--&gt;]]&gt;&lt;/template&gt;&lt;/sp_widget&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>1609498033</payload_hash>
+        <record_name>Go Back Button</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 15:29:11</sys_created_on>
+        <sys_id>3e13ebb7db9e0c10f2551329689619ca</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fbe6c13ac0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 15:29:11</sys_updated_on>
+        <type>Widget</type>
+        <update_guid>f213ebb7f29e0c1024e3c5798adaafca</update_guid>
+        <update_guid_history>f213ebb7f29e0c1024e3c5798adaafca:1609498033,363adfbb345e0c10ca2c65dbc63cca11:171625144,e31a9fbb4e5e0c10410398047966465e:-89227559,3b0a1fbbb65e0c109c4528ade6d03eb9:-1568494782,83f95bbb1d5e0c103c39f2d4cb83979f:-1999684220,22d95bbbff5e0c109f7a12de5e3b4aa5:-2141026643,59f8d77b705e0c10a7bbde93bf076e85:211860703,b198137bfc5e0c10a5896ede61893017:-1645678492,f6889b3b165e0c108d203e1d790d4339:-1430789619,7b48133b925e0c10c485b441cbff12f7:2131625675,b818173b5c5e0c10ac36badbdce0676e:101963228,ce0857b7d25e0c104c8d4cb119258ce8:1996292807,f38713f7bf5e0c10991e17faea8c826c:-1180543769,f6875bf7d25e0c10b1aac4f174708eb0:28529863,15a657b77f5e0c100ce11dc398c9fa95:750973926,909613b7755e0c10d46a8c609b5afdcd:1426633984,906613b7325e0c104e128ac0f8ed9f18:-922230465,16061b77ea5e0c10294508ed540b0b87:338754035,1df59f37045e0c104a765124f480a600:1621661824,62055737e95e0c1044c00d62b4ac4251:1122667185</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">d98cebf3dbde0c10f25513296896190e</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 16:10:19</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sp_widget">sp_widget</sys_db_object>
+        <sys_id>7740dbdcc2354c0282ee80f636327589</sys_id>
+        <sys_metadata>56059bf3db5e0c10f25513296896199e</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Go Back Button</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sp_widget_56059bf3db5e0c10f25513296896199e</sys_update_name>
+        <sys_update_version display_value="sp_widget_56059bf3db5e0c10f25513296896199e">3e13ebb7db9e0c10f2551329689619ca</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 16:10:19</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

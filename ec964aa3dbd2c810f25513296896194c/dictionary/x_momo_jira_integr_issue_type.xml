@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Issue Type" max_length="40" name="x_momo_jira_integr_issue_type" sizeclass="223" type="collection">
+        <element label="Description" max_length="4000" name="description" type="string"/>
+        <element label="External ID" max_length="40" name="external_id" read_only="true" type="string"/>
+        <element label="Icon" max_length="1024" name="icon" read_only="true" type="url"/>
+        <element label="Name" max_length="100" name="name" type="string"/>
+        <element attributes="ignore_filter_on_new=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" read_only="true" type="string"/>
+        <element label="Project" max_length="32" name="project" read_only="true" reference="x_momo_jira_integr_project" type="reference"/>
+        <index name="index">
+            <element name="project"/>
+        </index>
+    </element>
+</database>

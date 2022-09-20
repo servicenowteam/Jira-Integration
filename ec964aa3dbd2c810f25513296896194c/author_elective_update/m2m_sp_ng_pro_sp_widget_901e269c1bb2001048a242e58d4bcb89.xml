@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_ng_pro_sp_widget">
+    <m2m_sp_ng_pro_sp_widget action="DELETE">
+        <sp_angular_provider display_value="spEpiceditor">ab181a505b1112000d7ec7ad31f91ac0</sp_angular_provider>
+        <sp_widget display_value="Jira Issue Form">d4366904db7a4090f255132968961901</sp_widget>
+        <sys_class_name>m2m_sp_ng_pro_sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-02 11:10:06</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>901e269c1bb2001048a242e58d4bcb89</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>spEpiceditor.Jira Issue Form</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>m2m_sp_ng_pro_sp_widget_901e269c1bb2001048a242e58d4bcb89</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-02 11:10:06</sys_updated_on>
+    </m2m_sp_ng_pro_sp_widget>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>m2m_sp_ng_pro_sp_widget_901e269c1bb2001048a242e58d4bcb89</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_ng_pro_sp_widget"><m2m_sp_ng_pro_sp_widget action="INSERT_OR_UPDATE"><sp_angular_provider display_value="spEpiceditor">ab181a505b1112000d7ec7ad31f91ac0</sp_angular_provider><sp_widget display_value="Jira Issue Form">d4366904db7a4090f255132968961901</sp_widget><sys_class_name>m2m_sp_ng_pro_sp_widget</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-02-02 11:10:06</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>901e269c1bb2001048a242e58d4bcb89</sys_id><sys_mod_count>0</sys_mod_count><sys_name>spEpiceditor.Jira Issue Form</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>m2m_sp_ng_pro_sp_widget_901e269c1bb2001048a242e58d4bcb89</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-02-02 11:10:06</sys_updated_on></m2m_sp_ng_pro_sp_widget></record_update>]]></payload>
+        <payload_hash>258206724</payload_hash>
+        <record_name>spEpiceditor.Jira Issue Form</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-02 11:10:06</sys_created_on>
+        <sys_id>d01e269c1bb2001048a242e58d4bcb8c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1700597e8dd0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-02 11:10:06</sys_updated_on>
+        <type>Angular Providers</type>
+        <update_guid>d81e269ce3b20010c99fa9785753208b</update_guid>
+        <update_guid_history>d81e269ce3b20010c99fa9785753208b:258206724</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">c60fa6dc1bb2001048a242e58d4bcb06</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-02 11:14:19</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="m2m_sp_ng_pro_sp_widget">m2m_sp_ng_pro_sp_widget</sys_db_object>
+        <sys_id>3cef4826d0634f30914b388d2b0c0a10</sys_id>
+        <sys_metadata>901e269c1bb2001048a242e58d4bcb89</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>spEpiceditor.Jira Issue Form</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>m2m_sp_ng_pro_sp_widget_901e269c1bb2001048a242e58d4bcb89</sys_update_name>
+        <sys_update_version display_value="m2m_sp_ng_pro_sp_widget_901e269c1bb2001048a242e58d4bcb89">d01e269c1bb2001048a242e58d4bcb8c</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-02 11:14:19</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

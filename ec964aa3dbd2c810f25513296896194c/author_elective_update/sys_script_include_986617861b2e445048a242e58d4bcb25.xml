@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="DELETE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_momo_jira_integr.Jira</api_name>
+        <caller_access>2</caller_access>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>Jira</name>
+        <script><![CDATA[var Jira = Class.create();
+Jira.prototype = {
+  baseUrl: null,
+  initialize: function (applicationName, hostname, basePath) {
+    // Setting these so we can have some immutablity with
+    // the arguments;
+    var app = applicationName;
+    var host = hostname;
+    var base = basePath;
+
+    // defaults to the jira scoped app.
+    if (!app) {
+      app = 'x_momo_jira_integr';
+    }
+    
+    if (!host) {
+      host = gs.getProperty(app + '.instance_name');
+    }
+    if (!base) {
+      base = gs.getProperty(app + '.base_path');
+    }
+    // Double check to make sure that the configuration property is set
+    // if it is not throw an error.
+    if (!base || !host) {
+      var errorMsg = 'You are missing either your hostname or base rest url for your JIRA request.';
+      gs.error(errorMsg);
+      gs.addErrorMessage(errorMsg);
+      return;
+    }
+    this.baseUrl = host + '/' + base;
+  },
+  create: function(path, method, cb) {
+    var url = this.baseUrl + '/' + (path ? gs.urlEncode(path) : '');
+    var callback = function(error, response) {
+      return {
+        response: response,
+        error: error
+      };
+    };
+
+
+    if (!cb) return callback();
+  },
+  deserialize: function(body) {
+
+  },
+  type: 'Jira'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-26 14:20:25</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>986617861b2e445048a242e58d4bcb25</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>Jira</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_include_986617861b2e445048a242e58d4bcb25</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-26 14:36:10</sys_updated_on>
+    </sys_script_include>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_script_include_986617861b2e445048a242e58d4bcb25</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_script_include"&gt;&lt;sys_script_include action="INSERT_OR_UPDATE"&gt;&lt;access&gt;package_private&lt;/access&gt;&lt;active&gt;true&lt;/active&gt;&lt;api_name&gt;x_momo_jira_integr.Jira&lt;/api_name&gt;&lt;caller_access&gt;2&lt;/caller_access&gt;&lt;client_callable&gt;false&lt;/client_callable&gt;&lt;description/&gt;&lt;name&gt;Jira&lt;/name&gt;&lt;script&gt;&lt;![CDATA[var Jira = Class.create();
+Jira.prototype = {
+  baseUrl: null,
+  initialize: function (applicationName, hostname, basePath) {
+    // Setting these so we can have some immutablity with
+    // the arguments;
+    var app = applicationName;
+    var host = hostname;
+    var base = basePath;
+
+    // defaults to the jira scoped app.
+    if (!app) {
+      app = 'x_momo_jira_integr';
+    }
+    
+    if (!host) {
+      host = gs.getProperty(app + '.instance_name');
+    }
+    if (!base) {
+      base = gs.getProperty(app + '.base_path');
+    }
+    // Double check to make sure that the configuration property is set
+    // if it is not throw an error.
+    if (!base || !host) {
+      var errorMsg = 'You are missing either your hostname or base rest url for your JIRA request.';
+      gs.error(errorMsg);
+      gs.addErrorMessage(errorMsg);
+      return;
+    }
+    this.baseUrl = host + '/' + base;
+  },
+  create: function(path, method, cb) {
+    var url = this.baseUrl + '/' + (path ? gs.urlEncode(path) : '');
+    var callback = function(error, response) {
+      return {
+        response: response,
+        error: error
+      };
+    };
+
+
+    if (!cb) return callback();
+  },
+  deserialize: function(body) {
+
+  },
+  type: 'Jira'
+};]]&gt;&lt;/script&gt;&lt;sys_class_name&gt;sys_script_include&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-01-26 14:20:25&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;986617861b2e445048a242e58d4bcb25&lt;/sys_id&gt;&lt;sys_mod_count&gt;3&lt;/sys_mod_count&gt;&lt;sys_name&gt;Jira&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy&gt;read&lt;/sys_policy&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_script_include_986617861b2e445048a242e58d4bcb25&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg@movement.com&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-01-26 14:36:10&lt;/sys_updated_on&gt;&lt;/sys_script_include&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>117683415</payload_hash>
+        <record_name>Jira</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-26 14:36:10</sys_created_on>
+        <sys_id>d61adf4a1b2e445048a242e58d4bcb05</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fe2480ce30000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-26 14:36:10</sys_updated_on>
+        <type>Script Include</type>
+        <update_guid>9e1adf4a732e44503ada7178c97d8704</update_guid>
+        <update_guid_history>9e1adf4a732e44503ada7178c97d8704:117683415,fa999f4af72e4450db6fe13c06cd2cfb:32486417,90991f4a882e4450f9c74db27e4eaea0:172375672,3f769786132e44500c181875cf520763:919013918</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-26 15:12:10</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_script_include">sys_script_include</sys_db_object>
+        <sys_id>1f8f9713f3d040a889c89bee88803610</sys_id>
+        <sys_metadata>986617861b2e445048a242e58d4bcb25</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Jira</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_script_include_986617861b2e445048a242e58d4bcb25</sys_update_name>
+        <sys_update_version display_value="sys_script_include_986617861b2e445048a242e58d4bcb25">d61adf4a1b2e445048a242e58d4bcb05</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-26 15:12:10</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

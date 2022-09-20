@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_section caption="" section_id="91d22920db8b8450f25513296896193e" sys_domain="global" table="x_momo_jira_integr_jira_fields" version="3" view="">
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>number</element>
+            <position>0</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>d0440486db674010f255132968961932</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>sys_created_by</element>
+            <position>1</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>5c440486db674010f255132968961932</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>sys_created_on</element>
+            <position>2</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>d0440486db674010f255132968961933</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.split</element>
+            <position>3</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>58440486db674010f255132968961933</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type>.split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>sys_updated_on</element>
+            <position>4</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>dc440486db674010f255132968961933</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>sys_updated_by</element>
+            <position>5</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>54440486db674010f255132968961934</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.end_split</element>
+            <position>6</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>d8440486db674010f255132968961934</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type>.end_split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>field_name</element>
+            <position>7</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>50440486db674010f255132968961935</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>field_id</element>
+            <position>8</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>d4440486db674010f255132968961935</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>issue_field</element>
+            <position>9</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>5c440486db674010f255132968961935</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>active</element>
+            <position>10</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>d0440486db674010f255132968961936</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>change_template_field</element>
+            <position>11</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>58440486db674010f255132968961936</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>sys_mod_count</element>
+            <position>12</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>dc440486db674010f255132968961936</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>webhook_change_property</element>
+            <position>13</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>54440486db674010f255132968961937</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>system_label</element>
+            <position>14</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>d8440486db674010f255132968961937</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>custom</element>
+            <position>15</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>50440486db674010f255132968961938</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>schema_type</element>
+            <position>16</position>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-03-15 16:04:40</sys_created_on>
+            <sys_id>d4440486db674010f255132968961938</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_jira_fields" sys_domain="global" view="Default view">91d22920db8b8450f25513296896193e</sys_ui_section>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-03-15 16:04:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_section action="INSERT_OR_UPDATE">
+            <caption/>
+            <header>false</header>
+            <name>x_momo_jira_integr_jira_fields</name>
+            <roles/>
+            <sys_class_name>sys_ui_section</sys_class_name>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-02-15 10:35:36</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>91d22920db8b8450f25513296896193e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_momo_jira_integr_jira_fields</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+            <sys_update_name>sys_ui_section_91d22920db8b8450f25513296896193e</sys_update_name>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-02-15 10:35:36</sys_updated_on>
+            <sys_user/>
+            <title>true</title>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_section>
+    </sys_ui_section>
+</record_update>

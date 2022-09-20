@@ -1,0 +1,903 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function jiraIssueForm($scope, spModal, $window, spUtil, $rootScope, jiraMarkdown, $timeout, $sce) {
+  /* widget controller */
+  var c = this;
+  $scope.record = $scope.data.record;
+
+  $scope.isEditingShortDescription = false;
+  $scope.isEditingDescription = false;
+  $scope.modalIsOpen = false;
+  $scope.widgets = $scope.data.widgets;
+  $scope.linkedIssuesSelected = [];
+  $scope.j2m = jiraMarkdown;
+  $scope.changeFields = {};
+  $scope.data.delete_change_request = false;
+  $scope.showActivityInput = true;
+  $scope.isLoadingSaveBtn = false;
+
+  $scope.trustAsHtml = function (html) {
+    return $sce.trustAsHtml(html);
+  };
+
+  spUtil.recordWatch($scope, $scope.data.table, 'sys_id=' + $scope.data.sys_id + '^active=true', function (response) {
+    var data = response.data;
+    if (data.changes.includes('active')) {
+      $scope.server.update().then(function (res) {
+        $scope.widgets.activity_input = res.widgets.activity_input;
+      });
+    }
+  });
+
+  $rootScope.$on('jira.activity.changed', function (e, activity) {
+    $scope.showActivityInput = activity.showInputField;
+  });
+
+  $rootScope.$on('jira.change-request.updated', function (e, change) {
+    $scope.changeFields[change.id] = change.model;
+  });
+
+  $rootScope.$on('editor.description.content-change', function (e, payload) {
+    $scope.description = payload;
+  });
+
+  c.editorSubmit = function (action) {
+    if (action === 'cancel') {
+      $scope.record.description = $scope.prev_description || $scope.data.record.description;
+      $scope.isEditingDescription = false;
+    } else if (action === 'save') {
+      $scope.isLoadingSaveBtn = true;
+      $scope.data.update = {
+        field: 'description',
+        value: $scope.record.description
+      };
+
+      $scope.server.update().then(function (data) {
+        $scope.record = data.record;
+        $scope.isLoadingSaveBtn = false;
+        $scope.isEditingDescription = false;
+      });
+    }
+
+  };
+
+
+  $rootScope.$on('jira.issue.updated', function (e, update) {
+    if (typeof update !== 'object') return;
+    if (!update.hasOwnProperty('field') && !update.hasOwnProperty('value')) return;
+
+    if (update.field === 'description') return;
+    $scope.data.update = update;
+    $scope.server.update().then(function (data) {
+      $scope.record = data.record;
+    });
+  });
+
+  $rootScope.$on('jira.issue.approved', function (e, update) {
+    $scope.data.update = update;
+    $scope.server.update().then(function (data) {
+      $timeout(function () {
+        $window.location.href = $window.location.href.replace('&source=email', '');
+      }, 600);
+    });
+  });
+
+  $scope.enableEditMode = function (model) {
+    if (!$scope.data.canWrite) return;
+    $scope[model] = true;
+    if (model === 'isEditingDescription') {
+      $scope.prev_description = $scope.record.description;
+    }
+  };
+
+  $scope.disableEditing = function (model, field) {
+    if (field !== 'description') {
+      $scope[model] = false;
+    }
+
+
+    if (field == 'description' && $scope.record[field]) {
+      $scope.record[field] = $scope.j2m.toJira($scope.record[field]);
+    }
+    if (field !== 'description') {
+      $scope.$emit('jira.issue.updated', {
+        field: field,
+        value: $scope.record[field]
+      });
+    }
+
+  };
+
+  $rootScope.$on('jira.linked-issues.updated', function (e, selection) {
+    $scope.linkedIssuesSelected = selection;
+  });
+
+  $rootScope.$on('jira.transition.updated', function (e, field) {
+    $scope.oldStatusSysId = field.oldValue;
+    $scope.stageStatus = field.newValue;
+    if (field.isStatusDone && $scope.data.enabled_change_requests) {
+      $scope.data.change_request = true;
+      $scope.server.update().then(function (data) {
+        $scope.modalType = 'change-request';
+        $scope.changeFields.description = $scope.j2m.toPlainText(data.record.description);
+        $scope.changeFields.short_description = data.record.short_description;
+        openModal({
+          widget: 'jira-change-request-modal',
+          widgetInput: data.change_widget,
+          shared: data.change_widget,
+          size: 'lg',
+          buttons: [{
+            label: 'Cancel',
+            cancel: true
+          }, {
+            label: 'Submit',
+            primary: true
+          }]
+        });
+      });
+    } else if (field.isStatusDone) {
+      $scope.data.change_request = true;
+      $scope.data.status = field.newValue;
+      $scope.server.update().then(function (response) {
+        $scope.data.status = undefined;
+        $scope.data.change_request = false;
+      });
+    } else {
+      $scope.data.isComplete = !!field.isStatusDone;
+      $scope.data.status = field.newValue;
+      $scope.server.update().then(function (change) {
+        $scope.data.change_request = false;
+        $scope.data.isComplete = undefined;
+        $scope.data.status = undefined;
+      });
+    }
+  });
+
+  $rootScope.$on('jira.watch-list.clicked', function (e, widget) {
+    $scope.modalType = 'watch-list';
+    var options = {
+      title: 'Edit Watch List',
+      widget: widget.id,
+      shared: {
+        watch_list: widget.shared
+      },
+      widgetInput: widget.input,
+      buttons: [{
+        label: 'Done',
+        primary: true
+      }]
+    };
+    openModal(options);
+  });
+
+  $rootScope.$on('jira.linked-issue.clicked', function (e, widget) {
+    var title = 'Link an issue to ' + $scope.record.key;
+    $scope.modalType = 'linked-issues';
+    var options = {
+      title: title,
+      widget: widget.id,
+      shared: {
+        table: $scope.data.table,
+        sys_id: $scope.data.sys_id
+      },
+      widgetInput: widget.input || {
+        table: $scope.data.table,
+        sys_id: $scope.data.sys_id
+      },
+      buttons: widget.buttons,
+      size: 'lg'
+    };
+    openModal(options);
+  });
+
+  function openModal(options) {
+    $scope.modalIsOpen = true;
+    spModal.open(options).then(function (response, e) {
+
+      if ($scope.modalType == 'linked-issues' && response.primary && $scope.linkedIssuesSelected) {
+        if (Array.isArray($scope.linkedIssuesSelected)) {
+          $scope.data.linkedIssues = $scope.linkedIssuesSelected;
+          $scope.server.update().then(function (data) {
+            $scope.modalIsOpen = false;
+          });
+        } else {
+          $scope.modalIsOpen = false;
+        }
+      } else if ($scope.modalType == 'change-request') {
+        var fields = $scope.data.change_widget.fields;
+        var keys = Object.keys($scope.changeFields).filter(function (k) {
+          return k !== 'description' && k !== 'short_description' && k !== 'type';
+        });
+        var hasAllRequiredFields = fields.filter(function (f) {
+          return keys.includes(f.id);
+        });
+        if (keys.length === hasAllRequiredFields.length) {
+          $scope.data.change_request_meta = $scope.changeFields;
+          $scope.data.status = $scope.stageStatus;
+          $scope.server.update().then(function (data) {
+            $scope.stageStatus = null;
+            $scope.changeFields = {};
+            $scope.modalType = undefined;
+            $scope.isScrolling = false;
+            $scope.widgets = $scope.data.widgets;
+            $timeout(function () {
+              $window.location.href = '?id=application_development_requests';
+            }, 500);
+          });
+        } else if ($scope.changeFields.type === 'None') {
+          $scope.data.change_request_meta = $scope.changeFields;
+          $scope.data.status = $scope.stageStatus;
+          $scope.server.update().then(function (data) {
+            $scope.stageStatus = null;
+            $scope.changeFields = {};
+            $scope.modalType = undefined;
+            $scope.isScrolling = false;
+            $timeout(function () {
+              $window.location.href = '?id=application_development_requests';
+            }, 500);
+          });
+        }
+      }
+      $scope.isScrolling = false;
+      $scope.modalType = undefined;
+    }, function (r) {
+      if ($scope.modalType == 'change-request') {
+        $scope.data.change_request = false;
+        $scope.data.delete_change_request = true;
+        $scope.data.status = $scope.oldStatusSysId;
+        $scope.server.update();
+      }
+      $scope.changeFields = {};
+      $scope.isScrolling = false;
+      $scope.modalType = undefined;
+      $scope.modalIsOpen = false;
+      $scope.linkedIssues = [];
+    });
+  }
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>$table-border-width: 1px;&#13;
+$spacer: 1px;&#13;
+&#13;
+.show-border {&#13;
+  border: 1px solid transparent;&#13;
+  padding: 5px;&#13;
+&#13;
+  &amp;:hover {&#13;
+    border: 1px dashed #fff;&#13;
+    transition: 0.2s;&#13;
+  }&#13;
+}&#13;
+&#13;
+.description-no-text {&#13;
+  color: rgb(107, 119, 140);&#13;
+  ;&#13;
+}&#13;
+&#13;
+.panel-footer {&#13;
+  position: sticky;&#13;
+  z-index: 1039;&#13;
+  bottom: 0;&#13;
+  padding-top: 0px;&#13;
+  background: #fff;&#13;
+}&#13;
+&#13;
+.inline-title {&#13;
+  vertical-align: middle;&#13;
+}&#13;
+&#13;
+.title-container {&#13;
+  line-height: 1;&#13;
+}&#13;
+&#13;
+.inline-img {&#13;
+  display: inline;&#13;
+  max-height: 30px;&#13;
+  max-width: 30px;&#13;
+}&#13;
+&#13;
+.panel-primary {&#13;
+  border: none;&#13;
+}&#13;
+&#13;
+.jira-title-key {&#13;
+  padding-bottom: 5px;&#13;
+}&#13;
+&#13;
+.padding-l-none {&#13;
+  padding-left: 0px;&#13;
+}&#13;
+&#13;
+.padding-r-none {&#13;
+  padding-right: 0px;&#13;
+}&#13;
+&#13;
+.padding-l {&#13;
+  padding-left: 15px;&#13;
+}&#13;
+&#13;
+.padding-r {&#13;
+  padding-right: 15px;&#13;
+}&#13;
+&#13;
+input.form-control:focus {&#13;
+  border-color: $brand-primary;&#13;
+  outline: 5px auto $brand-primary;&#13;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.15), 0 0 8px rgba(233, 102, 130, 0.2);&#13;
+  transition: all 0.2s ease-in-out;&#13;
+}&#13;
+&#13;
+.description-box {&#13;
+  border: 1px solid transparent;&#13;
+  padding: 5px;&#13;
+  word-break: break-word;&#13;
+  transition: all 0.2s ease-in-out;&#13;
+&#13;
+  &amp;:not(.disabled):hover {&#13;
+    border: 1px dashed #ccc;&#13;
+    padding: 5px;&#13;
+    transition: all 0.2s ease-in-out;&#13;
+  }&#13;
+&#13;
+  &amp;.disabled {&#13;
+    background: #eee;&#13;
+    cursor: not-allowed;&#13;
+  }&#13;
+&#13;
+  p {&#13;
+    margin: 0 0 5px;&#13;
+  }&#13;
+&#13;
+  ol,&#13;
+  ul,&#13;
+  dl {&#13;
+    padding-left: 24px;&#13;
+    margin-bottom: 0px;&#13;
+    line-height: 1.2;&#13;
+&#13;
+    li {&#13;
+&#13;
+      ul:first-child,&#13;
+      dl:first-child,&#13;
+      ol:first-child {&#13;
+        margin-bottom: 0px;&#13;
+        padding-bottom: 0px;&#13;
+      }&#13;
+    }&#13;
+  }&#13;
+&#13;
+  .panel {&#13;
+    margin-bottom: 0px;&#13;
+    box-shadow: none;&#13;
+    padding: 3px;&#13;
+  }&#13;
+&#13;
+  hr {&#13;
+    margin: 0px;&#13;
+  }&#13;
+&#13;
+&#13;
+  table {&#13;
+    width: 100%;&#13;
+    max-width: 100%;&#13;
+    margin-bottom: $spacer;&#13;
+    background-color: $table-bg; // Reset for nesting within parents with `background-color`.&#13;
+    border: $table-border-width solid $table-border-color;&#13;
+&#13;
+    thead {&#13;
+      background-color: $body-bg;&#13;
+    }&#13;
+&#13;
+    tbody tr:first-child td {&#13;
+      border-top: none;&#13;
+    }&#13;
+&#13;
+&#13;
+&#13;
+    td:nth-child(odd) {&#13;
+      border-right: $table-border-width solid $table-border-color;&#13;
+      border-left: $table-border-width solid $table-border-color;&#13;
+    }&#13;
+&#13;
+    th:nth-child(odd) {&#13;
+      border-right: $table-border-width solid $table-border-color;&#13;
+      border-left: $table-border-width solid $table-border-color;&#13;
+    }&#13;
+&#13;
+    thead,&#13;
+    th,&#13;
+    td {&#13;
+      padding: $table-cell-padding;&#13;
+      vertical-align: top;&#13;
+      border-top: $table-border-width solid $table-border-color;&#13;
+    }&#13;
+&#13;
+&#13;
+    thead th {&#13;
+      vertical-align: bottom;&#13;
+      border-bottom: $table-border-width solid $table-border-color;&#13;
+    }&#13;
+&#13;
+    tbody+tbody {&#13;
+      border-top: (2 * $table-border-width) solid $table-border-color;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+.attachment-container {&#13;
+  overflow-x: hidden;&#13;
+}&#13;
+&#13;
+.read-more-link {&#13;
+  text-align: center;&#13;
+  transition: .4s;&#13;
+  background: transparent;&#13;
+&#13;
+  border-radius: 6px;&#13;
+  position: relative;&#13;
+  border: 1px solid transparent;&#13;
+  padding: 10px 10px 0px 10px;&#13;
+&#13;
+&#13;
+  &amp;:hover {&#13;
+    background-color: rgba(255, 255, 255, 0.5);&#13;
+    transition: .4s;&#13;
+  }&#13;
+&#13;
+  &amp;.move-read-less {&#13;
+    bottom: 100%;&#13;
+    left: 45%;&#13;
+    padding: 10px;&#13;
+    position: absolute;&#13;
+    transition: .4s;&#13;
+  }&#13;
+}&#13;
+&#13;
+@media screen and (max-width:600px) {&#13;
+  .read-more-link {&#13;
+    &amp;.move-read-less {&#13;
+      position: relative;&#13;
+      left: 0;&#13;
+      bottom: 0;&#13;
+      padding: 10px 10px 0px 10px;&#13;
+    }&#13;
+  }&#13;
+&#13;
+  .show-border {&#13;
+    border: 1px solid transparent;&#13;
+&#13;
+    &amp;:hover {&#13;
+      border: 1px solid transparent;&#13;
+      transition: 0.2s;&#13;
+    }&#13;
+  }&#13;
+&#13;
+  .margin-xs-only {&#13;
+    margin-bottom: 5px;&#13;
+    margin-top: 5px;&#13;
+  }&#13;
+&#13;
+  .description-box {&#13;
+    border: 1px solid transparent;&#13;
+    padding: 5px;&#13;
+    white-space: pre-wrap;&#13;
+    word-break: break-all;&#13;
+    transition: all 0.2s ease-in-out;&#13;
+&#13;
+    &amp;:hover {&#13;
+      border: 1px solid transparent;&#13;
+      padding: 5px;&#13;
+      transition: all 0.2s ease-in-out;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+&#13;
+.read-more-dots {&#13;
+  text-align: center;&#13;
+  display: none;&#13;
+}&#13;
+&#13;
+.confluenceTable {&#13;
+  border-collapse: collapse;&#13;
+  margin: 5px 0 5px 2px;&#13;
+  width: 100%;&#13;
+}&#13;
+&#13;
+.confluenceTd {&#13;
+  border: 1px solid #ccc;&#13;
+  padding: 3px 4px&#13;
+}&#13;
+&#13;
+.confluenceTh {&#13;
+  border: 1px solid #ccc;&#13;
+  background: #f5f5f5;&#13;
+  padding: 3px 4px;&#13;
+  text-align: center&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira_issue_form</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Jira Issue Form</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.table = options.table || $sp.getParameter('table');
+  data.sys_id = options.sys_id || $sp.getParameter('sys_id');
+  data.action = options.action || $sp.getParameter('action');
+
+  data.widgets = {};
+  data.enabled_change_requests = gs.getProperty('x_momo_jira_integr.change_request') == "true";
+  try {
+    data.action = parseInt(data.action);
+  } catch (e) {}
+  data.canViewJiraIssue = gs.hasRole('x_momo_jira_integr.issue_tech');
+  data.jiraInstance = gs.getProperty('x_momo_jira_integr.instance_name');
+  var gr = $sp.getRecord();
+  if (gr && data.action != 1) {
+    data.canRead = gr.canRead();
+    data.canWrite = gr.canWrite() && gr.getValue('active') == true;
+  } else if (data.action == 1) {
+    data.canWrite = gs.hasRole('x_momo_jira_integr.issue_user');
+    data.canRead = gs.hasRole('x_momo_jira_integr.issue_user');
+  } else {
+    data.canRead = false;
+    data.canWrite = false;
+  }
+
+
+
+  if (!gr.isNewRecord() && gr.isValid()) {
+    if ($sp.getParameter('source') == 'email' && gr.getValue('approval') == 'approved' && gs.hasRole('x_momo_jira_integr.issue_tech')) {
+      gs.addInfoMessage('Request, ' + gr.getValue('external_key') + ', has already been approved.');
+    }
+    data.record = {
+      sys_id: gr.getUniqueValue(),
+      request_implementation_date: gr.getValue('request_implementation_date'),
+      short_description: gr.getValue('short_description'),
+      description: gr.getValue('description'),
+      key: gr.getValue('external_key'),
+      request_type: {
+        name: gr.issue_type.name.toString(),
+        icon: gr.issue_type.icon.toString()
+      }
+    };
+    if (input) {
+      if (input.linkedIssues === '') {
+        gr.setValue('linked_issues', "");
+        gr.update();
+      } else if (input.linkedIssues) {
+        gr.setValue('linked_issues', input.linkedIssues);
+        gr.update();
+      }
+
+
+      if (!data.enabled_change_requests && input.change_request) {
+        gr.status = input.status;
+        gr.setValue('active', false);
+        gr.update();
+        data.canWrite = false;
+      } else if (input.status) {
+        gr.status = input.status;
+        if (data.isComplete) {
+          gr.active = data.isComplete;
+        }
+        gr.update();
+      }
+
+
+
+      if (input.change_request && data.enabled_change_requests) {
+        data.change_widget = {
+          fields: [{
+            id: 'start_date',
+            uniqueId: GlideSecureRandomUtil.getSecureRandomString(12),
+            name: 'Planned Started Date',
+            placeholder: 'Planned Start Date',
+            type: 'datetime',
+            model: gr.request_implementation_date.nil() ? null : gr.getValue('requested_implementation_date')
+          }, {
+            id: 'end_date',
+            uniqueId: GlideSecureRandomUtil.getSecureRandomString(6),
+            name: 'Planned End Date',
+            placeholder: 'Planned End Date',
+            type: 'datetime',
+            isHidden: true,
+            model: null
+          }, {
+            id: 'justification',
+            uniqueId: GlideSecureRandomUtil.getSecureRandomString(6),
+            name: 'Justification',
+            model: gr.getValue('justification'),
+            placeholder: 'What is the justification for this project?',
+            type: 'textarea',
+            rows: 4
+          }, {
+            name: 'Implementation Plan',
+            uniqueId: GlideSecureRandomUtil.getSecureRandomString(6),
+            id: 'implementation_plan',
+            type: 'textarea',
+            rows: 4,
+            model: gr.getValue('implementation_plan')
+          }, {
+            name: 'Risks and Impacted Systems',
+            uniqueId: GlideSecureRandomUtil.getSecureRandomString(6),
+            id: 'risk_impact_analysis',
+            type: 'textarea',
+            rows: 4,
+            model: gr.getValue('risks_and_impact')
+          }, {
+            name: 'Backout Plan',
+            uniqueId: GlideSecureRandomUtil.getSecureRandomString(6),
+            id: 'backout_plan',
+            type: 'textarea',
+            rows: 4,
+            model: gr.getValue('backout_plan')
+          }, {
+            name: 'Test Plan',
+            uniqueId: GlideSecureRandomUtil.getSecureRandomString(6),
+            id: 'test_plan',
+            type: 'textarea',
+            rows: 4,
+            model: gr.getValue('test_plan')
+          }, {
+            name: 'Communication Plan',
+            uniqueId: GlideSecureRandomUtil.getSecureRandomString(6),
+            id: 'communication_plan',
+            type: 'textarea',
+            rows: 4,
+            model: gr.getValue('communication_plan')
+          }]
+        };
+      }
+      if (input.delete_change_request && data.enabled_change_requests) {
+        gs.addErrorMessage('Your jira issue status was not changed. Please fill out the required form before marking this issue as done.');
+        gr.status = input.status;
+        gr.update();
+        data.delete_change_request = false;
+      }
+      if (input.change_request_meta && data.enabled_change_requests) {
+        try {
+          if (input.change_request_meta.type !== 'None') {
+            var cKeys = Object.keys(input.change_request_meta);
+            for (var i in cKeys) {
+              if (cKeys[i] !== 'description') {
+                gr.setValue([cKeys[i]], input.change_request_meta[cKeys[i]]);
+              }
+            }
+            gr.status = input.status;
+            gr.active = false;
+            gs.addInfoMessage('You\'re request has been sent to CAB. We will update you once we have everything approved!');
+          } else {
+            gr.active = false;
+            gr.status = input.status;
+            gr.cab_type = 'none';
+            gs.addInfoMessage('You\'re request has been resolved!');
+          }
+          gr.update();
+          data.delete_change_request = false;
+          data.change_request = null;
+          data.change_request_meta = undefined;
+          data.change_widget = {};
+
+        } catch (e) {}
+
+      }
+
+
+      if (input.update) {
+
+        gr.setValue(input.update.field, input.update.value);
+        if (input.update.field == 'approval') {
+          gr.work_notes = 'Approved by ' + gs.getUserDisplayName();
+        }
+        gr.update();
+        data.record = {
+          short_description: gr.getValue('short_description'),
+          description: gr.getValue('description'),
+          key: gr.getValue('external_key'),
+          request_type: {
+            name: gr.issue_type.name.toString(),
+            icon: gr.issue_type.icon.toString()
+          }
+        };
+      }
+    }
+
+    if (gr.getValue('approval') == 'approved') {
+      var issue_links = gr.getValue('linked_issues');
+      if (issue_links !== '' && typeof issue_links === 'string') {
+        if (/,/gi.test(issue_links)) {
+          issue_links = issue_links.split(',');
+        } else {
+          issue_links = [issue_links];
+        }
+      }
+
+      if (!Array.isArray(issue_links)) {
+        issue_links = [];
+      }
+      data.widgets.linked_issues_list = $sp.getWidget('jira-linked-issues-list', {
+        canRead: gr.canRead(),
+        canWrite: gr.canWrite(),
+        sys_id: data.sys_id,
+        table: data.table,
+        links: issue_links
+      });
+    }
+
+
+    data.widgets.side_bar_form = $sp.getWidget('jira-sidebar-form', {
+      table: data.table,
+      sys_id: data.sys_id,
+      formView: gr.getValue('approval') == 'approved' ? 'spsideview' : 'spsideviewapproval',
+      external_key: gr.getValue('external_key')
+    });
+
+    data.widgets.top_buttons_list = $sp.getWidget('form-top-button-list', {});
+    data.widgets.attachments_list = $sp.getWidget('jira-attachment-list', {
+      table: data.table,
+      sys_id: data.sys_id
+    });
+    data.widgets.activity_input = $sp.getWidget('jira-issue-activity-input', {
+      sys_id: data.sys_id,
+      table: data.table
+    });
+
+    data.widgets.activity_feed = $sp.getWidget('jira-issue-activity-feed', {
+      sys_id: data.sys_id,
+      table: data.table
+    });
+
+    data.widgets.editor = $sp.getWidget('jira_quill_editor', {
+      disabled: !data.canWrite,
+      fieldName: "description",
+      fieldValue: gr.getValue('description'),
+      placeholder: "Enter description here..."
+    });
+  }
+
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-01 11:17:37</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>d4366904db7a4090f255132968961901</sys_id>
+        <sys_mod_count>920</sys_mod_count>
+        <sys_name>Jira Issue Form</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_d4366904db7a4090f255132968961901</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2021-02-05 08:34:10</sys_updated_on>
+        <template><![CDATA[<div ng-if="data.canWrite && data.action == 1">
+  <sp-widget widget="data.new_form"></sp-widget>
+</div>
+<div ng-if="data.canRead && data.action == 2 && data.record">
+  <div class="col-md-9 col-xs-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="panel-editable" ng-show="data.canWrite" ng-click="enableEditMode('isEditingShortDescription')">
+            <div class="col-md-12">
+              <div class="panel-title" ng-show="isEditingShortDescription">
+                <input type="text" class="form-control" sn-focus="isEditingShortDescription"
+                  ng-blur="disableEditing('isEditingShortDescription', 'short_description')"
+                  ng-model="record.short_description">
+              </div>
+              <div class="panel-title show-border" ng-show="!isEditingShortDescription">
+                <span>{{record.short_description}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12" ng-show="!data.canWrite">
+            <span class="panel-title">{{record.short_description}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="row m-l-xs m-r-xs">
+          <div class="col-md-12 hidden-xs m-b-lg title-container">
+            <img title="{{ ::record.request_type.name }}" class="inline-img" ng-src="{{ ::record.request_type.icon }}"
+              alt="{{ ::record.request_type.name }}">
+            <a class="text-muted inline-title external-jira-link"
+              ng-href="{{ ::data.jiraInstance }}/browse/{{ ::record.key }}" target="_blank"
+              ng-if="data.canViewJiraIssue">{{ ::record.key }}</a>
+            <span class="text-muted inline-title" ng-if="!data.canViewJiraIssue">{{ ::record.key }}</span>
+          </div>
+          <div class="row margin-xs-only">
+            <div class="col-md-12">
+              <sp-widget widget="data.widgets.top_buttons_list"></sp-widget>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 hidden-xs">
+              <h4 class="form-label">Description</h4>
+            </div>
+            <div class="col-md-12" ng-if="isEditingDescription">
+              <div class="row">
+                <div class="col-md-12">
+                  <textarea rows="5" markdown-editor class="form-control m-t-sm" aria-multiline="true"
+                    ng-model="record.description" sn-focus="isEditingDescription" ng-trim="false"
+                    on-blur="disableEditing('isEditingDescription', 'description')"></textarea>
+                </div>
+              </div>
+              <div class="row m-t-sm">
+                <div class="col-md-10"></div>
+                <div class="col-md-1 padder-r-none">
+                  <button class="btn btn-default btn-sm pull-right" ng-click="c.editorSubmit('cancel')">Cancel</button>
+                </div>
+                <div class="col-md-1 padder-r-none">
+                  <button class="btn btn-primary btn-sm" ng-click="c.editorSubmit('save')">
+                    <span ng-if="!isLoadingSaveBtn">Save</span>
+                    <i class="fa fa-spinner fa-spin" aria-hidden="true" ng-if="isLoadingSaveBtn"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12" ng-show="!isEditingDescription" ng-click="enableEditMode('isEditingDescription')">
+              <div class="description-box" ng-bind-html="trustAsHtml(j2m.jiraToHTML(record.description))">
+              </div>
+              <div class="description-box" ng-if="!record.description">
+                <span class="text-muted description-no-text" ng-if="data.canWrite">Add a description...</span>
+                <span class="text-muted description-no-text" ng-if="!data.canWrite">Nothing here</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 padding-r-none padding-l-none">
+            <div class="attachment-container">
+              <sp-widget widget="widgets.attachments_list"></sp-widget>
+            </div>
+          </div>
+          <div class="col-md-12 padding-r-none padding-l-none">
+            <div class="linked-issues-container">
+              <sp-widget widget="widgets.linked_issues_list"></sp-widget>
+            </div>
+          </div>
+          <div class="col-md-12 padder-l-none padder-r-none">
+            <sp-widget widget="widgets.activity_feed"></sp-widget>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer panel-footer-fixed"
+        ng-show="(!isEditingShortDescription && !isEditingDescription && showActivityInput)">
+        <sp-widget widget="widgets.activity_input"></sp-widget>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-12">
+    <sp-widget widget="::widgets.side_bar_form"></sp-widget>
+  </div>
+</div>
+<div ng-if="data.canRead && data.action == 2 && !data.record">
+  <div class="col-md-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <div class="panel-title">UH OH! Somethings not right here!</div>
+      </div>
+      <div class="panel-body">
+        <div class="flex" style="justify-content: center;vertical-align: middle;text-align: center;padding:60px;">
+          <span class="text-muted">We could not find what you were looking for, this issue is either deleted or can no
+            longer be viewed.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

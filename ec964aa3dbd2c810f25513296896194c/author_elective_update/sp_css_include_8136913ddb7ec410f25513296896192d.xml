@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_css_include">
+    <sp_css_include action="DELETE">
+        <name>/stylesheet/thirdpart/stepper.css</name>
+        <source>local</source>
+        <sp_css display_value="jiraStepperCss">8736913ddb7ec410f2551329689619d4</sp_css>
+        <sys_class_name>sp_css_include</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-06 20:38:08</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>8136913ddb7ec410f25513296896192d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>/stylesheet/thirdpart/stepper.css</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_css_include_8136913ddb7ec410f25513296896192d</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-06 20:38:08</sys_updated_on>
+        <url/>
+    </sp_css_include>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sp_css_include_8136913ddb7ec410f25513296896192d</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_css_include"><sp_css_include action="INSERT_OR_UPDATE"><name>/stylesheet/thirdpart/stepper.css</name><source>local</source><sp_css display_value="jiraStepperCss">8736913ddb7ec410f2551329689619d4</sp_css><sys_class_name>sp_css_include</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-02-06 20:38:08</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>8136913ddb7ec410f25513296896192d</sys_id><sys_mod_count>0</sys_mod_count><sys_name>/stylesheet/thirdpart/stepper.css</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sp_css_include_8136913ddb7ec410f25513296896192d</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-02-06 20:38:08</sys_updated_on><url/></sp_css_include></record_update>]]></payload>
+        <payload_hash>317347840</payload_hash>
+        <record_name>/stylesheet/thirdpart/stepper.css</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-06 20:38:08</sys_created_on>
+        <sys_id>c076593ddb7ec410f255132968961955</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1701c39670d0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-06 20:38:08</sys_updated_on>
+        <type>CSS Include</type>
+        <update_guid>c876593de97ec41043ae391165986954</update_guid>
+        <update_guid_history>c876593de97ec41043ae391165986954:317347840</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">cdf073381b0f401048a242e58d4bcba5</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-16 15:35:01</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sp_css_include">sp_css_include</sys_db_object>
+        <sys_id>2efa13cd3f3549808c4edecdc3a49000</sys_id>
+        <sys_metadata>8136913ddb7ec410f25513296896192d</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>/stylesheet/thirdpart/stepper.css</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sp_css_include_8136913ddb7ec410f25513296896192d</sys_update_name>
+        <sys_update_version display_value="sp_css_include_8136913ddb7ec410f25513296896192d">c076593ddb7ec410f255132968961955</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-16 15:35:01</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

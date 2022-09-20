@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties_category_m2m">
+    <sys_properties_category_m2m action="DELETE">
+        <category display_value="Jira Configuration">cc198ee7dbd2c810f25513296896190e</category>
+        <order>600</order>
+        <property display_value="x_momo_jira_integr.basic_profile_id" name="x_momo_jira_integr.basic_profile_id">a0698e3fdb960c10f25513296896197e</property>
+        <sys_class_name>sys_properties_category_m2m</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 08:59:05</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>90d94a7fdb960c10f255132968961923</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_momo_jira_integr.basic_profile_id.Jira Configuration</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_properties_category_m2m_90d94a7fdb960c10f255132968961923</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 08:59:05</sys_updated_on>
+    </sys_properties_category_m2m>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_properties_category_m2m_90d94a7fdb960c10f255132968961923</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties_category_m2m"><sys_properties_category_m2m action="INSERT_OR_UPDATE"><category display_value="Jira Configuration">cc198ee7dbd2c810f25513296896190e</category><order>600</order><property display_value="x_momo_jira_integr.basic_profile_id" name="x_momo_jira_integr.basic_profile_id">a0698e3fdb960c10f25513296896197e</property><sys_class_name>sys_properties_category_m2m</sys_class_name><sys_created_by>douglas.schamberg@movement.com</sys_created_by><sys_created_on>2020-01-19 08:59:05</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>90d94a7fdb960c10f255132968961923</sys_id><sys_mod_count>0</sys_mod_count><sys_name>x_momo_jira_integr.basic_profile_id.Jira Configuration</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sys_properties_category_m2m_90d94a7fdb960c10f255132968961923</sys_update_name><sys_updated_by>douglas.schamberg@movement.com</sys_updated_by><sys_updated_on>2020-01-19 08:59:05</sys_updated_on></sys_properties_category_m2m></record_update>]]></payload>
+        <payload_hash>-1013053942</payload_hash>
+        <record_name>x_momo_jira_integr.basic_profile_id.Jira Configuration</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 08:59:05</sys_created_on>
+        <sys_id>58d94a7fdb960c10f255132968961925</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fbd06edad0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 08:59:05</sys_updated_on>
+        <type>Category Property</type>
+        <update_guid>50d94a7fca960c104a10b2606c94ec25</update_guid>
+        <update_guid_history>50d94a7fca960c104a10b2606c94ec25:-1013053942</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-05 09:23:36</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_properties_category_m2m">sys_properties_category_m2m</sys_db_object>
+        <sys_id>76d6815bb73c42cebeac077a134c1181</sys_id>
+        <sys_metadata>90d94a7fdb960c10f255132968961923</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_momo_jira_integr.basic_profile_id.Jira Configuration</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_properties_category_m2m_90d94a7fdb960c10f255132968961923</sys_update_name>
+        <sys_update_version display_value="sys_properties_category_m2m_90d94a7fdb960c10f255132968961923">58d94a7fdb960c10f255132968961925</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-05 09:23:36</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

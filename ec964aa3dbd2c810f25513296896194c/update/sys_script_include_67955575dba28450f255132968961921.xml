@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_momo_jira_integr.JiraAttachment</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>JiraAttachment</name>
+        <script><![CDATA[var JiraAttachment = Class.create();
+JiraAttachment.prototype = {
+  prefix: 'x_momo_jira_integr',
+  initialize: function () {},
+  createAttachmentFromContentUrl: function(grRecord, meta) {
+    var request = new sn_ws.RESTMessageV2();
+    var username = this.getProperty('username');
+    var password = this.getProperty('password');
+    request.setEndpoint(meta.content);
+    request.setHttpMethod('GET');
+    request.setRequestHeader('X-Atlassian-Token', 'no-check');
+    request.setBasicAuth(username, password);
+    if (!this.attachmentRecordExists(grRecord.getUniqueValue(), undefined, meta.filename)) {
+      request.saveResponseBodyAsAttachment(grRecord.getTableName(), grRecord.getUniqueValue(), meta.filename);
+
+      try {
+        var response = request.execute();
+        response.waitForResponse(200);
+        if (!response) return false;
+        this.createIssueAttachmentRecordFromWS(grRecord, response.getResponseAttachmentSysid(), meta, 'webhook');
+        return response.getStatusCode();
+      } catch (e) { 
+        gs.error(JSON.stringify(e, null, 1)) 
+        return false; }
+    } else {
+      request = null;
+    }
+  },
+  createMultipartRequestFromGr: function(grRecord) {
+    if (!grRecord) return [];
+    if (!grRecord.getValue('external_id')) return [];
+    var attachment = new GlideRecord('sys_attachment');
+    var results = [];
+    attachment.addQuery('table_name', grRecord.getTableName());
+    attachment.addQuery('table_sys_id', grRecord.getUniqueValue());
+    attachment.query();
+
+    while (attachment.next()) {
+      try {
+        var response = this.sendMultipartRequest(grRecord, attachment);
+        results.push(response);
+      } catch (e) {
+        gs.error(JSON.stringify(e, null, 1));
+      }
+    }
+
+    return results;
+  },
+  sendMultipartRequest: function (grRecord, attachment) {
+    var mpHelper = new MultipartHelper();
+    mpHelper.setHostDetails('sys_user', gs.getUserID());
+    mpHelper.addAttachment('file', attachment.getValue('sys_id'));
+    
+    mpHelper.createBody();
+
+    var request = new sn_ws.RESTMessageV2();
+    var path = 'issue/' + grRecord.getValue('external_id') + '/attachments';
+    var opts = this._setDefaultOptions(path);
+
+    request.setEndpoint(opts.url);
+    request.setHttpMethod('POST');
+    request.setRequestHeader("File", attachment.getValue('file_name'));
+    request.setRequestHeader("Multipart", "true");
+    request.setRequestHeader('Content-Type', mpHelper.getContentType());
+    request.setRequestHeader('X-Atlassian-Token', 'no-check');
+    request.setBasicAuth(opts.username, opts.password);
+    request.setRequestBodyFromAttachment(mpHelper.getBodyId());
+    var results;
+    var error;
+    var statusCode;
+    try {
+      var response = request.execute();
+      statusCode = response.getStatusCode();
+      if (statusCode != 200) {
+        error = this._deserializeResponse(response.getBody());
+      } else {
+        results = this._deserializeResponse(response.getBody());
+        
+        if (Array.isArray(results)) {
+          this.createIssueAttachmentRecord(grRecord, attachment, results[0]);
+        }
+      }
+    } catch (ex) {
+      gs.error(ex);
+      error = ex;
+    }
+
+    mpHelper.deleteBody();
+
+    return {
+      results: results,
+      error: error,
+      statusCode: statusCode
+    };
+  },
+  createIssueAttachmentRecordFromWS: function(record, attachment, meta, source) {
+    if (!this.attachmentRecordExists(record.getUniqueValue(), attachment)) {
+      var iAttachment = new GlideRecord('x_momo_jira_integr_issue_attachment');
+      iAttachment.initialize();
+      iAttachment.external_id = meta.id;
+      iAttachment.content_url = meta.content;
+      iAttachment.file_name = meta.filename;
+      iAttachment.source = source;
+      iAttachment.attachment = attachment;
+      
+      iAttachment.issue = record.getUniqueValue();
+      iAttachment.insert();
+    }
+  },
+  createIssueAttachmentRecord: function(record, attachment, meta, source) {
+    if (!this.attachmentRecordExists(record.getUniqueValue(), attachment.getUniqueValue())) {
+      var iAttachment = new GlideRecord('x_momo_jira_integr_issue_attachment');
+      iAttachment.initialize();
+      iAttachment.external_id = meta.id;
+      iAttachment.content_url = meta.content;
+      iAttachment.file_name = meta.filename;
+      if (source) {
+        iAttachment.source = source;
+      }
+      iAttachment.attachment = attachment.getUniqueValue();
+      
+      iAttachment.issue = record.getUniqueValue();
+      iAttachment.insert();
+    }
+  },
+  attachmentRecordExists: function(recordSysId, attachmentSysId, filename) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue_attachment');
+    
+    if (!filename) {
+      gr.addQuery('issue', recordSysId);
+      gr.addQuery('attachment', attachmentSysId);
+    } else {
+      gr.addEncodedQuery('attachment.file_name=' + filename + '^issue=' + recordSysId);
+    }
+    
+    gr.query();
+
+    return gr.next();
+  },
+  deleteAttachment: function(attachment) {
+    var sysAttachment = new GlideSysAttachment();
+    sysAttachment.deleteAttachment(attachment.getValue('attachment'));
+    attachment.deleteRecord();
+    return true;
+  },
+  deleteFromBRAttachment: function(issueAttachmentGR) {
+    if (issueAttachmentGR.getValue('source') == 'local') {
+      var isDeleted = this._sendDeleteRequestToJira(issueAttachmentGR.getValue('external_id'));
+      if (isDeleted) {
+        issueAttachmentGR.deleteRecord();
+      }
+      return;
+    }
+  },
+  getProperty: function(propertyName) {
+    var prop = gs.getProperty(this.prefix + '.' + propertyName);
+    return prop;
+  },
+  _sendDeleteRequestToJira: function(jiraId) {
+    var request = new sn_ws.RESTMessageV2();
+    var path = 'attachment/' + jiraId;
+    var opts = this._setDefaultOptions(path);
+    request.setEndpoint(opts.url);
+    request.setHttpMethod('DELETE');
+    request.setBasicAuth(opts.username, opts.password);
+    try {
+      var response = request.execute();
+      if (!response) return false;
+      if (response.getStatusCode() == 204) return true;
+    } catch (e) {
+      return false;
+    }
+  },
+  _deserializeResponse: function(responseBody) {
+    if (typeof responseBody !== 'string') return responseBody;
+    try {
+      return JSON.parse(responseBody);
+    } catch(e) {
+      return responseBody;
+    }
+  },
+  _setDefaultOptions: function(path, options) {
+    var host = this.getProperty('instance_name');
+    var base = this.getProperty('base_path') || '';
+    var url = host + '/' + base + '/' + path;
+    var defaults = {
+      url: url
+    };
+    var username = this.getProperty('username');
+    var password = this.getProperty('password');
+    var basicProfile = this.getProperty('basic_profile_id');
+    if (this.getProperty('use_basic_profile') && !gs.nil(basicProfile)) {
+      defaults.profile = this.getProperty('basic_profile_id');
+    } else if (!gs.nil(username) && !gs.nil(password)) {
+      defaults.username = this.getProperty('username');
+      defaults.password = this.getProperty('password');
+    }
+
+    if (!options) return defaults;
+
+    if (typeof options === 'object') {
+      var keys = Object.keys(options);
+      for (var i in keys) {
+        defaults[keys[i]] = options[keys[i]];
+      }
+    }
+
+    return defaults;
+  },
+  type: 'JiraAttachment'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-25 10:19:11</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>67955575dba28450f255132968961921</sys_id>
+        <sys_mod_count>209</sys_mod_count>
+        <sys_name>JiraAttachment</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_include_67955575dba28450f255132968961921</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-16 14:01:48</sys_updated_on>
+    </sys_script_include>
+</record_update>

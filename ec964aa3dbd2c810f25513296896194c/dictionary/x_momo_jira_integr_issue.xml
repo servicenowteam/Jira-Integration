@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element audit="true" label="Issue" max_length="40" name="x_momo_jira_integr_issue" sizeclass="4007" type="collection">
+        <element label="Active" max_length="40" name="active" type="boolean"/>
+        <element default="not requested" label="Approval" max_length="80" name="approval" type="string"/>
+        <element label="Approval History" max_length="4000" name="approval_history" type="journal"/>
+        <element label="Approved Date" max_length="40" name="approved_date" read_only="true" type="glide_date"/>
+        <element label="Assigned To" max_length="32" name="assigned_to" reference="sys_user" reference_qual="active=true^roles=x_momo_jira_integr.issue_user^x_momo_jira_integr_account_idISNOTEMPTY^EQ" reference_qual_condition="active=true^roles=x_momo_jira_integr.issue_user^x_momo_jira_integr_account_idISNOTEMPTY^EQ" type="reference"/>
+        <element label="Backout Plan" max_length="4000" name="backout_plan" type="string"/>
+        <element label="CAB Request" max_length="32" name="cab_request" read_only="true" reference="change_request" reference_qual="active=true^EQ" reference_qual_condition="active=true^EQ" type="reference"/>
+        <element label="CAB Type" max_length="40" name="cab_type" type="string"/>
+        <element label="Change Template" max_length="32" name="change_template" reference="std_change_record_producer" type="reference"/>
+        <element label="Comments" max_length="4000" name="comments" type="journal_input"/>
+        <element label="Communication Plan" max_length="4000" name="communication_plan" type="string"/>
+        <element label="Description" mandatory="true" max_length="4000" name="description" type="string"/>
+        <element attributes="readonly_clickthrough=false" label="Epic Link" max_length="32" name="epic_link" read_only="true" reference="x_momo_jira_integr_issue" reference_qual="issue_type.name=Epic^active=true^EQ" reference_qual_condition="issue_type.name=Epic^active=true^EQ" type="reference"/>
+        <element label="Project Name" max_length="200" name="epic_name" type="string"/>
+        <element label="Jira Issue ID" max_length="40" name="external_id" read_only="true" type="string"/>
+        <element display="true" label="Jira Issue Key" max_length="40" name="external_key" read_only="true" type="string"/>
+        <element label="Fix Version" max_length="40" name="fix_version" read_only="true" type="glide_list"/>
+        <element label="Implementation Plan" max_length="4000" name="implementation_plan" type="string"/>
+        <element attributes="ref_auto_completer=AJAXTableCompleter" dependent="project" dependent_on_field="project" label="Request Type" max_length="32" name="issue_type" reference="x_momo_jira_integr_issue_type" reference_floats="true" type="reference" use_dependent_field="true"/>
+        <element label="Justification" max_length="4000" name="justification" type="string"/>
+        <element label="Labels" max_length="4000" name="labels" read_only="true" type="glide_list"/>
+        <element label="Linked Issues" max_length="4000" name="linked_issues" reference="x_momo_jira_integr_issue_link" type="glide_list"/>
+        <element attributes="ignore_filter_on_new=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" read_only="true" type="string"/>
+        <element label="Priority" mandatory="true" max_length="40" name="priority" reference="x_momo_jira_integr_priority" type="reference" use_dependent_field="true"/>
+        <element label="Process Change" max_length="40" name="process_change" type="boolean"/>
+        <element dependent="project" dependent_on_field="project" label="Products" max_length="4000" name="products" reference="x_momo_jira_integr_product" reference_qual="active=true^EQ" reference_qual_condition="active=true^EQ" type="glide_list" use_dependent_field="true"/>
+        <element label="Project" max_length="32" name="project" reference="x_momo_jira_integr_project" reference_qual="active=true^EQ" reference_qual_condition="active=true^EQ" type="reference"/>
+        <element default="javascript:gs.getUserID();" dynamic_default_value="2fd8e97bef3221002841f7f775c0fbc1" label="Requested For" max_length="32" name="requested_for" reference="sys_user" reference_qual="active=true^EQ" reference_qual_condition="active=true^EQ" type="reference" use_dynamic_default="true"/>
+        <element default="javascript:gs.endOfNextMonth()" label="Request Implementation Date" max_length="40" name="request_implementation_date" type="glide_date"/>
+        <element label="Risks and Impact" max_length="4000" name="risks_and_impact" type="string"/>
+        <element attributes="default_rows=2,is_multi_text=false" label="Short Description" mandatory="true" max_length="4000" name="short_description" type="string"/>
+        <element label="Sprint" max_length="32" name="sprint" read_only="true" reference="x_momo_jira_integr_sprint" type="string"/>
+        <element choice="1" dependent="issue_type" dependent_on_field="issue_type" label="Status" max_length="32" name="status" reference="x_momo_jira_integr_status" type="reference" use_dependent_field="true">
+            <choice/>
+        </element>
+        <element label="Test Plan" max_length="4000" name="test_plan" type="string"/>
+        <element label="Watch List" max_length="4000" name="watch_list" reference="sys_user" reference_qual="active=true^EQ" reference_qual_condition="active=true^EQ" type="glide_list"/>
+        <element label="Work Notes" max_length="4000" name="work_notes" type="journal_input"/>
+        <index name="index">
+            <element name="cab_request"/>
+        </index>
+        <index name="index2">
+            <element name="change_template"/>
+        </index>
+        <index name="index3">
+            <element name="sprint"/>
+        </index>
+        <index name="index4">
+            <element name="issue_type"/>
+        </index>
+        <index name="index5">
+            <element name="project"/>
+        </index>
+        <index name="index6">
+            <element name="epic_link"/>
+        </index>
+        <index name="index7">
+            <element name="requested_for"/>
+        </index>
+        <index name="index8">
+            <element name="priority"/>
+        </index>
+        <index name="index9">
+            <element name="assigned_to"/>
+        </index>
+        <index name="index10">
+            <element name="status"/>
+        </index>
+    </element>
+</database>

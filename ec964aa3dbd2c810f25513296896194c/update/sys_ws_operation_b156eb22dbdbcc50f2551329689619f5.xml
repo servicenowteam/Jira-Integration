@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_operation">
+    <sys_ws_operation action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <http_method>POST</http_method>
+        <name>Add Issue Comments</name>
+        <operation_script><![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+  gs.include('JiraWebhookHelper');
+  gs.include('JiraRequestV2');
+
+  var helper = new JiraWebhookHelper(request, response);
+
+  var statusCode = 201;
+
+  if (isCommentValid(request.body.data)) {
+    var issue = getIssue(request.body.data.issue.id);
+    if (issue) {
+      var updated = insertNewComment(issue, request.body.data);
+      if (updated) {
+        statusCode = 204;
+      }
+    } else {
+      statusCode = 404;
+    }
+  }
+
+  helper.setWebhookResponse(statusCode);
+
+  function insertNewComment(issue, body) {
+    var comment = getRenderedContent(body.issue.id, body.comment.id);
+
+    if (!comment || typeof comment !== 'object') return false;
+
+    var user = getUserFromRequest(comment.updateAuthor);
+
+    if (user) {
+      var commentBody = comment.renderedBody
+        .replace(/<img(.*?)src="(\/.*?)"/gmi, '<img$1src="https://movementmortgage.atlassian.net$2" class="img-responsive"')
+        .replace(/<a(.*?)href="(\/.*?)"/gmi, '<a$1href="https://movementmortgage.atlassian.net$2"');
+      issue.comments = '<div id="commenting-user" style="display:none">' + user + '</div>' + commentBody;
+      issue.update();
+      return true;
+    }
+    return false;
+  }
+
+  function isCommentValid(body) {
+    var isValidBody = function () {
+      return (helper.isAtlassianWebhook() && (body && !(body instanceof Array)));
+    };
+
+    if (!isValidBody()) return false;
+
+    var comment = body.comment;
+
+    if (typeof comment === 'object') {
+      return (comment.visibility ? (comment.visibility.value === 'ServiceNow' && comment.visibility.type === 'role') : false);
+    }
+    return false;
+  }
+
+  function getRenderedContent(issueId, commentId) {
+    if (!issueId) return;
+    if (!commentId) return;
+    var req = new JiraRequestV2();
+    return req.send({
+      path: 'issue/' + issueId + '/comment/' + commentId + '?expand=renderedBody'
+    }).getResponse();
+  }
+
+  function getUserFromRequest(author) {
+
+    if (/Mulesoft/gi.test(author.emailAddress)) return;
+
+    var gr = new GlideRecord('sys_user');
+    gr.addQuery('active', true);
+    gr.addQuery('x_momo_jira_integr_account_id', author.accountId)
+      .addOrCondition('email', author.emailAddress);
+    gr.query();
+
+    while (gr.next()) {
+      return gr.getUniqueValue();
+    }
+  }
+
+  function getIssue(external_id) {
+    var gIssue = new GlideRecord('x_momo_jira_integr_issue');
+    gIssue.addQuery('active', true);
+    gIssue.addQuery('external_id', external_id);
+    gIssue.query();
+    while (gIssue.next()) {
+      return gIssue;
+    }
+  }
+
+
+
+
+
+
+})(request, response);]]></operation_script>
+        <operation_uri>/api/x_momo_jira_integr/webhooks/issue/{issue_id}/comments</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/issue/{issue_id}/comments</relative_path>
+        <request_example/>
+        <requires_acl_authorization>true</requires_acl_authorization>
+        <requires_authentication>false</requires_authentication>
+        <requires_snc_internal_role>true</requires_snc_internal_role>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-05 11:34:18</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>b156eb22dbdbcc50f2551329689619f5</sys_id>
+        <sys_mod_count>21</sys_mod_count>
+        <sys_name>Add Issue Comments</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ws_operation_b156eb22dbdbcc50f2551329689619f5</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2021-02-05 07:14:05</sys_updated_on>
+        <web_service_definition display_value="Webhooks">bd56d3811b66405048a242e58d4bcb33</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+</record_update>

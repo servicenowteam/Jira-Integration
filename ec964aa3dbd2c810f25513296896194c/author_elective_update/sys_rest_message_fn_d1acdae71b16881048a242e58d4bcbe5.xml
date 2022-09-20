@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_rest_message_fn">
+    <sys_rest_message_fn action="DELETE">
+        <authentication_type>inherit_from_parent</authentication_type>
+        <basic_auth_password/>
+        <basic_auth_profile/>
+        <basic_auth_user/>
+        <content/>
+        <function_name>GET issue</function_name>
+        <http_method>get</http_method>
+        <lock>false</lock>
+        <oauth2_profile/>
+        <protocol_name/>
+        <qualified_name>Outbound Jira Connection [ GET issue ]</qualified_name>
+        <rest_endpoint>https://movementmortgage.atlassian.net/rest/api/latest/issue/DAT-4143</rest_endpoint>
+        <rest_message display_value="Outbound Jira Connection">46459aaf1bd2881048a242e58d4bcbc5</rest_message>
+        <sys_class_name>sys_rest_message_fn</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-18 15:44:53</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>d1acdae71b16881048a242e58d4bcbe5</sys_id>
+        <sys_mod_count>12</sys_mod_count>
+        <sys_name>GET issue</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_rest_message_fn_d1acdae71b16881048a242e58d4bcbe5</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-18 15:58:16</sys_updated_on>
+        <use_basic_auth>false</use_basic_auth>
+        <use_mid_server/>
+        <use_mutual_auth>false</use_mutual_auth>
+    </sys_rest_message_fn>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_rest_message_fn_d1acdae71b16881048a242e58d4bcbe5</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_rest_message_fn"><sys_rest_message_fn action="INSERT_OR_UPDATE"><authentication_type>inherit_from_parent</authentication_type><basic_auth_password/><basic_auth_profile/><basic_auth_user/><content/><function_name>GET issue</function_name><http_method>get</http_method><lock>false</lock><oauth2_profile/><protocol_name/><qualified_name>Outbound Jira Connection [ GET issue ]</qualified_name><rest_endpoint>https://movementmortgage.atlassian.net/rest/api/latest/issue/DAT-4143</rest_endpoint><rest_message display_value="Outbound Jira Connection">46459aaf1bd2881048a242e58d4bcbc5</rest_message><sys_class_name>sys_rest_message_fn</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-01-18 15:44:53</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>d1acdae71b16881048a242e58d4bcbe5</sys_id><sys_mod_count>12</sys_mod_count><sys_name>GET issue</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sys_rest_message_fn_d1acdae71b16881048a242e58d4bcbe5</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-01-18 15:58:16</sys_updated_on><use_basic_auth>false</use_basic_auth><use_mid_server/><use_mutual_auth>false</use_mutual_auth></sys_rest_message_fn></record_update>]]></payload>
+        <payload_hash>990977775</payload_hash>
+        <record_name>GET issue</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-18 15:58:16</sys_created_on>
+        <sys_id>07202aeb1b16881048a242e58d4bcb06</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fb960576b0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-18 15:58:16</sys_updated_on>
+        <type>HTTP Method</type>
+        <update_guid>cb202aebe2168810f0cce139dd2c3d05</update_guid>
+        <update_guid_history>cb202aebe2168810f0cce139dd2c3d05:990977775,081022ebcb16881055894e618da7329f:-367301710,18ffd6eb7b168810b2514a5296705bfe:2062802081,3ddf16ebba168810046d33cf29052cde:-367301710,92bf56ebae168810dcbf0f4118b6d0b5:990977775,d38f52ebf71688103a6742dca9e38960:424148120,1c7f16abcd168810d7b498397ce5bd54:-1541376034,0e9ede2b3d1688109bdc0451b174f53d:502389161,12bd5e2b46168810a29d49a16cca7b20:-1319247616,e6adde2b56168810240387d295a60a39:602747695,5e8d5e2beb168810d9bbcca1ea54b717:-1286293038,a16d56e70b168810b5cc012a0a50b2af:901828054,0b1d162b4116881071c772188f80b041:602747695</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-18 16:02:44</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_rest_message_fn">sys_rest_message_fn</sys_db_object>
+        <sys_id>7cd2a3efc3ce4f3c9ba7d55b00ccc490</sys_id>
+        <sys_metadata>d1acdae71b16881048a242e58d4bcbe5</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>GET issue</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent display_value="">46459aaf1bd2881048a242e58d4bcbc5</sys_parent>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_rest_message_fn_d1acdae71b16881048a242e58d4bcbe5</sys_update_name>
+        <sys_update_version display_value="sys_rest_message_fn_d1acdae71b16881048a242e58d4bcbe5">07202aeb1b16881048a242e58d4bcb06</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-18 16:02:44</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

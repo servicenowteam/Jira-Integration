@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function ($scope, $rootScope) {
+  /* widget controller */
+  var c = this;
+
+  $scope.fields = $scope.data.fields;
+
+  $scope.changeType = {
+    model: 'normal',
+    id: 'type',
+  };
+
+  $scope.stdChangeTemplateLoaded = false; 
+
+  $scope.stdChangeTemplate = {
+    name: 'std-change-field',
+    value: null,
+    displayValue: null
+  };
+
+  $scope.$watch('changeType.model', function(value, previous) {
+    if (previous === 'standard') {
+      $scope.data.previous = true;
+      $scope.server.update().then(function(data) {
+        $scope.fields = data.fields;
+
+        $scope.data.previous = false;
+      });
+      $scope.stdChangeTemplate.value = null;
+      $scope.stdChangeTemplateLoaded = false;
+    }
+    $rootScope.$broadcast('jira.change-request.updated', $scope.changeType);
+  });
+
+  $scope.$watch('stdChangeTemplate.value', function(value, previous) {
+    $scope.data.changeTemplate = value;
+    if (!value) return;
+    $scope.stdChangeTemplateLoaded = false;
+    $scope.server.update().then(function(data) {
+      if (data.fields) {
+        $scope.fields = data.fields;
+        $scope.fields.forEach(function(field) {
+          if (field.hasChanged) {
+            $rootScope.$broadcast('jira.change-request.updated', field);
+          }
+        });
+      }
+
+      $scope.stdChangeTemplateLoaded = true;
+    });
+  });
+
+
+  var today = new Date();
+  var year = today.getFullYear();
+  var month = today.getMonth();
+  var day = today.getDate();
+  var maxDate = new Date(year + 3, month, day);
+  $scope.dateOptions = {
+    dateDisabled: disabled,
+    formatYear: 'yyyy',
+    maxDate: maxDate,
+    minDate: today,
+    startingDay: 1
+  };
+
+  
+
+  $scope.format = 'yyyy-MM-dd hh:ss';
+
+  // Disable weekend selection
+  function disabled(data) {
+    var date = data.date,
+      mode = data.mode;
+    return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+  }
+
+  $scope.onChange = function(field) {
+    if (field.id === 'start_date') {
+      
+      $scope.fields = $scope.fields.map(function(field) {
+        if (field.id === 'end_date') {
+          field.isHidden = false;
+        }
+        return field;
+      });
+    }
+
+    if (field.id === 'end_date') {
+      var start_date = $scope.fields.filter(function(field) {
+        return field.id === 'start_date';
+      })[0];
+
+      var start = new Date(start_date.model);
+      var end = new Date(field.model);
+      if (end < start) {
+        var year = start.getFullYear();
+        var month = start.getMonth();
+        var day = start.getDate();
+        field.model = (new Date(year, month, day + 1)).toDateString();
+      }
+    }
+    $rootScope.$broadcast('jira.change-request.updated', field);
+  };
+
+  $scope.openDatePicker = function(id) {
+    $scope.fields = $scope.fields.map(function(item) {
+      if (item.id === id) {
+        item.isOpen = true;
+      } else {
+        item.isOpen = false;
+      }
+      return item;
+    })
+  }
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>textarea.form-control {&#13;
+  resize: none;&#13;
+  margin-top: 10px;&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira-change-request-modal</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) { 
+  $('.change-type').select2();
+}]]></link>
+        <name>Jira Change Request Modal</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.fields = (input ? input.fields : undefined) || options.fields;
+
+  if (input) {
+    if (input.previous) {
+      data.fields = data.fields.map(function(field) {
+        field.uniqueId = GlideSecureRandomUtil.getSecureRandomString(6);
+        if (field.disabled) {
+          field.disabled = false;
+          field.hasChanged = false;
+          field.model = null;
+        }
+        return field;
+      });
+      return;
+    }
+    if (input.changeTemplate) {
+      var template = getStandardChangeTemplate(input.changeTemplate);
+      if (template) {
+        data.fields = setFieldsFromTemplate(template, data.fields);
+      }
+    }
+  }
+
+  function setFieldsFromTemplate(template, fields) {
+    var tmpl = template.split(/(\^(?=([A-Za-z_]+\=)))/gmi);
+    var _fields = fields;
+    var obj = {};
+    if (tmpl.length === 0) return _fields;
+    for (var i in tmpl) {
+      var fieldName = tmpl[i].split('=')[0];
+      var fieldValue = tmpl[i].split('=')[1];
+      obj[fieldName] = fieldValue;
+    }
+
+    return _fields.map(function(field) {
+      if (obj[field.id]) {
+        field.model = obj[field.id];
+        field.uniqueId = GlideSecureRandomUtil.getSecureRandomString(6);
+        field.disabled = true;
+        field.hasChanged = true;
+      } else {
+        field.uniqueId = GlideSecureRandomUtil.getSecureRandomString(6);
+      }
+      return field;
+    });
+  }
+
+  function getStandardChangeTemplate(sys_id) {
+    var gr = new GlideRecord('std_change_record_producer');
+    gr.get(sys_id);
+
+    if (gr.isValid()) {
+      return gr.template.template.toString().replace(/\^EQ$/, '');
+    }
+    return;
+  }
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-20 14:37:47</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>8e3a88dadb8b0810f255132968961975</sys_id>
+        <sys_mod_count>132</sys_mod_count>
+        <sys_name>Jira Change Request Modal</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_8e3a88dadb8b0810f255132968961975</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-12 10:34:37</sys_updated_on>
+        <template><![CDATA[<form class="form">
+  <div class="form-group">
+    <label for="changeType" class="form-label">Select Type of Change</label>
+    <select class="change-type" ng-model="changeType.model" required="true">
+      <option value="normal">Normal</option>
+      <option value="standard">Standard</option>
+      <option value="emergency">Emergency</option>
+      <option value="None">None</option>
+    </select>
+  </div>
+  <div class="form-group" ng-show="changeType.model == 'standard'">
+    <sn-record-picker
+      field="stdChangeTemplate"
+      table="'std_change_record_producer'"
+      display-field="'name'" 
+      search-fields="'name'" 
+      value-field="'sys_id'" 
+      default-query="'active=true'" 
+      multiple="false"
+      placeholder="Select a Template..."
+    ></sn-record-picker>
+  </div>
+  <div ng-show="changeType.model == 'normal' || changeType.model == 'emergency' || (stdChangeTemplateLoaded && changeType.model == 'standard')">
+    <div class="form-group" ng-repeat="field in fields track by field.uniqueId">
+      <label for="{{ field.id }}" class="form-label" ng-if="!field.isHidden">{{ ::field.name }}</label>
+      <textarea class="form-control"
+        id="{{ field.id }}"
+        rows="{{ field.rows }}"
+        ng-if="field.type === 'textarea'"
+        ng-model="field.model"
+        ng-blur="onChange(field)"
+        ng-placeholder="field.placeholder"
+        ng-disabled="field.disabled"
+        required="true"></textarea>
+      <sp-date-picker ng-model="field.model" 
+        field="field"
+        datepicker-options="dateOptions"
+        sn-change="onChange(field)"
+        sn-include-time="true"
+        ng-disabled="field.disabled"
+        ng-if="field.type === 'datetime' && !field.isHidden"></sp-date-picker>
+    </div>
+  </div>
+</form>]]></template>
+    </sp_widget>
+</record_update>

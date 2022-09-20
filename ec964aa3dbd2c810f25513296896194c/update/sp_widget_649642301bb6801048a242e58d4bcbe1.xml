@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function ($scope, $http, $window, spUtil, jiraLiveProfile) {
+  /* widget controller */
+  var c = this;
+  var filter = 'outward_issues=' + $scope.data.parent + '^ORinward_issue=' + $scope.data.parent;
+  $scope.liveProfile = jiraLiveProfile;
+  spUtil.recordWatch($scope, 'x_momo_jira_integr_issue_link', filter, function (response) {
+    $scope.server.refresh();
+  });
+
+  $scope.upperCaseString = function (str) {
+    if (typeof str !== "string") return;
+    if (str === '') return;
+
+    return str.toUpperCase();
+  };
+
+  $scope.hasLinkedIssues = function () {
+    if ($scope.data.issue_links.outward_links && $scope.data.issue_links.inward_links) {
+      return ($scope.data.issue_links.inward_links.length > 0 || $scope.data.issue_links.outward_links.length > 0);
+    } else if ($scope.data.issue_links.outward_links) {
+      return $scope.data.issue_links.outward_links.length > 0;
+    } else if ($scope.data.issue_links.inward_links) {
+      return $scope.data.issue_links.inward_links.length > 0;
+    } else {
+      return false;
+    }
+
+  };
+
+  $scope.goToLinkedIssue = function (issue) {
+    if (issue.canRead) {
+      $window.location.href = issue.link;
+    }
+  };
+
+  $scope.deleteIssueLink = function (e, issueSysId, parentSysId) {
+    e.preventDefault();
+    e.stopPropagation();
+    $scope.data.delete_issue_sys_id = issueSysId;
+    $scope.data.link_sys_id = parentSysId;
+    $scope.server.update()
+  };
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.list-group-item {&#13;
+  padding: 6px 5px;&#13;
+  z-index: inherit;&#13;
+  width: 70%;&#13;
+  transition: all 0.3s ease-in-out;&#13;
+&#13;
+  &amp;:hover {&#13;
+    z-index: 2000;&#13;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.23), 0 6px 6px rgba(0, 0, 0, 0.19);&#13;
+    transition: all 0.4s ease-in-out;&#13;
+  }&#13;
+}&#13;
+&#13;
+@media screen and (max-width:600px) {&#13;
+  .list-group-item {&#13;
+    width: 100%;&#13;
+  }&#13;
+&#13;
+  .jira-link-container {&#13;
+    &amp; .flex:first-child {&#13;
+      margin-right: 5px;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+&#13;
+.jira-button-container {&#13;
+  display: inline-flex;&#13;
+  flex: 0.1;&#13;
+  margin: 0px 10px;&#13;
+  justify-content: flex-end;&#13;
+}&#13;
+&#13;
+&#13;
+.jira-link-container {&#13;
+  display: inline-flex;&#13;
+  width: 100%;&#13;
+  align-items: center;&#13;
+&#13;
+  &amp; .flex:first-child {&#13;
+    flex: 0.2;&#13;
+  }&#13;
+}&#13;
+&#13;
+.jira-col {&#13;
+  display: inline-flex;&#13;
+  justify-content: flex-end;&#13;
+&#13;
+  &amp;.priority-icon {&#13;
+    flex: 0.1;&#13;
+    padding-right: 5px;&#13;
+  }&#13;
+}&#13;
+&#13;
+.jira-avatar {&#13;
+  width: 10%;&#13;
+  display: inline-flex;&#13;
+  flex: 0.2;&#13;
+  justify-content: center;&#13;
+&#13;
+  &amp; .avatar-xs {&#13;
+    width: 3rem;&#13;
+    height: 3rem;&#13;
+  }&#13;
+}&#13;
+&#13;
+.jira-icon-key {&#13;
+  display: inline-flex;&#13;
+  vertical-align: middle;&#13;
+  padding-right: 5px;&#13;
+&#13;
+  &amp; .jira-icon {&#13;
+    margin-top: 2px;&#13;
+  }&#13;
+}&#13;
+&#13;
+.jira-text {&#13;
+  display: inline-flex;&#13;
+&#13;
+  &amp;.jira-key-link {&#13;
+    color: rgb(137, 147, 164);&#13;
+    outline: none;&#13;
+    white-space: nowrap;&#13;
+    font-weight: 600;&#13;
+&#13;
+    &amp;:hover {&#13;
+      text-decoration: underline;&#13;
+    }&#13;
+  }&#13;
+&#13;
+  &amp;.jira-status {&#13;
+    font-size: 12px;&#13;
+    text-align: center;&#13;
+    font-weight: 700;&#13;
+    flex: 0.2;&#13;
+    background: inherit;&#13;
+    text-transform: uppercase;&#13;
+    transition: all 0.2s;&#13;
+&#13;
+    &amp; span:hover {&#13;
+      text-decoration: underline;&#13;
+      background: rgba(137, 147, 164, 0.7);&#13;
+      color: rgba(0, 0, 0, 0.6);&#13;
+      border-radius: 4px;&#13;
+      padding: 2px 5px;&#13;
+      transition: all 0.2s;&#13;
+    }&#13;
+  }&#13;
+&#13;
+  &amp;.short-description {&#13;
+    width: 50%;&#13;
+  }&#13;
+}&#13;
+&#13;
+.jira-icon {&#13;
+  display: inline-flex;&#13;
+&#13;
+  &amp;.jira-icon-xs {&#13;
+    width: 15px;&#13;
+    height: 15px;&#13;
+  }&#13;
+&#13;
+  &amp;.jira-icon-sm {&#13;
+    width: 25px;&#13;
+    height: 25px;&#13;
+  }&#13;
+&#13;
+  &amp;.jira-icon-md {&#13;
+    width: 30px;&#13;
+    height: 30px;&#13;
+  }&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira-linked-issues-list</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Jira Linked Issues List</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.parent = options.sys_id || $sp.getParameter('sys_id');
+  data.table = options.table || $sp.getParameter('table');
+
+  data.canRead = options.canRead;
+  data.issue_links = createIssueLinksObject();
+
+  
+
+  if (input) {
+    if (input.link_sys_id && input.link_sys_id != '') {
+      removeIssueLink(input.link_sys_id);
+      data.issue_links = createIssueLinksObject();
+    }
+  }
+
+  function createIssueLinksObject() {
+    var issue_links = {};
+    if (hasIssueLinks(data.parent, 'outward_issues')) {
+      issue_links.outward_links = getIssueLinks(data.parent, 'outward_issues');
+    } else {
+      issue_links.outward_links = [];
+    }
+  
+    if (hasIssueLinks(data.parent, 'inward_issue')) {
+      issue_links.inward_links = getIssueLinks(data.parent, 'inward_issue');
+    } else {
+      issue_links.inward_links = [];
+    }
+
+    return issue_links;
+  }
+
+  function removeIssueLink(linkID) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue_link');
+    
+    gr.get(linkID);
+    if (gr.isValid() && gr.canDelete()) {
+      
+      gr.active = false;
+      gr.update();
+    }
+  }
+
+  function hasIssueLinks(currentSysId, columnName) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue_link');
+    gr.addQuery(columnName, currentSysId);
+    gr.addQuery('active', true);
+    gr.query();
+    return gr.next();
+  }
+
+  function getIssueLinks(currentSysId, columnName) {
+    var links = [];
+    var hasTypes = [];
+    var gr = new GlideRecord('x_momo_jira_integr_issue_link');
+    gr.addQuery(columnName, currentSysId);
+    gr.addQuery('active', true);
+    gr.addNotNullQuery("external_id");
+    gr.query();
+    
+    while (gr.next()) {
+      var link = {
+        sys_id: gr.getValue('sys_id'),
+        type: {
+          id: gr.getValue('type_id'),
+          name: gr.type_id.name.toString(),
+          outward_name: gr.type_id.outward_type_name.toString(),
+          inward_name: gr.type_id.inward_type_name.toString()
+        },
+        issues: []
+      };
+      
+      var issue;
+      if (columnName == 'outward_issues') {
+        issue = gr.inward_issue;
+      } else {
+        issue = gr.outward_issues;
+      }
+      // User can click the link if they own the issue.
+      var canRead = gr.canRead() && (issue.sys_created_by.toString() == gs.getUserName() || gs.hasRole('x_momo_jira_integr.issue_tech'));
+      link.issues.push({
+        sys_id: issue.sys_id.toString(),
+        key: issue.external_key.toString(),
+        request_type: {
+          name: issue.issue_type.name.toString(),
+          icon: issue.issue_type.icon.toString(),
+        },
+        priority: {
+          name: issue.priority.name.toString(),
+          icon: issue.priority.icon.toString()
+        },
+        assigned_to: gs.nil(issue.assigned_to.toString()) ? null : issue.assigned_to.toString(),
+        status: issue.status.name.toString(),
+        short_description: issue.short_description.toString(),
+        link: '?id=jira_issues_form&action=2&table=x_momo_jira_integr_issue&sys_id=' + issue.sys_id.toString(),
+        canRead: canRead,
+        canDelete: gr.canDelete() && gs.hasRole('x_momo_jira_integr.issue_tech')
+      });
+      if (hasTypes.indexOf(gr.getValue('type_id')) < 0) {
+        hasTypes.push(gr.getValue('type_id'));
+        links.push(link);
+      } else {
+        links = links.map(function(item) {
+          if (item.type.id == gr.getValue('type_id')) {
+            item.issues = item.issues.concat(link.issues);
+          }
+          return item;
+        });
+      }
+    }
+    return links;
+  }
+
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-03 21:34:30</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>649642301bb6801048a242e58d4bcbe1</sys_id>
+        <sys_mod_count>341</sys_mod_count>
+        <sys_name>Jira Linked Issues List</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_649642301bb6801048a242e58d4bcbe1</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-22 16:28:22</sys_updated_on>
+        <template><![CDATA[<div class="row" ng-if="data.canRead && hasLinkedIssues()">
+  <div class="col-md-12">
+    <h4 class="form-label">Linked Issues</h4>
+  </div>
+  <div class="col-md-12" ng-if="data.issue_links.outward_links.length > 0">
+    <div class="row" ng-repeat="issue_link in data.issue_links.outward_links">
+      <div class="col-md-12">
+        <div class="block linked-issue-title">
+          <span class="text-muted">{{ issue_link.type.inward_name }}</span>
+        </div>
+        <ul class="list-group">
+          <li class="list-group-item" ng-click="goToLinkedIssue(issue)" ng-mouseover="isHoveringOver = $index"
+            ng-mouseleave="isHoveringOver = undefined" ng-repeat="issue in issue_link.issues track by $index">
+            <div class="jira-link-container">
+              <div class="flex">
+                <img class="jira-icon jira-icon-xs hidden-xs" ng-if="issue.request_type.icon"
+                  alt="{{ issue.request_type.name }}" title="{{ issue.request_type.name }}"
+                  ng-src="{{ issue.request_type.icon }}">
+                <a class="jira-text jira-key-link" href="javascript:void(0)">{{ issue.key }}</a>
+              </div>
+
+              <span class="jira-text short-description flex">{{ issue.short_description }}</span>
+              <div class="jira-col priority-icon flex hidden-xs">
+                <img ng-if="issue.priority.icon" alt="{{ issue.priority.name }}" ng-src="{{ issue.priority.icon }}"
+                  title="{{ issue.priority.name }}" class="jira-icon jira-icon-sm">
+              </div>
+
+              <div class="jira-avatar flex hidden-xs" ng-if="liveProfile.hasLiveProfile(issue.assigned_to)">
+                <sn-avatar-once primary="liveProfile.getLiveProfileById(issue.assigned_to)" class="avatar-xs"
+                  show-presence="false" enable-tooltip="true" enable-context-menu="false"></sn-avatar-once>
+              </div>
+              <span class="jira-text jira-status flex hidden-xs"><span ng-bind="issue.status"></span></span>
+              <div class="jira-button-container">
+                <button type="button" class="btn btn-xs jira-button jira-button-xs jira-btn-close"
+                  ng-if="issue.canDelete" ng-click="deleteIssueLink($event, issue.sys_id, issue_link.sys_id)">
+                  <i class="icon-connect-close"></i>
+                </button>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12" ng-if="data.issue_links.inward_links.length > 0">
+    <div class="row" ng-repeat="issue_link in data.issue_links.inward_links">
+      <div class="col-md-12">
+        <div class="block linked-issue-title">
+          <span class="text-muted">{{ issue_link.type.outward_name }}</span>
+        </div>
+        <ul class="list-group">
+          <li class="list-group-item" ng-click="goToLinkedIssue(issue)" ng-mouseover="isHoveringOver = $index"
+            ng-mouseleave="isHoveringOver = undefined" ng-repeat="issue in issue_link.issues track by $index">
+            <div class="jira-link-container">
+              <div class="flex">
+                <img class="jira-icon jira-icon-xs hidden-xs" ng-if="issue.request_type.icon"
+                  alt="{{ issue.request_type.name }}" title="{{ issue.request_type.name }}"
+                  ng-src="{{ issue.request_type.icon }}">
+                <a class="jira-text jira-key-link" href="javascript:void(0)">{{ issue.key }}</a>
+              </div>
+
+              <span class="jira-text short-description flex">{{ issue.short_description }}</span>
+              <div class="jira-col priority-icon flex hidden-xs">
+                <img ng-if="issue.priority.icon" alt="{{ issue.priority.name }}" ng-src="{{ issue.priority.icon }}"
+                  title="{{ issue.priority.name }}" class="jira-icon jira-icon-sm">
+              </div>
+
+              <div class="jira-avatar flex hidden-xs" ng-if="liveProfile.hasLiveProfile(issue.assigned_to)">
+                <sn-avatar-once primary="liveProfile.getLiveProfileById(issue.assigned_to)" class="avatar-xs"
+                  show-presence="false" enable-tooltip="true" enable-context-menu="false"></sn-avatar-once>
+              </div>
+
+              <span class="jira-text jira-status flex hidden-xs"><span ng-bind="issue.status"></span></span>
+              <div class="jira-button-container">
+                <button type="button" class="btn btn-xs jira-button jira-button-xs jira-btn-close"
+                  ng-if="issue.canDelete" ng-click="deleteIssueLink($event, issue.sys_id, issue_link.sys_id)">
+                  <i class="icon-connect-close"></i>
+                </button>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_dependency_js_include">
+    <m2m_sp_dependency_js_include action="INSERT_OR_UPDATE">
+        <order>100</order>
+        <sp_dependency display_value="markdownEditor">c053ffb81b0f401048a242e58d4bcb93</sp_dependency>
+        <sp_js_include display_value="/thirdparty/bootstrap-markdown.min.js">78803bf41b0f401048a242e58d4bcb32</sp_js_include>
+        <sys_class_name>m2m_sp_dependency_js_include</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-16 15:46:18</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>ee8333f81b0f401048a242e58d4bcbe3</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>markdownEditor./thirdparty/bootstrap-markdown.min.js</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>m2m_sp_dependency_js_include_ee8333f81b0f401048a242e58d4bcbe3</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-16 15:46:18</sys_updated_on>
+    </m2m_sp_dependency_js_include>
+</record_update>

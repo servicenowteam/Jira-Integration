@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_instance">
+    <sp_instance action="DELETE">
+        <active>true</active>
+        <class_name/>
+        <color>default</color>
+        <css/>
+        <glyph/>
+        <id/>
+        <order>1</order>
+        <roles/>
+        <short_description/>
+        <size>md</size>
+        <sp_column display_value="2">8e32c6891bdf445048a242e58d4bcb35</sp_column>
+        <sp_widget display_value="Jira Report">69166b99db934850f25513296896194a</sp_widget>
+        <sys_class_name>sp_instance</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 14:32:56</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>9809e79ddb934850f2551329689619cc</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_instance_9809e79ddb934850f2551329689619cc</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-01 14:32:56</sys_updated_on>
+        <title/>
+        <url/>
+        <widget_parameters/>
+    </sp_instance>
+    <sys_translated_text action="DELETE" query="documentkey=9809e79ddb934850f2551329689619cc"/>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sp_instance_9809e79ddb934850f2551329689619cc</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_instance"><sp_instance action="INSERT_OR_UPDATE"><active>true</active><class_name/><color>default</color><css/><glyph/><id/><order>1</order><roles/><short_description/><size>md</size><sp_column display_value="2">8e32c6891bdf445048a242e58d4bcb35</sp_column><sp_widget display_value="Jira Report">69166b99db934850f25513296896194a</sp_widget><sys_class_name>sp_instance</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-03-01 14:32:56</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>9809e79ddb934850f2551329689619cc</sys_id><sys_mod_count>0</sys_mod_count><sys_name/><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sp_instance_9809e79ddb934850f2551329689619cc</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-03-01 14:32:56</sys_updated_on><title/><url/><widget_parameters/></sp_instance><sys_translated_text action="delete_multiple" query="documentkey=9809e79ddb934850f2551329689619cc"/></record_update>]]></payload>
+        <payload_hash>-1938243445</payload_hash>
+        <record_name/>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 14:32:56</sys_created_on>
+        <sys_id>5c09e79ddb934850f2551329689619ce</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1709683ac210000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-01 14:32:56</sys_updated_on>
+        <type>Instance</type>
+        <update_guid>5409e79df593485085c99fd89587e1ce</update_guid>
+        <update_guid_history>5409e79df593485085c99fd89587e1ce:-1938243445</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">b569a3dddb934850f2551329689619c9</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 14:34:41</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sp_instance">sp_instance</sys_db_object>
+        <sys_id>062a316b48724a00865953e568990000</sys_id>
+        <sys_metadata>9809e79ddb934850f2551329689619cc</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sp_instance_9809e79ddb934850f2551329689619cc</sys_update_name>
+        <sys_update_version display_value="sp_instance_9809e79ddb934850f2551329689619cc">5c09e79ddb934850f2551329689619ce</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-01 14:34:41</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

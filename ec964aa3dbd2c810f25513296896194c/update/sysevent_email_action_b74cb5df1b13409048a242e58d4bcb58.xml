@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sysevent_email_action">
+    <sysevent_email_action action="INSERT_OR_UPDATE">
+        <action_insert>false</action_insert>
+        <action_update>false</action_update>
+        <active>true</active>
+        <advanced_condition/>
+        <affected_field_on_event/>
+        <category display_value="Jira" name="Jira">122ea6fa1b43c81048a242e58d4bcbeb</category>
+        <collection>x_momo_jira_integr_issue</collection>
+        <condition/>
+        <content_type>text/html</content_type>
+        <default_interval/>
+        <description/>
+        <digest_from/>
+        <digest_html/>
+        <digest_reply_to/>
+        <digest_separator_html><![CDATA[<p>&nbsp;</p>
+<hr />
+<p>&nbsp;</p>]]></digest_separator_html>
+        <digest_separator_text><![CDATA[\n--------------------------------------------------------------------------------\n]]></digest_separator_text>
+        <digest_subject/>
+        <digest_template/>
+        <digest_text/>
+        <digestable>false</digestable>
+        <event_name>x_momo_jira_integr.comments_added_by_tec</event_name>
+        <event_parm_1>true</event_parm_1>
+        <event_parm_2>false</event_parm_2>
+        <exclude_delegates>false</exclude_delegates>
+        <force_delivery>false</force_delivery>
+        <from/>
+        <generation_type>event</generation_type>
+        <importance>high</importance>
+        <include_attachments>false</include_attachments>
+        <item>event.parm1</item>
+        <item_table/>
+        <mandatory>false</mandatory>
+        <message/>
+        <message_html><![CDATA[<table class="container-for-gmail-android"
+  style="min-width: 290px; width: 100%; font-family: Helvetica, Arial, sans-serif;" width="100%" cellspacing="0"
+  cellpadding="0" align="center">
+  <tbody>
+    <tr>
+      <td class="content-padding" style="background-color: #f7f7f7; padding: 5px 0 30px;" align="center" valign="top"
+        width="100%">
+        <center>
+          <table class="w320" style="width: 453px;" width="600" cellspacing="0" cellpadding="0">
+            <tbody>
+              <tr>
+                <td class="header-md"
+                  style="padding-bottom: 20px; font-size: 18px; font-weight: bold; line-height: normal; color: #4d4d4d; width: 453.2px;">
+                  ${mail_script:jira_comments_subject_msg}</td>
+              </tr>
+              <tr>
+                <td class="mini-block-container" style="padding: 8px 20px; width: 413.2px;">
+                  <table style="border-collapse: separate !important;" width="100%" cellspacing="0" cellpadding="0">
+                    <tbody>
+                      <tr>
+                        <td class="mini-block"
+                          style="padding: 5px 0px 20px 0px; background-color: #ffffff; width: 278px; border: 1px solid #cccccc; border-radius: 5px;">
+                          <table width="100%" cellspacing="0" cellpadding="0">
+                            <tbody>
+                              <tr>
+                                <td class="comment-body" style="text-align: justify; padding-left: 5px;" align="left">
+                                  ${mail_script:jira_view_latest_comment}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </center>
+      </td>
+    </tr>
+    <tr>
+      <td class="button" style="padding: 5px;">
+        <center>
+          <div>
+            <!--[if mso]>
+            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${mail_script:jira_sp_link}" style="height:60px;v-text-anchor:middle;width:200px;" arcsize="9%" strokecolor="#ff6f6f" fillcolor="#ff6f6f">
+              <w:anchorlock/>
+              <center style="color:#ffffff;font-family:sans-serif;font-size:13px;font-weight:bold;">Details Here</center>
+            </v:roundrect>
+          <![endif]--><a
+              style="background-color: #ff6f6f; border: 1px solid #ff6f6f; border-radius: 5px; color: #ffffff; display: inline-block; font-family: sans-serif; font-size: 13px; font-weight: bold; line-height: 60px; text-align: center; text-decoration: none; width: 200px; -webkit-text-size-adjust: none; mso-hide: all;"
+              href="${mail_script:jira_sp_link}">Details Here</a></div>
+        </center>
+      </td>
+    </tr>
+  </tbody>
+</table>]]></message_html>
+        <message_list/>
+        <message_text/>
+        <name>Jira Comments Added</name>
+        <omit_watermark>false</omit_watermark>
+        <order>100</order>
+        <push_message_only>false</push_message_only>
+        <recipient_fields>watch_list</recipient_fields>
+        <recipient_groups/>
+        <recipient_users/>
+        <reply_to/>
+        <send_self>true</send_self>
+        <sms_alternate/>
+        <style/>
+        <subject>We have a new message for you!</subject>
+        <subscribable>false</subscribable>
+        <sys_class_name>sysevent_email_action</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-07 11:46:41</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>b74cb5df1b13409048a242e58d4bcb58</sys_id>
+        <sys_mod_count>29</sys_mod_count>
+        <sys_name>Jira Comments Added</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sysevent_email_action_b74cb5df1b13409048a242e58d4bcb58</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-12 18:10:39</sys_updated_on>
+        <sys_version>2</sys_version>
+        <template display_value="Jira Default Template">139810871b57cc5048a242e58d4bcb75</template>
+        <type>email</type>
+        <weight>0</weight>
+    </sysevent_email_action>
+    <sys_translated_text action="delete_multiple" query="documentkey=b74cb5df1b13409048a242e58d4bcb58"/>
+</record_update>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties_category_m2m">
+    <sys_properties_category_m2m action="INSERT_OR_UPDATE">
+        <category display_value="Jira Configuration">39bc6529db6b8c90f2551329689619c9</category>
+        <order>1</order>
+        <property display_value="x_momo_jira_integr.use_basic_auth_profile" name="x_momo_jira_integr.use_basic_auth_profile">58f3e6231b56881048a242e58d4bcb94</property>
+        <sys_class_name>sys_properties_category_m2m</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-14 10:25:09</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>a7ac2529db6b8c90f25513296896198c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_momo_jira_integr.use_basic_auth_profile.Jira Configuration</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_properties_category_m2m_a7ac2529db6b8c90f25513296896198c</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-14 10:25:09</sys_updated_on>
+    </sys_properties_category_m2m>
+</record_update>

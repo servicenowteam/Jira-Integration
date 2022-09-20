@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function jiraAttachmentList($scope, $rootScope, jiraAttachmentHelper, spUtil) {
+  var c = this;
+
+  c.$onInit = function () {
+    c.attachments = c.data.attachments;
+    c.attachmentHelper = jiraAttachmentHelper;
+  };
+
+  spUtil.recordWatch($scope, "sys_attachment", 'table_sys_id=' + $scope.data.sysId, function (response) {
+    var data = response.data;
+
+    if (data.operation === 'delete') {
+      c.loading = true;
+      $scope.server.update().then(function (res) {
+        c.attachments = res.attachments;
+        c.loading = false;
+      });
+    }
+    if (data.operation === 'update' && data.changes.includes('state') && data.record.state.value === 'available' && response.ext.from_user !== 'guest') {
+      c.loading = true;
+      $scope.data.optimisticLookupId = data.sys_id;
+      $scope.server.update().then(function (res) {
+        c.attachments = res.attachments;
+        $scope.data.optimisticLookupId = undefined;
+        c.loading = false;
+      });
+    }
+  });
+
+  c.getAttachmentIcon = function (attachment) {
+    var icon = c.attachmentHelper.createIcon(attachment.filename, attachment.contentType, attachment.id);
+    return icon.toHtml();
+  };
+
+  c.deleteAttachment = function ($event, sysId) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    c.attachmentHelper.deleteAttachment(sysId, {
+      confirm: true
+    });
+  };
+
+  c.hasAttachments = function () {
+    if (!c.attachments) return false;
+    if (c.attachments.length === 0) return false;
+    return true;
+  };
+
+  c.isImage = function (contentType, filename) {
+    return c.attachmentHelper.isImage(filename, contentType);
+  };
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>::-webkit-scrollbar {&#13;
+  height: 4px;&#13;
+}&#13;
+&#13;
+::-webkit-scrollbar-track {&#13;
+  box-shadow: inset 0 0 0.5px rgba(0, 0, 0, 0.01);&#13;
+  background-color: rgba(0, 0, 0, 0.1);&#13;
+}&#13;
+&#13;
+::-webkit-scrollbar-thumb {&#13;
+  background-color: rgba(0, 0, 0, 0.1);&#13;
+  border-radius: 0.1em;&#13;
+  outline: 0.5px solid #eee;&#13;
+}&#13;
+&#13;
+.jira-attachment-list {&#13;
+  overflow-x: auto;&#13;
+  padding: 15px 15px 5px 15px;&#13;
+}&#13;
+&#13;
+.attachment-label {&#13;
+  padding: 15px 15px 0px 15px;&#13;
+&#13;
+  &amp;&gt;div&gt;.form-label {&#13;
+    margin-bottom: 0px;&#13;
+  }&#13;
+}&#13;
+&#13;
+.list-group {&#13;
+  margin-bottom: 5px;&#13;
+}&#13;
+&#13;
+.list-group-horizontal {&#13;
+  display: inline-flex;&#13;
+}&#13;
+&#13;
+.padding-l-none {&#13;
+  padding-left: 0px;&#13;
+}&#13;
+&#13;
+.padding-r-none {&#13;
+  padding-right: 0px;&#13;
+}&#13;
+&#13;
+.loader {&#13;
+  width: 100%;&#13;
+  height: 100%;&#13;
+  background: rgba(255, 255, 255, 0.7);&#13;
+  transition: all 0.4s ease;&#13;
+  justify-content: center;&#13;
+  align-items: center;&#13;
+  vertical-align: middle;&#13;
+  display: flex;&#13;
+  position: absolute;&#13;
+  top: 0;&#13;
+  left: 0;&#13;
+  z-index: 2000;&#13;
+&#13;
+  &amp;&gt;.sp-loading-indicator {&#13;
+    display: flex;&#13;
+    width: 54px;&#13;
+    height: 18px;&#13;
+    vertical-align: middle;&#13;
+    justify-content: center;&#13;
+    color: $brand-primary;&#13;
+  }&#13;
+}&#13;
+&#13;
+&#13;
+.list-group-item {&#13;
+  min-height: 150px;&#13;
+&#13;
+  width: 242px;&#13;
+&#13;
+  &amp;:not(:first-child) {&#13;
+    margin-left: 10px;&#13;
+  }&#13;
+&#13;
+  &amp;:hover {&#13;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);&#13;
+    transition: 0.4s;&#13;
+  }&#13;
+}&#13;
+&#13;
+a.get-attachment,&#13;
+.file-name {&#13;
+  color: #000;&#13;
+  text-align: center;&#13;
+}&#13;
+&#13;
+&#13;
+.jira-attachment-icon {&#13;
+  font-size: 30px;&#13;
+}&#13;
+&#13;
+.attachment-thumbnail {&#13;
+  max-width: 190px;&#13;
+  display: inline;&#13;
+}&#13;
+&#13;
+.jira-icon {&#13;
+  text-align: center;&#13;
+  font-size: 40px;&#13;
+&#13;
+  &amp;.jira-icon-grey {&#13;
+    color: #eee;&#13;
+  }&#13;
+&#13;
+  &amp;.jira-icon-green {&#13;
+    color: #08AC2A;&#13;
+  }&#13;
+&#13;
+  &amp;.jira-icon-red {&#13;
+    color: #B63737&#13;
+  }&#13;
+&#13;
+  &amp;.jira-icon-blue {&#13;
+    color: #031DB1;&#13;
+  }&#13;
+&#13;
+  &amp;.jira-icon-orange {&#13;
+    color: #CB8315;&#13;
+  }&#13;
+&#13;
+  &amp;.jira-icon-purple {&#13;
+    color: #9215CB;&#13;
+  }&#13;
+}&#13;
+&#13;
+.centered {&#13;
+  display: flex;&#13;
+  width: 100%;&#13;
+  justify-content: center;&#13;
+  align-items: center;&#13;
+  vertical-align: middle;&#13;
+  padding: 5px 0px;&#13;
+}&#13;
+&#13;
+.align-center {&#13;
+  display: inline;&#13;
+  justify-content: center;&#13;
+  align-items: center;&#13;
+  vertical-align: middle;&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira-attachment-list</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Jira Attachment List</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  var record_id = options.record_id || $sp.getParameter('sys_id');
+  var record_table = options.record_table || $sp.getParameter('table');
+  data.sysId = record_id;
+  data.table = record_table;
+
+  data.attachments = [];
+
+  var issue = getIssue(record_table, record_id);
+  var ACLS = getPermissions(record_table, record_id);
+
+  data.canRead = ACLS.canRead;
+  data.canAttach = ACLS.canAttach;
+  data.canWrite = ACLS.canWrite;
+  data.canDelete = ACLS.canDelete;
+  if (issue) {
+    data.attachments = getAttachments(issue.getUniqueValue());
+  }
+
+
+  if (input) {
+    if (input.optimisticLookupId) {
+      var attachment = getSingleAttachment(input.optimisticLookupId);
+      if (attachment) {
+        data.attachments.push(attachment);
+      }
+
+    }
+  }
+
+  function getSingleAttachment(sysId) {
+    var gr = new GlideRecord("sys_attachment");
+
+    gr.get(sysId);
+
+    if (!gr.isValidRecord()) return;
+
+    return {
+      id: gr.getUniqueValue(),
+      filename: gr.getValue('file_name'),
+      contentType: gr.getValue('content_type'),
+      state: gr.getValue('state'),
+      updatedOn: gr.getValue('sys_updated_on')
+    };
+  }
+
+
+  function getAttachments(issueId) {
+    var attachments = [];
+    var gr = new GlideRecord('x_momo_jira_integr_issue_attachment');
+    gr.addQuery('issue', issueId);
+    gr.addQuery('active', true);
+    gr.query();
+
+    while (gr.next()) {
+      if (!gr.attachment.nil()) {
+        var attachment = gr.attachment.getRefRecord();
+        attachments.push({
+          id: attachment.getUniqueValue(),
+          filename: attachment.getValue('file_name'),
+          contentType: attachment.getValue('content_type'),
+          state: attachment.getValue('state'),
+          updatedOn: attachment.getValue('sys_updated_on')
+        });
+      }
+    }
+
+    return attachments;
+  }
+
+  function getPermissions(table, sysId) {
+    var permissions = {
+      canRead: true,
+      canWrite: false,
+      canAttach: false,
+      canDelete: false
+    };
+
+    var gr = new GlideRecord(table);
+    gr.get(sysId);
+    if (gr.isValidRecord()) {
+      var active = gr.getValue('active') == true;
+      var analyst = gs.hasRole('x_momo_jira_integr.issue_tech');
+      var created = gr.getValue('sys_created_by') === gs.getUserName();
+      var attacher = gs.hasRole(gs.getProperty("glide.attachment.role"));
+
+      permissions.canAttach = attacher && active;
+      permissions.canDelete = (created || analyst) && active;
+      permissions.canWrite = active && analyst;
+    }
+
+    return permissions;
+  }
+
+  function getIssue(table, sysId) {
+    var gr = new GlideRecord(table);
+
+    gr.get(sysId);
+
+    if (gr.isValidRecord()) {
+      return gr;
+    }
+  }
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-02 08:40:12</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>eccbc6541b32001048a242e58d4bcb6d</sys_id>
+        <sys_mod_count>189</sys_mod_count>
+        <sys_name>Jira Attachment List</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_eccbc6541b32001048a242e58d4bcb6d</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-07-18 15:36:08</sys_updated_on>
+        <template><![CDATA[<div class="row attachment-label" ng-if="data.canRead && c.hasAttachments(attachments)">
+  <div class="col-md-12 padding-l-none padding-r-none">
+    <h4 class="form-label">Attachments</h4>
+  </div>
+</div>
+<div class="jira-attachment-list" ng-if="data.canRead && c.hasAttachments(attachments)">
+  <div class="loader" ng-show="c.loading">
+    <div class="hidden-xs sp-loading-indicator la-sm">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+  <ul class="list-group list-group-horizontal">
+    <li class="list-group-item" ng-class="{'card-icon': !c.isImage(attachment.contentType, attachment.filename)}"
+      ng-repeat="attachment in c.attachments">
+      <div class="sp-attachment-block file-attachment">
+        <a ng-if="attachment.state === 'available'" style="border:none;" href
+          ng-href="{{ ::c.attachmentHelper.downloadAttachment(attachment.id) }}"
+          ng-bind-html="::c.getAttachmentIcon(attachment)">
+        </a>
+        <div class="file-name">
+          <a ng-if="attachment.state === 'available'" class="get-attachment"
+            ng-href="{{ ::c.attachmentHelper.downloadAttachment(attachment.id) }}" href>
+            {{ attachment.filename }}
+          </a>
+        </div>
+        <div class="tools align-center hidden-xs">
+          <div class="centered">
+            <button ng-if="data.canDelete" type="button" class="btn btn-default"
+              ng-click="c.deleteAttachment($event, attachment.id)" title="Delete">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div style="text-align:center;">
+            <time>
+              <sn-time-ago timestamp="::attachment.updatedOn"></sn-time-ago>
+            </time>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>]]></template>
+    </sp_widget>
+</record_update>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_email">
+    <sys_script_email action="INSERT_OR_UPDATE">
+        <name>jira_comments_subject_msg</name>
+        <new_lines_to_html>false</new_lines_to_html>
+        <script><![CDATA[(function runMailScript(current, template, email, email_action, event) {
+  var message = '';
+  var updatedBy = current.getValue('sys_updated_by');
+  if (event) {
+    if (event.parm2) {
+      message += event.parm2;
+    } else if (/\./gi.test(updatedBy)) {
+      message += updatedBy.split('.').join(' '); 
+    } else {
+      message = 'Someone';
+    }
+  }
+  template.print(message + ' sent you a message!');
+  email.setSubject(message + ' sent you a message!');
+})(current, template, email, email_action, event);]]></script>
+        <sys_class_name>sys_script_email</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-07 11:54:11</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>c82ef9531b53409048a242e58d4bcb8d</sys_id>
+        <sys_mod_count>5</sys_mod_count>
+        <sys_name>jira_comments_subject_msg</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_email_c82ef9531b53409048a242e58d4bcb8d</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-07 12:19:08</sys_updated_on>
+    </sys_script_email>
+</record_update>

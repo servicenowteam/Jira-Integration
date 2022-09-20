@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_action">
+    <sys_ui_action action="INSERT_OR_UPDATE">
+        <action_name>sysverb_create_templates</action_name>
+        <active>true</active>
+        <client>false</client>
+        <client_script_v2><![CDATA[function onClick(g_form) {
+
+}]]></client_script_v2>
+        <comments/>
+        <condition>gs.getProperty('x_momo_jira_integr.change_request')</condition>
+        <form_action>false</form_action>
+        <form_button>false</form_button>
+        <form_button_v2>false</form_button_v2>
+        <form_context_menu>false</form_context_menu>
+        <form_link>false</form_link>
+        <form_menu_button_v2>false</form_menu_button_v2>
+        <form_style/>
+        <format_for_configurable_workspace>false</format_for_configurable_workspace>
+        <hint/>
+        <isolate_script>false</isolate_script>
+        <list_action>true</list_action>
+        <list_banner_button>true</list_banner_button>
+        <list_button>false</list_button>
+        <list_choice>false</list_choice>
+        <list_context_menu>false</list_context_menu>
+        <list_link>false</list_link>
+        <list_save_with_form_button>false</list_save_with_form_button>
+        <list_style/>
+        <messages/>
+        <name>Create Standard Change Field</name>
+        <onclick/>
+        <order>103</order>
+        <script><![CDATA[gs.include('JiraRequest');
+
+var alreadyExists = changeParentFieldExists();
+if (alreadyExists) {
+  gs.addErrorMessage('You already have a custom field labeled as the standard change field. You cannot create a new field.');
+} else {
+  var jiraField = createNewCustomField();
+  if (jiraField) {
+    var prevParent = changeStandardTemplateField(jiraField);
+    updateStandardTemplatesMap(prevParent, jiraField.getUniqueValue());
+  } else if (jiraField) {
+    updateStandardTemplatesMap(prevParent, jiraField.getUniqueValue());
+  }
+
+  if (jiraField) {
+    var templates = getStandardTemplates(jiraField.getUniqueValue());
+    if (templates.length > 0) {
+      for (var t in templates) {
+        var template = templates[t];
+        createCustomFieldOptions(jiraField.getValue('custom_id'), [ template ]);
+      }
+      var options = getCustomFieldOptions(jiraField.getValue('custom_id'));
+      if (Array.isArray(options)) {
+        if (options.length > 0) {
+          templates = templates.map(function(template) {
+            for (var o in options) {
+              var option = options[o];
+              if (option.value === template.name) {
+                template.external_id = option.id;
+              }
+            }
+            return template;
+          }).filter(function(template) {
+            return template.external_id !== undefined;
+          });
+          templates.forEach(function(template) {
+            createCustomFieldOption(template, jiraField.getUniqueValue());
+          });
+        } 
+      }
+    }
+  }
+}
+
+function createNewCustomField() {
+  var fieldFromJira = createCustomFieldInJira();
+  if (!fieldFromJira) return false;
+
+  var gr = new GlideRecord('x_momo_jira_integr_jira_fields');
+  gr.initialize();
+  gr.active = true;
+  gr.change_template_field = true;
+  gr.custom = true;
+  gr.webhook_change_property = "to";
+  gr.custom_id = fieldFromJira.schema.customId;
+  gr.field_id = fieldFromJira.id;
+  gr.field_name = fieldFromJira.name;
+  gr.schema_type = fieldFromJira.schema.type;
+  gr.schema_custom_type = fieldFromJira.schema.custom;
+  gr.system_label = fieldFromJira.schema.system;
+  gr.insert();
+  return gr;
+}
+
+function getCustomFieldOptions(customId) {
+  var request = new JiraRequest();
+  var response = request.getCustomFieldOptions(customId);
+  if (!response) return [];
+  return response.values;
+}
+
+function createCustomFieldInJira() {
+  var payload = {
+    name: 'CAB Standard Templates',
+    description: 'A list of standard templates from Service Now. Do not edit this field. It will be automatically updated from Service Now.',
+    type: 'com.atlassian.jira.plugin.system.customfieldtypes:select',
+    searcherKey: 'com.atlassian.jira.plugin.system.customfieldtypes:multiselectsearcher'
+  };
+
+  var request = new JiraRequest();
+
+  var response = request.createCustomField(payload);
+  if (!response) return false;
+  if (typeof response.result !== 'object') return false;
+  if (!response.result.schema && !response.result.id) return false;
+  return response.result;
+}
+
+function updateStandardTemplatesMap(prev, parent) {
+  var gr = new GlideRecord('x_momo_jira_integr_standard_change_map');
+  gr.addQuery('belongs_to', prev);
+  gr.query();
+
+  while (gr.next()) {
+    gr.belongs_to = parent;
+    gr.update();
+  }
+}
+
+function changeStandardTemplateField(cur) {
+  var gr = new GlideRecord(cur.getTableName());
+  gr.addEncodedQuery('active=true^sys_id!=' + cur.getUniqueValue() + '^change_template_field=true');
+  gr.query();
+
+  while (gr.next()) {
+    gr.setValue('change_template_field', false);
+    gr.update();
+    return gr.getUniqueValue();
+  }
+}
+
+function createCustomFieldOptions(parent, changes) {
+  var request = new JiraRequest();
+  var body = {
+    options: changes.map(function(ch) {
+      return {
+        value: ch.name,
+        cascadingOptions: []
+      };
+    })
+  };
+  request.createCustomFieldOptions(parent, body);
+}
+
+function createCustomFieldOption(response, belongsTo) {
+
+  var gr = new GlideRecord('x_momo_jira_integr_standard_change_map');
+  gr.initialize();
+  gr.standard_change_template = response.sysId;
+  gr.external_id = response.external_id;
+  gr.belongs_to = belongsTo;
+  gr.insert();
+}
+
+function getStandardTemplates(belongsTo) {
+  var templateNames = [];
+  var gr = new GlideRecord('std_change_record_producer');
+  gr.addQuery('active', true);
+  gr.query();
+  while (gr.next()) {
+    templateNames.push({
+      name: gr.getValue('name'), 
+      sysId: gr.getUniqueValue(), 
+      belongs: belongsTo
+    });
+  }
+  return templateNames;
+}
+
+function getBelongsTo() {
+  if (!changeParentFieldExists()) return false;
+  var gr = new GlideRecord('x_momo_jira_integr_jira_fields');
+  gr.addQuery('change_template_field', true);
+  gr.query();
+
+  while (gr.next()) {
+    return {
+      externalId: gr.getValue('custom_id'),
+      sysId: gr.getUniqueValue(),
+      fieldId: gr.getValue('field_id')
+    };
+  }
+}
+
+function changeParentFieldExists() {
+  var ga = new GlideAggregate('x_momo_jira_integr_jira_fields');
+  ga.addAggregate('COUNT');
+  ga.addEncodedQuery('change_template_field=true^custom_idISNOTEMPTY');
+  ga.query();
+
+  while (ga.next()) {
+    var count = ga.getAggregate('COUNT');
+    return (Number(count) > 0);
+  }
+  return false;
+}]]></script>
+        <show_insert>true</show_insert>
+        <show_multiple_update>false</show_multiple_update>
+        <show_query>false</show_query>
+        <show_update>true</show_update>
+        <sys_class_name>sys_ui_action</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-14 10:21:04</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>402ba1a5db6b8c90f2551329689619a5</sys_id>
+        <sys_mod_count>42</sys_mod_count>
+        <sys_name>Create Standard Change Field</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ui_action_402ba1a5db6b8c90f2551329689619a5</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-20 12:07:40</sys_updated_on>
+        <table>x_momo_jira_integr_jira_fields</table>
+        <ui11_compatible>true</ui11_compatible>
+        <ui16_compatible>false</ui16_compatible>
+    </sys_ui_action>
+</record_update>

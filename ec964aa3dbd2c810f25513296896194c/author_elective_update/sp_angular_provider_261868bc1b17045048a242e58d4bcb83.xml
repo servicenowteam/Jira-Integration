@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_angular_provider">
+    <sp_angular_provider action="DELETE">
+        <name>jiraListAnimate</name>
+        <script><![CDATA[function focusableInput() {
+  return {
+    scope: {
+      snAnimate: '@',
+      trigger: '=snAnimate'
+    },
+    link: function(scope, element) {
+      angular.element(element).addClass('visible');
+    }
+  }
+}]]></script>
+        <sys_class_name>sp_angular_provider</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-28 11:13:18</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>261868bc1b17045048a242e58d4bcb83</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>jiraListAnimate</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_angular_provider_261868bc1b17045048a242e58d4bcb83</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-28 11:21:41</sys_updated_on>
+        <type>directive</type>
+    </sp_angular_provider>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sp_angular_provider_261868bc1b17045048a242e58d4bcb83</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sp_angular_provider"&gt;&lt;sp_angular_provider action="INSERT_OR_UPDATE"&gt;&lt;name&gt;jiraListAnimate&lt;/name&gt;&lt;script&gt;&lt;![CDATA[function focusableInput() {
+  return {
+    scope: {
+      snAnimate: '@',
+      trigger: '=snAnimate'
+    },
+    link: function(scope, element) {
+      angular.element(element).addClass('visible');
+    }
+  }
+}]]&gt;&lt;/script&gt;&lt;sys_class_name&gt;sp_angular_provider&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-02-28 11:13:18&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;261868bc1b17045048a242e58d4bcb83&lt;/sys_id&gt;&lt;sys_mod_count&gt;7&lt;/sys_mod_count&gt;&lt;sys_name&gt;jiraListAnimate&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sp_angular_provider_261868bc1b17045048a242e58d4bcb83&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg@movement.com&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-02-28 11:21:41&lt;/sys_updated_on&gt;&lt;type&gt;directive&lt;/type&gt;&lt;/sp_angular_provider&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>-66800699</payload_hash>
+        <record_name>jiraListAnimate</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-02-28 11:21:41</sys_created_on>
+        <sys_id>930ae0f8db9b4450f2551329689619c7</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1708b87d9f80000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-28 11:21:41</sys_updated_on>
+        <type>Widget Angular Provider</type>
+        <update_guid>5b0ae0f8849b4450028eee9e507418c6</update_guid>
+        <update_guid_history>5b0ae0f8849b4450028eee9e507418c6:-66800699,cbd9a0f8659b4450e4113da040779140:1723897252,1ed9a4b8c19b4450b290711cf8eef007:-1696335531,d9d92cb86c9b44508f0c17809527388c:-568644479,29b9ecb8db9b445069c3fdb9cc764755:-1736593713,4c9920b8899b44505976ba0a71beee72:-1264793050,d7c8e878a99b4450b9daf0341cc0badc:-1344961436,2028e47c89170450c72987c8bdfcbf93:546738337</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">b7d030b81b57045048a242e58d4bcbea</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-28 11:51:29</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sp_angular_provider">sp_angular_provider</sys_db_object>
+        <sys_id>14057ab3028c476081e43aa3468e4400</sys_id>
+        <sys_metadata>261868bc1b17045048a242e58d4bcb83</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>jiraListAnimate</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sp_angular_provider_261868bc1b17045048a242e58d4bcb83</sys_update_name>
+        <sys_update_version display_value="sp_angular_provider_261868bc1b17045048a242e58d4bcb83">930ae0f8db9b4450f2551329689619c7</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-28 11:51:29</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

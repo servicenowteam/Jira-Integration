@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_widget_dependency">
+    <m2m_sp_widget_dependency action="DELETE">
+        <sp_dependency display_value="highcharts">768db45d1b2b889048a242e58d4bcbb7</sp_dependency>
+        <sp_widget display_value="Jira Report Card">333f74111b6b889048a242e58d4bcb8d</sp_widget>
+        <sys_class_name>m2m_sp_widget_dependency</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-13 12:27:47</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>7b6fb8111b6b889048a242e58d4bcbc2</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>highcharts.Jira Report Card</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>m2m_sp_widget_dependency_7b6fb8111b6b889048a242e58d4bcbc2</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-13 12:27:47</sys_updated_on>
+    </m2m_sp_widget_dependency>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>m2m_sp_widget_dependency_7b6fb8111b6b889048a242e58d4bcbc2</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_widget_dependency"><m2m_sp_widget_dependency action="INSERT_OR_UPDATE"><sp_dependency display_value="highcharts">768db45d1b2b889048a242e58d4bcbb7</sp_dependency><sp_widget display_value="Jira Report Card">333f74111b6b889048a242e58d4bcb8d</sp_widget><sys_class_name>m2m_sp_widget_dependency</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-03-13 12:27:47</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>7b6fb8111b6b889048a242e58d4bcbc2</sys_id><sys_mod_count>0</sys_mod_count><sys_name>highcharts.Jira Report Card</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>m2m_sp_widget_dependency_7b6fb8111b6b889048a242e58d4bcbc2</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-03-13 12:27:47</sys_updated_on></m2m_sp_widget_dependency></record_update>]]></payload>
+        <payload_hash>-2144173199</payload_hash>
+        <record_name>highcharts.Jira Report Card</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-13 12:27:47</sys_created_on>
+        <sys_id>376fb8111b6b889048a242e58d4bcbc5</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>170d3dd66320000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-13 12:27:47</sys_updated_on>
+        <type>Widget Dependency</type>
+        <update_guid>3f6fb811ec6b8890374c183d8554a1c4</update_guid>
+        <update_guid_history>3f6fb811ec6b8890374c183d8554a1c4:-2144173199</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">4fddc9151bab889048a242e58d4bcb0d</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-13 13:30:48</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="m2m_sp_widget_dependency">m2m_sp_widget_dependency</sys_db_object>
+        <sys_id>17849692ae444f0b966053383046c409</sys_id>
+        <sys_metadata>7b6fb8111b6b889048a242e58d4bcbc2</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>highcharts.Jira Report Card</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>m2m_sp_widget_dependency_7b6fb8111b6b889048a242e58d4bcbc2</sys_update_name>
+        <sys_update_version display_value="m2m_sp_widget_dependency_7b6fb8111b6b889048a242e58d4bcbc2">376fb8111b6b889048a242e58d4bcbc5</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-13 13:30:48</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

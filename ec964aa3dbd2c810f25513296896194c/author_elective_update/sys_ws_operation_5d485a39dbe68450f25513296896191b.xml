@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_operation">
+    <sys_ws_operation action="DELETE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <http_method>GET</http_method>
+        <name>helper</name>
+        <operation_script><![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+  // THis uses the REST helper to save the attachment correctly.
+  var mpREST = new MultipartRest(request);
+  mpREST.setResponse(response);
+
+})(request, response);]]></operation_script>
+        <operation_uri>/api/x_momo_jira_integr/attachments/helper</operation_uri>
+        <produces>multipart/form-data, application/json</produces>
+        <produces_customized>true</produces_customized>
+        <relative_path>/helper</relative_path>
+        <request_example/>
+        <requires_acl_authorization>true</requires_acl_authorization>
+        <requires_authentication>false</requires_authentication>
+        <requires_snc_internal_role>true</requires_snc_internal_role>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-25 15:11:38</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>5d485a39dbe68450f25513296896191b</sys_id>
+        <sys_mod_count>10</sys_mod_count>
+        <sys_name>helper</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ws_operation_5d485a39dbe68450f25513296896191b</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-25 16:17:41</sys_updated_on>
+        <web_service_definition display_value="attachments">ab185639dbe68450f2551329689619cd</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_ws_operation_5d485a39dbe68450f25513296896191b</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ws_operation"&gt;&lt;sys_ws_operation action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;consumes&gt;application/json,application/xml,text/xml&lt;/consumes&gt;&lt;consumes_customized&gt;false&lt;/consumes_customized&gt;&lt;default_operation_uri/&gt;&lt;enforce_acl&gt;cf9d01d3e73003009d6247e603f6a990&lt;/enforce_acl&gt;&lt;http_method&gt;GET&lt;/http_method&gt;&lt;name&gt;helper&lt;/name&gt;&lt;operation_script&gt;&lt;![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+  // THis uses the REST helper to save the attachment correctly.
+  var mpREST = new MultipartRest(request);
+  mpREST.setResponse(response);
+
+})(request, response);]]&gt;&lt;/operation_script&gt;&lt;operation_uri&gt;/api/x_momo_jira_integr/attachments/helper&lt;/operation_uri&gt;&lt;produces&gt;multipart/form-data, application/json&lt;/produces&gt;&lt;produces_customized&gt;true&lt;/produces_customized&gt;&lt;relative_path&gt;/helper&lt;/relative_path&gt;&lt;request_example/&gt;&lt;requires_acl_authorization&gt;true&lt;/requires_acl_authorization&gt;&lt;requires_authentication&gt;false&lt;/requires_authentication&gt;&lt;requires_snc_internal_role&gt;true&lt;/requires_snc_internal_role&gt;&lt;short_description/&gt;&lt;sys_class_name&gt;sys_ws_operation&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg@movement.com&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-01-25 15:11:38&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;5d485a39dbe68450f25513296896191b&lt;/sys_id&gt;&lt;sys_mod_count&gt;10&lt;/sys_mod_count&gt;&lt;sys_name&gt;helper&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ws_operation_5d485a39dbe68450f25513296896191b&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-01-25 16:17:41&lt;/sys_updated_on&gt;&lt;web_service_definition display_value="attachments"&gt;ab185639dbe68450f2551329689619cd&lt;/web_service_definition&gt;&lt;web_service_version/&gt;&lt;/sys_ws_operation&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>1885590567</payload_hash>
+        <record_name>helper</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-25 16:17:41</sys_created_on>
+        <sys_id>6fb76ef9db2a8450f25513296896193b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fdd7ea1910000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-25 16:17:41</sys_updated_on>
+        <type>Scripted REST Resource</type>
+        <update_guid>27b76ef9352a84502bfd413ab0a85f3b</update_guid>
+        <update_guid_history>27b76ef9352a84502bfd413ab0a85f3b:1885590567,fcb76eb9122a84502540e73203d58ba5:2030403674,5776ae39432a845053cd09a15a1cdc8c:1885590567,b7412a710fe60450eb7a480a046f3c64:2030403674,8b412a7156e60450c4741cb8c0b8821a:1627058200,f730e23136e60450714a02cd5f206fcb:-1108029681,793b9ab946a60450c2455c3816237b98:1627058200,a2cad2b904a60450d7989c2c5c972277:2030403674,c6ca5679c1a6045062b7a6f2f00e7631:475566755,6ac8123925a60450b6324655231283e8:522867770,90a856f5e3e68450677c3eaccce24920:-1666791573</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-05 09:23:38</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_ws_operation">sys_ws_operation</sys_db_object>
+        <sys_id>aa16d59889d14d80af890c948a606400</sys_id>
+        <sys_metadata>5d485a39dbe68450f25513296896191b</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>helper</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_ws_operation_5d485a39dbe68450f25513296896191b</sys_update_name>
+        <sys_update_version display_value="sys_ws_operation_5d485a39dbe68450f25513296896191b">6fb76ef9db2a8450f25513296896193b</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-05 09:23:38</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function jiraQuillEditor($scope, $rootScope, ngConverter) {
+  /* widget controller */
+  var c = this;
+
+  $scope.loading = true;
+  $scope.focused = false;
+  $scope.field = {
+    name: $scope.data.fieldName,
+    value: $scope.data.fieldValue
+  };
+
+
+  $scope.modelOptions = {
+    debounce: {
+      'default': 0,
+      blur: 0,
+      focus: 0
+    },
+    getterSetter: true
+  };
+
+  c.$onInit = function () {
+    $scope.field = {
+      name: $scope.data.fieldName,
+      value: $scope.data.fieldValue
+    };
+  };
+
+  c.onEditorReady = function (editor) {
+    $scope.loading = false;
+
+    $scope.$emit('editor.ready');
+  };
+
+  c.onEditorFocus = function (editor, source) {
+    $scope.focused = true;
+    $rootScope.$broadcast('editor.' + $scope.data.fieldName + '.focused', {
+      editor: editor,
+      source: source,
+      focused: true
+    });
+  };
+
+  c.onEditorBlur = function (editor, source) {
+    $scope.focused = false;
+    var content = $scope.field.value;
+    if (c.data.convertTo === 'md' && $scope.field.value) {
+      content = ngConverter.convertHtmlToMd($scope.field.value);
+    }
+
+    $rootScope.$broadcast('editor.' + $scope.data.fieldName + '.blurred', {
+      editor: editor,
+      source: source,
+      content: content,
+      focused: false,
+      name: $scope.field.name
+    });
+  };
+
+  c.onEditorContentChange = function (editor, html, text, content, delta, oldDelta, source) {
+    var payload = {
+      html: html,
+      text: text,
+      delta: delta,
+      md: text !== '' ? ngConverter.convertHtmlToMd(html) : html
+    };
+    $scope.$emit('editor.' + $scope.data.fieldName + '.content-change', payload);
+  };
+
+  c.createToolbarButtonClass = function (btn) {
+    if (typeof btn === 'string') {
+      return 'ql-' + btn;
+    }
+
+    if (typeof btn === 'object') {
+      return 'ql-list';
+    }
+  };
+
+  c.getToolbarButtonValue = function (btn) {
+    if (typeof btn === 'object') {
+      return btn.list;
+    }
+  };
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.ql-editor {&#13;
+  padding-left: 4px;&#13;
+}&#13;
+&#13;
+.editor-container {&#13;
+  display: flex;&#13;
+  width: 100%;&#13;
+}&#13;
+&#13;
+pre.ql-container {&#13;
+  background: #fff;&#13;
+  margin-top: 0px;&#13;
+  border-top-left-radius: 0px;&#13;
+  border-top-right-radius: 0px;&#13;
+  border-bottom-left-radius: 0px;&#13;
+  border-bottom-right-radius: 0px;&#13;
+  border-bottom: 1px solid #ccc;&#13;
+  border-top: none;&#13;
+  width: 100%;&#13;
+  height: auto;&#13;
+  max-height: 200px;&#13;
+  transition: all 0.3s ease;&#13;
+&#13;
+  &amp; .ql-editor {&#13;
+    padding-top: 12px;&#13;
+    padding-bottom: 12px;&#13;
+    overflow-y: auto;&#13;
+  }&#13;
+}&#13;
+&#13;
+.editor-border {&#13;
+  &amp;.disabled {&#13;
+    &amp; pre.ql-container {&#13;
+      background-color: #eee;&#13;
+      cursor: read-only;&#13;
+    }&#13;
+  }&#13;
+&#13;
+  &amp;.editor-lg {&#13;
+    &amp; pre.ql-container {&#13;
+      height: auto;&#13;
+      max-height: 300px;&#13;
+    }&#13;
+  }&#13;
+&#13;
+  &amp; pre.ql-container {&#13;
+    margin-top: -1px;&#13;
+    height: 34px;&#13;
+    border-top: 1px solid #ccc;&#13;
+    border-bottom: 1px solid #ccc;&#13;
+    padding: 0px;&#13;
+&#13;
+    &amp; .ql-editor {&#13;
+      padding-top: 7px;&#13;
+      padding-bottom: 12px;&#13;
+      overflow-y: hidden;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+.ql-mention-list-container {&#13;
+  border-radius: 6px;&#13;
+  box-shadow: 0 8px 20px 0 rgba(30, 30, 30, .08);&#13;
+  border: none;&#13;
+&#13;
+  &amp; .ql-mention-list {&#13;
+    border: none;&#13;
+  }&#13;
+}&#13;
+&#13;
+.ql-toolbar {&#13;
+  opacity: 0;&#13;
+  height: 0px !important;&#13;
+  padding: 0px;&#13;
+  border-top: none;&#13;
+  transition: all 0.3s ease-out;&#13;
+&#13;
+  &amp;.editor-active {&#13;
+    padding: 4px 8px 2px 8px;&#13;
+    border-top: 1px solid #ccc;&#13;
+    height: auto !important;&#13;
+    border-bottom-left-radius: 0px;&#13;
+    border-bottom-right-radius: 0px;&#13;
+    opacity: 1;&#13;
+    transition: all 0.3s ease-in;&#13;
+  }&#13;
+}&#13;
+&#13;
+.ql-mention-list-item {&#13;
+  border: 1px solid transparent;&#13;
+&#13;
+  &amp;.selected {&#13;
+    background-color: #d9534f;&#13;
+    text-decoration: none;&#13;
+    color: #fff;&#13;
+&#13;
+    &amp;:first-child {&#13;
+      border-top-left-radius: 6px;&#13;
+      border-top-right-radius: 6px;&#13;
+    }&#13;
+&#13;
+    &amp;:last-child {&#13;
+      border-bottom-left-radius: 6px;&#13;
+      border-bottom-right-radius: 6px;&#13;
+    }&#13;
+  }&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira_quill_editor</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Jira Quill Editor</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.editor = {};
+  data.editor.theme = options.theme || 'snow';
+  data.editor.container = null;
+  data.editor.modules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'blockquote'],
+      [{
+        list: 'ordered'
+      }, {
+        list: 'bullet'
+      }]
+    ],
+    imageDrop: true,
+    magicUrl: true,
+    imageResize: {
+      modules: ['DisplaySize', 'Resize']
+    }
+  };
+
+  data.editor.placeholder = options.placeholder || "Enter text here...";
+  data.editor.disabled = options.disabled || false;
+  data.showToolbar = options.showToolbar || true;
+  data.size = options.size;
+  data.fieldName = options.fieldName || "comments";
+  data.fieldValue = options.fieldValue;
+  data.convertTo = options.convertTo || "md";
+  data.editor.preserveWhitespace = true;
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-08-22 11:24:09</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>d362c75ddbba1050f255132968961997</sys_id>
+        <sys_mod_count>80</sys_mod_count>
+        <sys_name>Jira Quill Editor</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_d362c75ddbba1050f255132968961997</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-09-03 12:59:05</sys_updated_on>
+        <template><![CDATA[<div class="d-flex">
+  <ng-quill-editor ng-model="field.value" placeholder="data.editor.placeholder" on-blur="c.onEditorBlur(editor, source)"
+    on-focus="c.onEditorFocus(editor, source)" preserve-whitespace="data.editor.preserveWhitespace"
+    read-only="(data.editor.disabled || loading)"
+    on-content-changed="c.onEditorContentChange(editor, html, text, content, delta, oldDelta, source)"
+    track-changes="all" on-editor-created="c.onEditorReady(editor)" theme="{{ ::data.editor.theme }}"
+    format="{{ ::data.editor.format }}" modules="data.editor.modules"
+    ng-class="{'editor-border': (!focused && !field.value && !data.showToolbar), 'disabled': (data.editor.disabled || loading), 'editor-lg': (data.size === 'lg')}">
+    <ng-quill-toolbar>
+      <div id="toolbar" ng-class="{'editor-active': (focused || data.showToolbar)}">
+        <span class="ql-formats">
+          <button class="ql-bold"></button>
+          <button class="ql-italic"></button>
+          <button class="ql-blockquote"></button>
+          <button class="ql-list" value="ordered"></button>
+          <button class="ql-list" value="bullet"></button>
+        </span>
+      </div>
+    </ng-quill-toolbar>
+  </ng-quill-editor>
+</div>]]></template>
+    </sp_widget>
+</record_update>

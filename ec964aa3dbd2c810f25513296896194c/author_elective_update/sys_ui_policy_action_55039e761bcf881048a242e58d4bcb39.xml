@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_policy_action">
+    <sys_ui_policy_action action="DELETE">
+        <cleared>false</cleared>
+        <disabled>false</disabled>
+        <field>issue_type</field>
+        <mandatory>ignore</mandatory>
+        <sys_class_name>sys_ui_policy_action</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 13:52:38</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>55039e761bcf881048a242e58d4bcb39</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>issue_type</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ui_policy_action_55039e761bcf881048a242e58d4bcb39</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-22 13:52:38</sys_updated_on>
+        <table>x_momo_jira_integr_issue</table>
+        <ui_policy display_value="Enable issue fields when active">45c25a761bcf881048a242e58d4bcb02</ui_policy>
+        <visible>ignore</visible>
+    </sys_ui_policy_action>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_ui_policy_action_55039e761bcf881048a242e58d4bcb39</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_policy_action"><sys_ui_policy_action action="INSERT_OR_UPDATE"><cleared>false</cleared><disabled>false</disabled><field>issue_type</field><mandatory>ignore</mandatory><sys_class_name>sys_ui_policy_action</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-02-22 13:52:38</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>55039e761bcf881048a242e58d4bcb39</sys_id><sys_mod_count>0</sys_mod_count><sys_name>issue_type</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sys_ui_policy_action_55039e761bcf881048a242e58d4bcb39</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-02-22 13:52:38</sys_updated_on><table>x_momo_jira_integr_issue</table><ui_policy display_value="Enable issue fields when active">45c25a761bcf881048a242e58d4bcb02</ui_policy><visible>ignore</visible></sys_ui_policy_action></record_update>]]></payload>
+        <payload_hash>120528073</payload_hash>
+        <record_name>issue_type</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 13:52:38</sys_created_on>
+        <sys_id>04131e361bcf881048a242e58d4bcb0c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1706d2be7810000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-22 13:52:38</sys_updated_on>
+        <type>UI Policy Action</type>
+        <update_guid>0c131e360fcf8810e06672f1c547980b</update_guid>
+        <update_guid_history>0c131e360fcf8810e06672f1c547980b:120528073</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 13:57:20</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_ui_policy_action">sys_ui_policy_action</sys_db_object>
+        <sys_id>4049bc3451054cb7aeb4311e04b078b9</sys_id>
+        <sys_metadata>55039e761bcf881048a242e58d4bcb39</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>issue_type</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_ui_policy_action_55039e761bcf881048a242e58d4bcb39</sys_update_name>
+        <sys_update_version display_value="sys_ui_policy_action_55039e761bcf881048a242e58d4bcb39">04131e361bcf881048a242e58d4bcb0c</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-22 13:57:20</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

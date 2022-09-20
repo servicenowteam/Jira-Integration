@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_data_policy2">
+    <sys_data_policy2 action="DELETE">
+        <active>false</active>
+        <apply_import_set>true</apply_import_set>
+        <apply_soap>true</apply_soap>
+        <conditions table="x_momo_jira_integr_issue">active=false^cab_requestISNOTEMPTY^ORcab_type=none^EQ<item endquery="false" field="active" goto="false" newquery="false" operator="=" or="false" value="false"/>
+            <item endquery="false" field="cab_request" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item endquery="false" field="cab_type" goto="false" newquery="false" operator="=" or="true" value="none"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </conditions>
+        <description/>
+        <enforce_ui>true</enforce_ui>
+        <inherit>false</inherit>
+        <model_id/>
+        <model_table>x_momo_jira_integr_issue</model_table>
+        <reverse_if_false>false</reverse_if_false>
+        <short_description>Disabled All Fields</short_description>
+        <sys_class_name>sys_data_policy2</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 14:27:16</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>4bfa1eb21b03c81048a242e58d4bcb9e</sys_id>
+        <sys_mod_count>11</sys_mod_count>
+        <sys_name>Disabled All Fields</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_data_policy2_4bfa1eb21b03c81048a242e58d4bcb9e</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-12 12:09:53</sys_updated_on>
+    </sys_data_policy2>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_data_policy2_4bfa1eb21b03c81048a242e58d4bcb9e</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_data_policy2"><sys_data_policy2 action="INSERT_OR_UPDATE"><active>false</active><apply_import_set>true</apply_import_set><apply_soap>true</apply_soap><conditions table="x_momo_jira_integr_issue">active=false^cab_requestISNOTEMPTY^ORcab_type=none^EQ<item endquery="false" field="active" goto="false" newquery="false" operator="=" or="false" value="false"/><item endquery="false" field="cab_request" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/><item endquery="false" field="cab_type" goto="false" newquery="false" operator="=" or="true" value="none"/><item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/></conditions><description/><enforce_ui>true</enforce_ui><inherit>false</inherit><model_id/><model_table>x_momo_jira_integr_issue</model_table><reverse_if_false>false</reverse_if_false><short_description>Disabled All Fields</short_description><sys_class_name>sys_data_policy2</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-02-22 14:27:16</sys_created_on><sys_customer_update>false</sys_customer_update><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>4bfa1eb21b03c81048a242e58d4bcb9e</sys_id><sys_mod_count>11</sys_mod_count><sys_name>Disabled All Fields</sys_name><sys_overrides/><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sys_data_policy2_4bfa1eb21b03c81048a242e58d4bcb9e</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-03-12 12:09:53</sys_updated_on></sys_data_policy2></record_update>]]></payload>
+        <payload_hash>53226510</payload_hash>
+        <record_name>Disabled All Fields</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-12 12:09:53</sys_created_on>
+        <sys_id>0cc1f73cdba7c890f2551329689619a2</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>170cea6a73a0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-12 12:09:53</sys_updated_on>
+        <type>Data Policy</type>
+        <update_guid>c8c1f73cf6a7c890de1df3378d205b95</update_guid>
+        <update_guid_history>c8c1f73cf6a7c890de1df3378d205b95:53226510,708a93f86227c89004957bf73841f106:-2129381073,256026ba8703c8101b6c6e3137010b43:-2096539840,f340e2baaa03c810fc06418a832049e3:-1273292493,94106e7af403c8103458462ccb781c00:-531330802,13ff167a8003c81068eb69b759fd816b:-690447681,cb0fd63a4d03c81045f3a0cfead2af79:-531330802,7ffe923a5203c810bbc3cbef55a2fbba:-690447681,35bedeb67303c81082a83da9d8c32fe0:-531330802,99ed16b64003c8107010e83a42a65c1c:-997058297,6d5d92b64c03c810b57491745264e858:-2096539840,c7fa1eb29a03c810480ea4ff9f9105a1:875213800</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-15 16:31:52</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_data_policy2">sys_data_policy2</sys_db_object>
+        <sys_id>745b29e05c574474807426d59b0b2244</sys_id>
+        <sys_metadata>4bfa1eb21b03c81048a242e58d4bcb9e</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Disabled All Fields</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent display_value="">452d16f7db1a0c10f255132968961945</sys_parent>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_data_policy2_4bfa1eb21b03c81048a242e58d4bcb9e</sys_update_name>
+        <sys_update_version display_value="sys_data_policy2_4bfa1eb21b03c81048a242e58d4bcb9e">0cc1f73cdba7c890f2551329689619a2</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-15 16:31:52</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

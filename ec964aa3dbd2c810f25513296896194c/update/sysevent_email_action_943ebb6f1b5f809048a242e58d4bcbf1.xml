@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sysevent_email_action">
+    <sysevent_email_action action="INSERT_OR_UPDATE">
+        <action_insert>false</action_insert>
+        <action_update>true</action_update>
+        <active>true</active>
+        <advanced_condition/>
+        <affected_field_on_event/>
+        <category display_value="Jira" name="Jira">122ea6fa1b43c81048a242e58d4bcbeb</category>
+        <collection>x_momo_jira_integr_issue</collection>
+        <condition table="x_momo_jira_integr_issue">cab_requestVALCHANGES^status.category.external_key=done^active=true^cab_requestISNOTEMPTY^requested_forNSAMEASassigned_to^EQ<item endquery="false" field="cab_request" goto="false" newquery="false" operator="VALCHANGES" or="false" value=""/>
+            <item endquery="false" field="status.category.external_key" goto="false" newquery="false" operator="=" or="false" value="done"/>
+            <item endquery="false" field="active" goto="false" newquery="false" operator="=" or="false" value="true"/>
+            <item endquery="false" field="cab_request" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item endquery="false" field="requested_for" goto="false" newquery="false" operator="NSAMEAS" or="false" value="assigned_to"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </condition>
+        <content_type>text/html</content_type>
+        <default_interval/>
+        <description/>
+        <digest_from/>
+        <digest_html/>
+        <digest_reply_to/>
+        <digest_separator_html><![CDATA[<p>&nbsp;</p>
+<hr />
+<p>&nbsp;</p>]]></digest_separator_html>
+        <digest_separator_text><![CDATA[\n--------------------------------------------------------------------------------\n]]></digest_separator_text>
+        <digest_subject/>
+        <digest_template/>
+        <digest_text/>
+        <digestable>false</digestable>
+        <event_name>antivirus.infected</event_name>
+        <event_parm_1>false</event_parm_1>
+        <event_parm_2>false</event_parm_2>
+        <exclude_delegates>false</exclude_delegates>
+        <force_delivery>false</force_delivery>
+        <from/>
+        <generation_type>engine</generation_type>
+        <importance/>
+        <include_attachments>false</include_attachments>
+        <item>event.parm1</item>
+        <item_table/>
+        <mandatory>false</mandatory>
+        <message/>
+        <message_html><![CDATA[<table class="container-for-gmail-android" style="border-collapse: collapse;" width="100%" cellspacing="0"
+  cellpadding="0" align="center">
+  <tbody>
+    <tr>
+      <td class="content-padding" style="background-color: #f7f7f7; padding: 5px 0 15px; border-collapse: collapse;"
+        align="center" valign="top" width="100%">
+        <center>
+          <table class="w320" style="width: 320px;" cellspacing="0" cellpadding="0">
+            <tbody>
+              <tr>
+                <td class="header-md"
+                  style="padding-bottom: 20px; font-size: 16px !important; font-weight: bold; line-height: normal; text-align: center; color: #4d4d4d; font-family: Helvetica, Arial, sans-serif;">
+                  Last Step!</td>
+              </tr>
+              <tr>
+                <td class="header-sm"
+                  style="padding-bottom: 20px; font-size: 14px !important; font-weight: bold !important; line-height: normal; color: #4d4d4d; font-family: Helvetica, Arial, sans-serif; text-align: center;">
+                  ${short_description}</td>
+              </tr>
+              <tr>
+                <td class="free-text"
+                  style="text-align: center; font-family: Helvetica, Arial, sans-serif; font-size: 14px;">We are pleased
+                  to tell you that your request, ${external_key}, is almost completed!</td>
+              </tr>
+              <tr>
+                <td class="mini-block-container" style="padding: 8px 20px; width: 413.2px;">
+                  <table style="border-collapse: separate !important;" width="100%" cellspacing="0" cellpadding="0">
+                    <tbody>
+                      <tr>
+                        <td class="mini-block"
+                          style="padding: 5px 10px 20px 10px; background-color: #ffffff; width: 278px; border: 1px solid #cccccc; border-radius: 5px;">
+                          <table width="100%" cellspacing="0" cellpadding="0">
+                            <tbody>
+                              <tr>
+                                <td class="comment-body" style="text-align: justify; padding-left: 5px;" align="left">
+                                  <table style="border-collapse: separate !important;" width="100%" cellspacing="0"
+                                    cellpadding="0">
+                                    <tbody>
+                                      <tr>
+                                        <td class="header-sm"
+                                          style="text-align: left !important; padding-bottom: 20px; font-size: 16px !important; font-weight: bold; line-height: normal; color: #4d4d4d;">
+                                          What's Next?</td>
+                                      </tr>
+                                      <tr>
+                                        <td
+                                          style="text-align: left; border-collapse: collapse !important; padding-bottom: 10px !important;">
+                                          <span class="header-sm"
+                                            style="font-size: 14px !important; font-weight: bold; line-height: normal; color: #4d4d4d;">1.</span>
+                                          <span class="free-text"
+                                            style="font-size: 14px !important; font-weight: normal !important; line-height: normal; color: #4d4d4d;">
+                                            We have a planned release date of ${cab_request.end_date}, and we will let
+                                            you know if that changes.</span></td>
+                                      </tr>
+                                      <tr>
+                                        <td
+                                          style="text-align: left; border-collapse: collapse !important; padding-bottom: 10px !important;">
+                                          <span class="header-sm"
+                                            style="font-size: 14px !important; font-weight: bold; line-height: normal; color: #4d4d4d;">2.</span>
+                                          <span class="free-text"
+                                            style="font-size: 14px !important; font-weight: normal !important; line-height: normal; color: #4d4d4d;">
+                                            Be on the look out for more emails. We may still need to communicate with
+                                            you about the details. We will get back with you once we finalize the above
+                                            release date.</span></td>
+                                      </tr>
+                                      <tr>
+                                        <td
+                                          style="text-align: left; border-collapse: collapse !important; padding-bottom: 10px !important;">
+                                          <span class="header-sm"
+                                            style="font-size: 14px !important; font-weight: bold; line-height: normal; color: #4d4d4d;">3.</span>
+                                          <span class="free-text"
+                                            style="font-size: 14px !important; font-weight: normal !important; line-height: normal; color: #4d4d4d;">
+                                            Our number 1 priority is that we exceeded your expectations. If we have not,
+                                            feel free to message us back. We love getting feedback whether it be
+                                            positive, or something we still need to work on.</span></td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </center>
+      </td>
+    </tr>
+    <tr>
+      <td class="button" style="padding-top: 10px !important;">
+        <center>
+          <div>
+            <!--[if mso]>
+              <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${mail_script:jira_sp_link}" style="height:60px;v-text-anchor:middle;width:200px;" arcsize="10%" strokecolor="#ff6f6f" fillcolor="#ff6f6f">
+                <w:anchorlock/>
+                <center style="color:#ffffff;font-family:sans-serif;font-size:13px;font-weight:bold;">Details Here</center>
+              </v:roundrect>
+            <![endif]--><a
+              style="background-color: #ff6f6f; border: 1px solid #ff6f6f; border-radius: 4px; color: #ffffff; display: inline-block; font-family: sans-serif; font-size: 13px; font-weight: bold; line-height: 40px; text-align: center; text-decoration: none; width: 155px; -webkit-text-size-adjust: none; mso-hide: all;"
+              href="${mail_script:jira_sp_link}">Details Here</a></div>
+        </center>
+      </td>
+    </tr>
+  </tbody>
+</table>]]></message_html>
+        <message_list/>
+        <message_text/>
+        <name>Jira Sent to CAB</name>
+        <omit_watermark>false</omit_watermark>
+        <order>100</order>
+        <push_message_only>false</push_message_only>
+        <recipient_fields>requested_for,watch_list</recipient_fields>
+        <recipient_groups/>
+        <recipient_users/>
+        <reply_to/>
+        <send_self>true</send_self>
+        <sms_alternate/>
+        <style/>
+        <subject>${requested_for.first_name} ${external_key} is almost completed!</subject>
+        <subscribable>false</subscribable>
+        <sys_class_name>sysevent_email_action</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-08 15:53:21</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>943ebb6f1b5f809048a242e58d4bcbf1</sys_id>
+        <sys_mod_count>6</sys_mod_count>
+        <sys_name>Jira Sent to CAB</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sysevent_email_action_943ebb6f1b5f809048a242e58d4bcbf1</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-12 11:02:12</sys_updated_on>
+        <sys_version>2</sys_version>
+        <template display_value="Jira Default Template">139810871b57cc5048a242e58d4bcb75</template>
+        <type>email</type>
+        <weight>0</weight>
+    </sysevent_email_action>
+    <sys_translated_text action="delete_multiple" query="documentkey=943ebb6f1b5f809048a242e58d4bcbf1"/>
+</record_update>

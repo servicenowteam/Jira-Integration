@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_email">
+    <sys_script_email action="INSERT_OR_UPDATE">
+        <name>jira_view_latest_comment</name>
+        <new_lines_to_html>false</new_lines_to_html>
+        <script><![CDATA[(function runMailScript(current, template, email, email_action, event) {
+
+  var comment = getComment(current.getUniqueValue());
+
+  template.print(comment.replace(/\n/gm, '<br style="mso-data-placement:same-cell;">'));
+
+  function getComment(element_id) {
+    gs.include('JiraStringUtils');
+    var utils = new JiraStringUtils();
+    var gr = new GlideRecord('sys_journal_field');
+    gr.addQuery('element', 'comments');
+    gr.addQuery('element_id', element_id);
+    gr.addQuery('name', 'x_momo_jira_integr_issue');
+    gr.orderByDesc('sys_created_on');
+    gr.query();
+
+    while (gr.next()) {
+      return utils.toPlainText(gr.getValue('value')).getText();
+    }
+  }
+})(current, template, email, email_action, event);]]></script>
+        <sys_class_name>sys_script_email</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-06 10:17:31</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>507ed4c71b57cc5048a242e58d4bcbaf</sys_id>
+        <sys_mod_count>5</sys_mod_count>
+        <sys_name>jira_view_latest_comment</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_email_507ed4c71b57cc5048a242e58d4bcbaf</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-07 08:57:55</sys_updated_on>
+    </sys_script_email>
+</record_update>

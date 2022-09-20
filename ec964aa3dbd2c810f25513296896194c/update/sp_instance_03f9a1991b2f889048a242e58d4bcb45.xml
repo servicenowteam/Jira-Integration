@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_instance">
+    <sp_instance action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <class_name/>
+        <color>default</color>
+        <css/>
+        <glyph/>
+        <id>Team Workload By Month</id>
+        <order>1</order>
+        <roles/>
+        <short_description/>
+        <size>md</size>
+        <sp_column display_value="2">d3992d591b2f889048a242e58d4bcb64</sp_column>
+        <sp_widget display_value="Jira Report Card">333f74111b6b889048a242e58d4bcb8d</sp_widget>
+        <sys_class_name>sp_instance</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-13 15:33:40</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>03f9a1991b2f889048a242e58d4bcb45</sys_id>
+        <sys_mod_count>15</sys_mod_count>
+        <sys_name/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_instance_03f9a1991b2f889048a242e58d4bcb45</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-13 17:10:40</sys_updated_on>
+        <title/>
+        <url/>
+        <widget_parameters><![CDATA[{
+  "title": "Requested Releases This Month By Team",
+  "chartType": "pie",
+  "table": "x_momo_jira_integr_issue",
+  "groupBy": "project",
+  "query": "active=true^approval=approved^cab_requestISEMPTY^request_implementation_dateONThis month@javascript:gs.beginningOfThisMonth()@javascript:gs.endOfThisMonth()",
+  "colors": null,
+  "limitResults": true,
+  "noResultsMsg": "Nothing being released this month"
+}]]></widget_parameters>
+    </sp_instance>
+    <sys_translated_text action="delete_multiple" query="documentkey=03f9a1991b2f889048a242e58d4bcb45"/>
+</record_update>

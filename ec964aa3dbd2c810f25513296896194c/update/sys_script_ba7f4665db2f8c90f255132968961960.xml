@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>std_change_record_producer</collection>
+        <condition>gs.getProperty('x_momo_jira_integr.change_request')</condition>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="std_change_record_producer">active=true^nameISNOTEMPTY^templateISNOTEMPTY^EQ<item endquery="false" field="active" goto="false" newquery="false" operator="=" or="false" value="true"/>
+            <item endquery="false" field="name" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item endquery="false" field="template" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Standard Change Template Created</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+  gs.include('JiraRequest');
+
+  var parent = getBelongsTo();
+
+  if (parent) {
+    var res = createJiraOption(parent, current.getValue('name'));
+    if (res) {
+      var options = getCustomFieldOptions(parent.externalId);
+      if (Array.isArray(options)) {
+        options = options.filter(function(item) {
+          return item.value == current.getValue('name');
+        });
+  
+        if (options.length > 0) {
+          options.forEach(function(option) {
+            createCustomFieldOption({
+              sysId: current.getUniqueValue(),
+              external_id: option.id,
+              belongsTo: parent.sysId
+            });
+          });
+        }
+      }
+    }
+  }
+
+  function createJiraOption(parent, name) {
+    var request = new JiraRequest();
+    var payload =  {
+      options: [{
+        value: name,
+        cascadingOptions: []
+      }]
+    };
+    return request.createCustomFieldOptions(parent.externalId, payload);
+  }
+
+  function getCustomFieldOptions(customId) {
+    var request = new JiraRequest();
+    var response = request.getCustomFieldOptions(customId);
+    if (!response) return [];
+    return response.values;
+  }
+  
+  function getBelongsTo() {
+    if (!changeParentFieldExists()) return false;
+    var gr = new GlideRecord('x_momo_jira_integr_jira_fields');
+    gr.addQuery('change_template_field', true);
+    gr.addQuery('active', true);
+    gr.query();
+  
+    while (gr.next()) {
+      if (gr.isValid()) {
+        return {
+          externalId: gr.getValue('custom_id'),
+          sysId: gr.getUniqueValue(),
+          fieldId: gr.getValue('field_id')
+        };
+      }
+    }
+  }
+
+  function createCustomFieldOption(response) {
+
+    var gr = new GlideRecord('x_momo_jira_integr_standard_change_map');
+    gr.initialize();
+    gr.standard_change_template = response.sysId;
+    gr.external_id = response.id;
+    gr.belongs_to = response.belongsTo;
+    gr.insert();
+  }
+
+  function changeParentFieldExists() {
+    var ga = new GlideAggregate('x_momo_jira_integr_jira_fields');
+    ga.addAggregate('COUNT');
+    ga.addEncodedQuery('change_template_field=true^custom_idISNOTEMPTY');
+    ga.query();
+  
+    while (ga.next()) {
+      var count = ga.getAggregate('COUNT');
+      return (Number(count) > 0);
+    }
+    return false;
+  }
+  
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-14 12:57:37</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>ba7f4665db2f8c90f255132968961960</sys_id>
+        <sys_mod_count>9</sys_mod_count>
+        <sys_name>Standard Change Template Created</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_ba7f4665db2f8c90f255132968961960</sys_update_name>
+        <sys_updated_by>Adrian.Wilson</sys_updated_by>
+        <sys_updated_on>2022-09-15 17:50:03</sys_updated_on>
+        <template/>
+        <when>async_always</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=ba7f4665db2f8c90f255132968961960"/>
+</record_update>

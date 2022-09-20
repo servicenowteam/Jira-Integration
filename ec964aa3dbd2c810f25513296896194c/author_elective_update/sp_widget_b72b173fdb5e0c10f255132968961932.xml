@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="DELETE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope, $window) {
+  /* widget controller */
+  var c = this;
+
+  $scope.goToNewRecord = function(link) {
+    $window.location.href = link;
+  }
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.panel {&#13;
+  border: none;&#13;
+  padding-left: 0px;&#13;
+  padding-right: 0px;&#13;
+}&#13;
+&#13;
+.panel-body {&#13;
+  padding: 20px 0px 30px 0px;&#13;
+}&#13;
+&#13;
+.col-xs-12 {&#13;
+  padding-left: 5px;&#13;
+  padding-right: 5px;&#13;
+  margin-bottom: 5px;&#13;
+}&#13;
+&#13;
+.btn.btn-outline:hover {&#13;
+  border-color: $brand-primary;&#13;
+  color: #fff;&#13;
+  background: $brand-primary;&#13;
+&#13;
+  border-style: solid;&#13;
+  border-radius: 5px;&#13;
+  border-width: 1px;&#13;
+&#13;
+  -webkit-transition: all .3s ease-out;&#13;
+  -moz-transition: all .3s ease-out;&#13;
+  -ms-transition: all .3s ease-out;&#13;
+  transition: all .3s ease-out;&#13;
+}&#13;
+&#13;
+.btn.btn-outline:focus {&#13;
+  border: 1px solid $brand-primary;&#13;
+  box-shadow: 0px 0px 5px $brand-primary;&#13;
+  outline: none;&#13;
+}&#13;
+&#13;
+.btn.btn-outline {&#13;
+  background: #fff;&#13;
+&#13;
+  border-style: solid;&#13;
+  border-radius: 5px;&#13;
+  border-width: 1px;&#13;
+&#13;
+  -webkit-transition: all .3s ease-out;&#13;
+  -moz-transition: all .3s ease-out;&#13;
+  -ms-transition: all .3s ease-out;&#13;
+  transition: all .3s ease-out;&#13;
+  border-color: $brand-primary;&#13;
+  color: $brand-primary;&#13;
+}&#13;
+&#13;
+@media screen and (max-width: 1000px) {&#13;
+  .panel {&#13;
+    display: none;&#13;
+    visibility: hidden;&#13;
+  }&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira_quick_actions</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Jira Quick Actions</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.table = options.table || $sp.getValue('table') || 'x_momo_jira_integr_issue';
+  data.canCreate = gs.hasRole('x_momo_jira_integr.issue_user');
+  data.buttons = options.buttons.map(function(button) {
+    return {
+      name: button.name,
+      link: "?id=jira_issue_new_form&table=" + data.table + '&request_type=' + button.params.request_type
+    }
+  });
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 14:54:34</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>b72b173fdb5e0c10f255132968961932</sys_id>
+        <sys_mod_count>21</sys_mod_count>
+        <sys_name>Jira Quick Actions</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_b72b173fdb5e0c10f255132968961932</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 15:39:15</sys_updated_on>
+        <template><![CDATA[<div class="panel panel-primary col-md-9" ng-if="data.buttons && data.canCreate">
+  <div class="panel-heading">
+    <div class="sp-attachments-header panel-title pull-left">
+      ${Create a request}
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="panel-body padder-t padder-b-none">
+    <div class="col-xs-12" ng-repeat="btn in data.buttons track by $index">
+      <button
+        type="button"
+        class="btn btn-block btn-outline"
+        ng-click="goToNewRecord(btn.link)">
+        <span>{{::btn.name}}</span>
+      </button>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sp_widget_b72b173fdb5e0c10f255132968961932</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sp_widget"&gt;&lt;sp_widget action="INSERT_OR_UPDATE"&gt;&lt;category&gt;custom&lt;/category&gt;&lt;client_script&gt;&lt;![CDATA[function($scope, $window) {
+  /* widget controller */
+  var c = this;
+
+  $scope.goToNewRecord = function(link) {
+    $window.location.href = link;
+  }
+}]]&gt;&lt;/client_script&gt;&lt;controller_as&gt;c&lt;/controller_as&gt;&lt;css&gt;.panel {&amp;#13;
+  border: none;&amp;#13;
+  padding-left: 0px;&amp;#13;
+  padding-right: 0px;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.panel-body {&amp;#13;
+  padding: 20px 0px 30px 0px;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.col-xs-12 {&amp;#13;
+  padding-left: 5px;&amp;#13;
+  padding-right: 5px;&amp;#13;
+  margin-bottom: 5px;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.btn.btn-outline:hover {&amp;#13;
+  border-color: $brand-primary;&amp;#13;
+  color: #fff;&amp;#13;
+  background: $brand-primary;&amp;#13;
+&amp;#13;
+  border-style: solid;&amp;#13;
+  border-radius: 5px;&amp;#13;
+  border-width: 1px;&amp;#13;
+&amp;#13;
+  -webkit-transition: all .3s ease-out;&amp;#13;
+  -moz-transition: all .3s ease-out;&amp;#13;
+  -ms-transition: all .3s ease-out;&amp;#13;
+  transition: all .3s ease-out;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.btn.btn-outline:focus {&amp;#13;
+  border: 1px solid $brand-primary;&amp;#13;
+  box-shadow: 0px 0px 5px $brand-primary;&amp;#13;
+  outline: none;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.btn.btn-outline {&amp;#13;
+  background: #fff;&amp;#13;
+&amp;#13;
+  border-style: solid;&amp;#13;
+  border-radius: 5px;&amp;#13;
+  border-width: 1px;&amp;#13;
+&amp;#13;
+  -webkit-transition: all .3s ease-out;&amp;#13;
+  -moz-transition: all .3s ease-out;&amp;#13;
+  -ms-transition: all .3s ease-out;&amp;#13;
+  transition: all .3s ease-out;&amp;#13;
+  border-color: $brand-primary;&amp;#13;
+  color: $brand-primary;&amp;#13;
+}&amp;#13;
+&amp;#13;
+@media screen and (max-width: 1000px) {&amp;#13;
+  .panel {&amp;#13;
+    display: none;&amp;#13;
+    visibility: hidden;&amp;#13;
+  }&amp;#13;
+}&lt;/css&gt;&lt;data_table&gt;sp_instance&lt;/data_table&gt;&lt;demo_data/&gt;&lt;description/&gt;&lt;docs/&gt;&lt;field_list/&gt;&lt;has_preview&gt;false&lt;/has_preview&gt;&lt;id&gt;jira_quick_actions&lt;/id&gt;&lt;internal&gt;false&lt;/internal&gt;&lt;link&gt;&lt;![CDATA[function link(scope, element, attrs, controller) {  }]]&gt;&lt;/link&gt;&lt;name&gt;Jira Quick Actions&lt;/name&gt;&lt;option_schema/&gt;&lt;public&gt;false&lt;/public&gt;&lt;roles/&gt;&lt;script&gt;&lt;![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.table = options.table || $sp.getValue('table') || 'x_momo_jira_integr_issue';
+  data.canCreate = gs.hasRole('x_momo_jira_integr.issue_user');
+  data.buttons = options.buttons.map(function(button) {
+    return {
+      name: button.name,
+      link: "?id=jira_issue_new_form&amp;table=" + data.table + '&amp;request_type=' + button.params.request_type
+    }
+  });
+})();]]&gt;&lt;/script&gt;&lt;servicenow&gt;false&lt;/servicenow&gt;&lt;sys_class_name&gt;sp_widget&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg@movement.com&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-01-19 14:54:34&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;b72b173fdb5e0c10f255132968961932&lt;/sys_id&gt;&lt;sys_mod_count&gt;21&lt;/sys_mod_count&gt;&lt;sys_name&gt;Jira Quick Actions&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sp_widget_b72b173fdb5e0c10f255132968961932&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg@movement.com&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-01-19 15:39:15&lt;/sys_updated_on&gt;&lt;template&gt;&lt;![CDATA[&lt;div class="panel panel-primary col-md-9" ng-if="data.buttons &amp;&amp; data.canCreate"&gt;
+  &lt;div class="panel-heading"&gt;
+    &lt;div class="sp-attachments-header panel-title pull-left"&gt;
+      ${Create a request}
+    &lt;/div&gt;
+    &lt;div class="clearfix"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="panel-body padder-t padder-b-none"&gt;
+    &lt;div class="col-xs-12" ng-repeat="btn in data.buttons track by $index"&gt;
+      &lt;button
+        type="button"
+        class="btn btn-block btn-outline"
+        ng-click="goToNewRecord(btn.link)"&gt;
+        &lt;span&gt;{{::btn.name}}&lt;/span&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;]]&gt;&lt;/template&gt;&lt;/sp_widget&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>1269170054</payload_hash>
+        <record_name>Jira Quick Actions</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 15:39:15</sys_created_on>
+        <sys_id>1e652f7bdb9e0c10f2551329689619a0</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fbe754a160000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 15:39:15</sys_updated_on>
+        <type>Widget</type>
+        <update_guid>d2652f7b049e0c10524abbdfebad9fa0</update_guid>
+        <update_guid_history>d2652f7b049e0c10524abbdfebad9fa0:1269170054,4015e37bfe9e0c104fb51981227f00b0:658784915,baf267b7c99e0c1050c4c3b1b3772c1a:-1828360735,52b223b74c9e0c1044e88cbd4622c3f0:-779874396,9d9263b72a9e0c10a449a84e334de856:-2054113218,849223b7749e0c10aa9e2f2329b55de9:-284559966,e982a7773d9e0c10d537e10dc957746f:424218885,1e426777549e0c107d44e59f3806e3f2:-1793752728,31426777659e0c10a15e770a83406a2d:583359061,77026777209e0c1013ebce796b28c4eb:1476795922,d10223774b9e0c1007a821a414b99c06:1074554578,05a1eff30e9e0c10f9f249d98d120cdb:-1426093310,4091eff31f9e0c109ef03c469246e7d6:1406109611,42cf17b3d09e0c100d235defe38eac89:-323130529,e7af57b3ed9e0c10b5e241df74d0e749:-2075025397,daaf17b3be9e0c10fef9338862567583:-49980907,639f1f736f9e0c105ffc0f99cea66cdb:588533719,505f5f73629e0c10d2777dd59e5b3b9e:-295925904,ad4f1f73c29e0c1024db02f19416b3d5:2122846881,9b1ddfbfd85e0c10b5df218f433a2a1e:-2079665530,279b5f3faa5e0c105e729ac9790cdae4:1715591152,bb2b173f975e0c10ffa95782efc84e33:1767046602</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">ad7c6bf3dbde0c10f255132968961951</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 16:10:03</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sp_widget">sp_widget</sys_db_object>
+        <sys_id>388ed32713d94f199ed7ef2070eaf969</sys_id>
+        <sys_metadata>b72b173fdb5e0c10f255132968961932</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Jira Quick Actions</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sp_widget_b72b173fdb5e0c10f255132968961932</sys_update_name>
+        <sys_update_version display_value="sp_widget_b72b173fdb5e0c10f255132968961932">1e652f7bdb9e0c10f2551329689619a0</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 16:10:03</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

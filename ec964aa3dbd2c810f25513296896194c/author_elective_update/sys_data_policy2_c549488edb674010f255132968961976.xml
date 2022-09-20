@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_data_policy2">
+    <sys_data_policy2 action="DELETE">
+        <active>false</active>
+        <apply_import_set>true</apply_import_set>
+        <apply_soap>true</apply_soap>
+        <conditions table="x_momo_jira_integr_issue">active=true^EQ<item endquery="false" field="active" goto="false" newquery="false" operator="=" or="false" value="true"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </conditions>
+        <description>Hides projects that are not in the included projects list, if the included projects list is not empty</description>
+        <enforce_ui>true</enforce_ui>
+        <inherit>false</inherit>
+        <model_id/>
+        <model_table>x_momo_jira_integr_issue</model_table>
+        <reverse_if_false>true</reverse_if_false>
+        <short_description>Hide Projects</short_description>
+        <sys_class_name>sys_data_policy2</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-15 16:27:41</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>c549488edb674010f255132968961976</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>Hide Projects</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_data_policy2_c549488edb674010f255132968961976</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-15 16:29:47</sys_updated_on>
+    </sys_data_policy2>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_data_policy2_c549488edb674010f255132968961976</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_data_policy2"><sys_data_policy2 action="INSERT_OR_UPDATE"><active>false</active><apply_import_set>true</apply_import_set><apply_soap>true</apply_soap><conditions table="x_momo_jira_integr_issue">active=true^EQ<item endquery="false" field="active" goto="false" newquery="false" operator="=" or="false" value="true"/><item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/></conditions><description>Hides projects that are not in the included projects list, if the included projects list is not empty</description><enforce_ui>true</enforce_ui><inherit>false</inherit><model_id/><model_table>x_momo_jira_integr_issue</model_table><reverse_if_false>true</reverse_if_false><short_description>Hide Projects</short_description><sys_class_name>sys_data_policy2</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-03-15 16:27:41</sys_created_on><sys_customer_update>false</sys_customer_update><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>c549488edb674010f255132968961976</sys_id><sys_mod_count>2</sys_mod_count><sys_name>Hide Projects</sys_name><sys_overrides/><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sys_data_policy2_c549488edb674010f255132968961976</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-03-15 16:29:47</sys_updated_on></sys_data_policy2></record_update>]]></payload>
+        <payload_hash>-2100427502</payload_hash>
+        <record_name>Hide Projects</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-15 16:29:47</sys_created_on>
+        <sys_id>a40a48cedb674010f2551329689619ef</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>170df07aed10000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-15 16:29:47</sys_updated_on>
+        <type>Data Policy</type>
+        <update_guid>2c0a48cef7674010bdecd7a381047bee</update_guid>
+        <update_guid_history>2c0a48cef7674010bdecd7a381047bee:-2100427502,d6998c0e086740106586724c56dc4ead:99990131,6189cc4e176740108da4b64d9d7845db:-1999901675</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-15 16:31:42</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_data_policy2">sys_data_policy2</sys_db_object>
+        <sys_id>0b2b1eebc42b4eb091d33db3fa6e6890</sys_id>
+        <sys_metadata>c549488edb674010f255132968961976</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Hide Projects</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent display_value="">452d16f7db1a0c10f255132968961945</sys_parent>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_data_policy2_c549488edb674010f255132968961976</sys_update_name>
+        <sys_update_version display_value="sys_data_policy2_c549488edb674010f255132968961976">a40a48cedb674010f2551329689619ef</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-15 16:31:42</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

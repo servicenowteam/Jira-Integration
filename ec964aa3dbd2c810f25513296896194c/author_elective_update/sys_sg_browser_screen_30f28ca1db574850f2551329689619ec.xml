@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_browser_screen">
+    <sys_sg_browser_screen action="DELETE">
+        <available_offline>false</available_offline>
+        <description>Jira Issues</description>
+        <dynamic_prefetch_count/>
+        <external_browser>false</external_browser>
+        <fetch_type>not_required</fetch_type>
+        <hide_filters>false</hide_filters>
+        <icon display_value="Issues Icon">6cf248a1db574850f255132968961995</icon>
+        <name>Issues</name>
+        <relative_url>true</relative_url>
+        <roles_override/>
+        <sys_class_name>sys_sg_browser_screen</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 16:27:00</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>30f28ca1db574850f2551329689619ec</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Issues</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_sg_browser_screen_30f28ca1db574850f2551329689619ec</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-01 16:27:00</sys_updated_on>
+        <url>/sp?id=application_development_requests</url>
+    </sys_sg_browser_screen>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_sg_browser_screen_30f28ca1db574850f2551329689619ec</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_browser_screen"><sys_sg_browser_screen action="INSERT_OR_UPDATE"><available_offline>false</available_offline><description>Jira Issues</description><dynamic_prefetch_count/><external_browser>false</external_browser><fetch_type>not_required</fetch_type><hide_filters>false</hide_filters><icon display_value="Issues Icon">6cf248a1db574850f255132968961995</icon><name>Issues</name><relative_url>true</relative_url><roles_override/><sys_class_name>sys_sg_browser_screen</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-03-01 16:27:00</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>30f28ca1db574850f2551329689619ec</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Issues</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sys_sg_browser_screen_30f28ca1db574850f2551329689619ec</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-03-01 16:27:00</sys_updated_on><url>/sp?id=application_development_requests</url></sys_sg_browser_screen></record_update>]]></payload>
+        <payload_hash>2041929010</payload_hash>
+        <record_name>Issues</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 16:27:01</sys_created_on>
+        <sys_id>9b1380e1db574850f255132968961913</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>17096ec1c110000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-01 16:27:01</sys_updated_on>
+        <type>Browser Screen</type>
+        <update_guid>931380e1d2574850d4d693455b97fb13</update_guid>
+        <update_guid_history>931380e1d2574850d4d693455b97fb13:2041929010</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 16:29:52</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_sg_browser_screen">sys_sg_browser_screen</sys_db_object>
+        <sys_id>3d44b3a28c104976a2165fe980adbe29</sys_id>
+        <sys_metadata>30f28ca1db574850f2551329689619ec</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Issues</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_sg_browser_screen_30f28ca1db574850f2551329689619ec</sys_update_name>
+        <sys_update_version display_value="sys_sg_browser_screen_30f28ca1db574850f2551329689619ec">9b1380e1db574850f255132968961913</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-01 16:29:52</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

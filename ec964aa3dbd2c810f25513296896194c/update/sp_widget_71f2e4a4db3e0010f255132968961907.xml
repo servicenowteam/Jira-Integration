@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function ($scope, $window, $http, $rootScope, jiraMarkdown) {
+  /* widget controller */
+  var c = this;
+
+  $scope.journalFieldInput = null;
+  $scope.journalInputRows = 1;
+
+  c.$onInit = function () {
+    $scope.activityType = {
+      selected: true,
+      showInputField: true,
+      optionValue: "1",
+      name: 'Comments',
+      placeholder: 'Add a comment...',
+      htmlClass: 'comments',
+      columnName: 'comments'
+    }
+  }
+
+  $scope.user = {
+    sys_id: $window.NOW.user_id,
+    user_display_name: $window.NOW.user_display_name
+  };
+
+  $rootScope.$on('jira.activity.changed', function (e, activity) {
+    $scope.activityType = activity;
+    if (!$scope.activityType.showInputField) {
+      $scope.journalFieldInput = null;
+      $scope.journalInputRows = 1;
+    }
+  });
+
+  $scope.insertJournalFieldEntry = function (evt) {
+    $scope.data.inputFieldValue = jiraMarkdown.toJira($scope.journalFieldInput);
+    $scope.data.inputFieldName = $scope.activityType.columnName;
+    $scope.server.update().then(function () {
+      $scope.journalFieldInput = null;
+      $scope.journalInputRows = 1;
+      $rootScope.$broadcast('jira.journal-field.inserted');
+    });
+  }
+
+  $scope.inputFieldIsNull = function () {
+    return ($scope.journalFieldInput === null || $scope.journalFieldInput === '' || $scope.journalFieldInput === undefined);
+  }
+  $scope.setJournalInputRows = function (numberOfRows) {
+    if (numberOfRows == 1 && !$scope.inputFieldIsNull()) return;
+    $scope.journalInputRows = numberOfRows;
+  }
+
+
+  var liveProfiles = {};
+  liveProfiles[$scope.user.sys_id] = {
+    userID: $scope.user.sys_id,
+    name: $scope.user.user_display_name,
+    initials: $window.NOW.user_initials
+  };
+  if ($window.NOW.user_avatar) {
+    liveProfiles[$scope.user.sys_id].userImage = $window.NOW.user_avatar;
+  }
+
+  $scope.getLiveProfileByUserId = function (userId) {
+    return liveProfiles[userId];
+  }
+
+  var pending = {};
+
+  //Little caching implementation to make sure we only get a given user's profile once.
+  $scope.hasLiveProfile = function hasLiveProfile(userId) {
+    if (!userId)
+      return false;
+
+    if (liveProfiles[userId])
+      return true;
+
+    if (pending[userId])
+      return false;
+
+    pending[userId] = $http.get('/api/now/live/profiles/sys_user.' + userId).then(function (response) {
+      liveProfiles[userId] = {
+        userID: userId,
+        name: response.data.result.name,
+        initials: buildInitials(response.data.result.name),
+        avatar: response.data.result.avatar
+      };
+    });
+    return false;
+  }
+
+  function buildInitials(name) {
+    if (!name)
+      return "--";
+
+    var initials = name.split(" ").map(function (word) {
+      return word.toUpperCase();
+    }).filter(function (word) {
+      return word.match(/^[A-Z]/);
+    }).map(function (word) {
+      return word.substring(0, 1);
+    }).join("");
+
+    return (initials.length > 3) ? initials.substr(0, 3) : initials;
+  }
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>textarea {
+  resize: none;
+  vertical-align: middle;
+  display: inline-flex;
+  margin-left: 5px;
+}
+
+.md-editor {
+  display: inline-block;
+  width: 85%;
+
+  &amp; .btn-toolbar {
+    display: none;
+    margin-left: 0px;
+    margin-bottom: 5px;
+    transition: all 1s ease-in;
+  }
+
+  &amp; .btn-toolbar.active-toolbar {
+    display: block;
+    transition: all 1s ease-in;
+  }
+}
+
+.row {
+  &amp;.emails {
+    display: none;
+  }
+
+  &amp;.work-notes {
+    &amp; .avatar-container .avatar.soloAvatar {
+      background: gold;
+      transition: all 0.4s;
+    }
+  }
+
+  &amp;.comments {
+    &amp; .avatar-container .avatar.soloAvatar {
+      background: #1a8cff;
+      transition: all 0.4s;
+    }
+  }
+}
+
+textarea.work-notes {
+  box-shadow: none;
+  transition: all 0.3s;
+
+  &amp;:focus {
+    box-shadow: 0px 0px 7px gold;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    outline: none;
+    transition: all 0.2s;
+  }
+}
+
+.send-button-container {
+  position: relative;
+  padding-left: 15px;
+  display: inline-block;
+  padding-top: 5px;
+  vertical-align: middle;
+
+  &amp; button {
+    padding: 6px 0px;
+    transition: all 0.4s;
+
+    &amp; span {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: rgba(0, 0, 0, 0.15) center;
+      padding: 6px 12px 6px 12px;
+      height: 100%;
+      width: 100%;
+      border-radius: 4px;
+      border: 1px solid transparent;
+    }
+
+    &amp;.work-notes {
+      background: gold;
+      outline: none;
+      border-radius: 4px;
+      color: #fff;
+
+      &amp;:focus {
+        box-shadow: 0px 0px 7px gold;
+        border: 1px solid transparent;
+        outline: none;
+        transition: all 0.4s;
+      }
+    }
+
+    &amp;.comments {
+      background: #1a8cff;
+      color: #fff;
+    }
+  }
+}
+
+label.activity-panel-footer {
+  margin-bottom: 0px;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+select.custom-select {
+  border: none;
+  box-shadow: none;
+  color: #000;
+  border-radius: 2px;
+  outline: none;
+  font-weight: 350;
+
+  &amp;:hover {
+    background-color: rgba(9, 30, 66, .04);
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  &amp;:active,
+  &amp;:focus {
+    color: #000;
+    background-color: #fff;
+    transition: all 0.2s
+  }
+
+  &amp; option {
+    font-size: 14px;
+    background-color: initial;
+
+    &amp;:hover {
+      background-color: rgba(9, 30, 66, .03);
+    }
+  }
+}
+
+.activity-feed-header {
+  padding: 0px 15px 15px 15px;
+}
+
+.center {
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  display: inline-flex;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira-issue-activity-input</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Jira Form Activity Input</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.table = (input ? input.table : undefined) || options.table || $sp.getParameter('table');
+  data.sys_id = (input ? input.sys_id : undefined) || $sp.getParameter('sys_id');
+
+  var gr = new GlideRecord(data.table);
+  if (!gr.isValid()) return;
+
+  gr.get(data.sys_id);
+
+  if (!gr) return;
+
+  if (!gr.canRead()) return;
+  data.canWrite = gr.canWrite() && gr.getValue('active') == true;
+
+  if (input) {
+
+    if (!gs.nil(input.inputFieldValue) && !gs.nil(input.inputFieldName)) {
+      if (gr.canWrite()) {
+        gr[input.inputFieldName] = input.inputFieldValue;
+        data.input = input;
+        gr.update();
+      }
+    }
+  }
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-02 19:40:51</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>71f2e4a4db3e0010f255132968961907</sys_id>
+        <sys_mod_count>327</sys_mod_count>
+        <sys_name>Jira Form Activity Input</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_71f2e4a4db3e0010f255132968961907</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-07-18 10:33:56</sys_updated_on>
+        <template><![CDATA[<div class="activity-feed-header">
+  <div class="row m-t" ng-class="activityType.htmlClass">
+    <div class="col-md-12">
+      <sn-avatar-once primary="getLiveProfileByUserId(user.sys_id)" class="avatar-large hidden-xs" show-presence="false"
+        ng-show="activityType.showInputField" enable-context-menu="false"></sn-avatar-once>
+      <textarea ng-model="journalFieldInput" markdown-editor show-toolbar-on-focus="true" rows="{{ journalInputRows }}"
+        class="form-control" ng-class="activityType.htmlClass" on-focus="setJournalInputRows(4)"
+        on-blur="setJournalInputRows(1)" ng-show="activityType.showInputField" ng-disabled="!data.canWrite"
+        placeholder="{{ activityType.placeholder }}"></textarea>
+      <div class="send-button-container" ng-show="activityType.showInputField && !inputFieldIsNull()">
+        <button class="btn btn-default btn-sm pull-right" ng-disabled="!data.canWrite" ng-class="activityType.htmlClass"
+          ng-click="insertJournalFieldEntry($event)">
+          <span>Send</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

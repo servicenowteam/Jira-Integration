@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_action">
+    <sys_ui_action action="INSERT_OR_UPDATE">
+        <action_name>sysverb_update_options</action_name>
+        <active>true</active>
+        <client>false</client>
+        <client_script_v2><![CDATA[function onClick(g_form) {
+
+}]]></client_script_v2>
+        <comments/>
+        <condition>gs.getProperty('x_momo_jira_integr.change_request')</condition>
+        <form_action>false</form_action>
+        <form_button>false</form_button>
+        <form_button_v2>false</form_button_v2>
+        <form_context_menu>false</form_context_menu>
+        <form_link>false</form_link>
+        <form_menu_button_v2>false</form_menu_button_v2>
+        <form_style>primary</form_style>
+        <format_for_configurable_workspace>false</format_for_configurable_workspace>
+        <hint/>
+        <isolate_script>false</isolate_script>
+        <list_action>true</list_action>
+        <list_banner_button>true</list_banner_button>
+        <list_button>false</list_button>
+        <list_choice>false</list_choice>
+        <list_context_menu>false</list_context_menu>
+        <list_link>false</list_link>
+        <list_save_with_form_button>false</list_save_with_form_button>
+        <list_style/>
+        <messages/>
+        <name>Update Standard Template Options</name>
+        <onclick/>
+        <order>102</order>
+        <script><![CDATA[gs.include('JiraRequestV2');
+var change = changeTemplateFieldExists();
+
+if (!change) {
+  gs.addErrorMessage('You have not selected a field to be the standard change field. Please select the field, and all options will be updated');
+} else {
+  var request = new JiraRequestV2();
+  var templates = getStandardChangeTemplates();
+  var fieldId = change.getValue('field_id').replace('customfield_', '');
+  var options = request.send({
+    method: 'GET',
+    path: 'customField/' + fieldId + '/option'
+  }).getResponse();
+
+  if (options) {
+    var values = options.values;
+    var newOptions = getNewStandardChangeOptions(values, templates);
+    if (newOptions.length > 0) {
+      request.send({
+        method: 'POST',
+        async: true,
+        body: {
+          options: newOptions
+        }
+      });
+    } else {
+      gs.addInfoMessage('All your standard templates are already up to date.');
+    }
+  }
+}
+
+function getNewStandardChangeOptions(options, templates) {
+  var newTemplates = [];
+  var util = new global.ArrayUtil();
+  if (Array.isArray(templates) && Array.isArray(options)) {
+    options = options.map(function (option) {
+      return option.value;
+    });
+    for (var i = 0; i < templates.length; i++) {
+      var name = templates[i];
+      if (!util.contains(options, name)) {
+        newTemplates.push(name);
+      }
+    }
+  }
+  if (newTemplates.length === 0) return [];
+
+  return newTemplates.map(function (opt) {
+    return {
+      value: opt,
+      cascadingOptions: []
+    };
+  });
+}
+
+function getStandardChangeTemplates() {
+  var templates = [];
+  var gr = new GlideRecord('std_change_record_producer');
+  gr.addQuery('active', true);
+  gr.query();
+
+  while (gr.next()) {
+    templates.push(gr.getValue('name'));
+  }
+  return templates;
+}
+
+
+function changeTemplateFieldExists() {
+  var gr = new GlideRecord('x_momo_jira_integr_jira_fields');
+
+  gr.get('change_template_field', true);
+
+  if (gr.isValidRecord()) {
+    return gr;
+  }
+  return false;
+}]]></script>
+        <show_insert>true</show_insert>
+        <show_multiple_update>false</show_multiple_update>
+        <show_query>false</show_query>
+        <show_update>true</show_update>
+        <sys_class_name>sys_ui_action</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-08-21 12:07:50</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>c8820e05db72dc10f2551329689619db</sys_id>
+        <sys_mod_count>14</sys_mod_count>
+        <sys_name>Update Standard Template Options</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ui_action_c8820e05db72dc10f2551329689619db</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-08-21 13:10:48</sys_updated_on>
+        <table>x_momo_jira_integr_jira_fields</table>
+        <ui11_compatible>true</ui11_compatible>
+        <ui16_compatible>false</ui16_compatible>
+    </sys_ui_action>
+</record_update>

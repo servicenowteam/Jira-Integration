@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_dependency_js_include">
+    <m2m_sp_dependency_js_include action="DELETE">
+        <order>99</order>
+        <sp_dependency display_value="highcharts-ng">768db45d1b2b889048a242e58d4bcbb7</sp_dependency>
+        <sp_js_include display_value="/scripts/glide-highcharts-v5.js">13d098915be032003d1c484c11f91a7f</sp_js_include>
+        <sys_class_name>m2m_sp_dependency_js_include</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-13 12:20:56</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>6bddbc9d1b2b889048a242e58d4bcb06</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>highcharts-ng./scripts/glide-highcharts-v5.js</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>m2m_sp_dependency_js_include_6bddbc9d1b2b889048a242e58d4bcb06</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-13 12:21:07</sys_updated_on>
+    </m2m_sp_dependency_js_include>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>m2m_sp_dependency_js_include_6bddbc9d1b2b889048a242e58d4bcb06</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_dependency_js_include"><m2m_sp_dependency_js_include action="INSERT_OR_UPDATE"><order>99</order><sp_dependency display_value="highcharts-ng">768db45d1b2b889048a242e58d4bcbb7</sp_dependency><sp_js_include display_value="/scripts/glide-highcharts-v5.js">13d098915be032003d1c484c11f91a7f</sp_js_include><sys_class_name>m2m_sp_dependency_js_include</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-03-13 12:20:56</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>6bddbc9d1b2b889048a242e58d4bcb06</sys_id><sys_mod_count>1</sys_mod_count><sys_name>highcharts-ng./scripts/glide-highcharts-v5.js</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>m2m_sp_dependency_js_include_6bddbc9d1b2b889048a242e58d4bcb06</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-03-13 12:21:07</sys_updated_on></m2m_sp_dependency_js_include></record_update>]]></payload>
+        <payload_hash>-822765700</payload_hash>
+        <record_name>highcharts-ng./scripts/glide-highcharts-v5.js</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-13 12:21:07</sys_created_on>
+        <sys_id>92edfc9d1b2b889048a242e58d4bcb4b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>170d3d74e950000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-13 12:21:07</sys_updated_on>
+        <type>Dependency JS Includes</type>
+        <update_guid>1aedfc9dc12b889017a68e1dd562864a</update_guid>
+        <update_guid_history>1aedfc9dc12b889017a68e1dd562864a:-822765700,2bddbc9d242b8890ad9d91590e524f08:1832075629</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">a27ef8dd1b2b889048a242e58d4bcb54</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-13 12:23:35</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="m2m_sp_dependency_js_include">m2m_sp_dependency_js_include</sys_db_object>
+        <sys_id>a5a044b3cc9445d3a14153e5fcd32bb9</sys_id>
+        <sys_metadata>6bddbc9d1b2b889048a242e58d4bcb06</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>highcharts-ng./scripts/glide-highcharts-v5.js</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>m2m_sp_dependency_js_include_6bddbc9d1b2b889048a242e58d4bcb06</sys_update_name>
+        <sys_update_version display_value="m2m_sp_dependency_js_include_6bddbc9d1b2b889048a242e58d4bcb06">92edfc9d1b2b889048a242e58d4bcb4b</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-13 12:23:35</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

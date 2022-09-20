@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_script">
+    <sys_ui_script action="DELETE">
+        <active>true</active>
+        <description>bootstrap-markdown angular module&#13;
+&#13;
+formatted specifically for jira</description>
+        <global>false</global>
+        <name>x_momo_jira_integr.jiraMarkdownEditor</name>
+        <script><![CDATA[var x_momo_jira_integr = x_momo_jira_integr || {};
+
+x_momo_jira_integr.jiraMarkdownEditor = (function() {
+	"use strict";
+
+/* set your private variables and functions here. For example: 
+	var privateVar = 0; 
+	function private_function() {
+		return ++privateVar;
+	}
+*/
+
+/* Share variables between multiple UI scripts by adding them to your scope object. For example: 
+	x_momo_jira_integr.sharedVar = 0; 
+
+ Then access them in your scripts the same way. For example: 
+	function get_shared() {
+		return x_momo_jira_integr.sharedVar;
+	}
+*/
+
+	return {
+
+/* set your public API here. For example:
+		incrementAndReturnPrivateVar: function() {
+			return private_function();
+		},
+*/
+		type:  "jiraMarkdownEditor"
+	};
+})();
+]]></script>
+        <script_name>jiraMarkdownEditor</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-16 14:20:05</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>b98f5ff01bcb401048a242e58d4bcb63</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_momo_jira_integr.jiraMarkdownEditor</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ui_script_b98f5ff01bcb401048a242e58d4bcb63</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-16 14:20:05</sys_updated_on>
+        <ui_type>0</ui_type>
+        <use_scoped_format>true</use_scoped_format>
+    </sys_ui_script>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_ui_script_b98f5ff01bcb401048a242e58d4bcb63</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ui_script"&gt;&lt;sys_ui_script action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;description&gt;bootstrap-markdown angular module&amp;#13;
+&amp;#13;
+formatted specifically for jira&lt;/description&gt;&lt;global&gt;false&lt;/global&gt;&lt;name&gt;x_momo_jira_integr.jiraMarkdownEditor&lt;/name&gt;&lt;script&gt;&lt;![CDATA[var x_momo_jira_integr = x_momo_jira_integr || {};
+
+x_momo_jira_integr.jiraMarkdownEditor = (function() {
+	"use strict";
+
+/* set your private variables and functions here. For example: 
+	var privateVar = 0; 
+	function private_function() {
+		return ++privateVar;
+	}
+*/
+
+/* Share variables between multiple UI scripts by adding them to your scope object. For example: 
+	x_momo_jira_integr.sharedVar = 0; 
+
+ Then access them in your scripts the same way. For example: 
+	function get_shared() {
+		return x_momo_jira_integr.sharedVar;
+	}
+*/
+
+	return {
+
+/* set your public API here. For example:
+		incrementAndReturnPrivateVar: function() {
+			return private_function();
+		},
+*/
+		type:  "jiraMarkdownEditor"
+	};
+})();
+]]&gt;&lt;/script&gt;&lt;script_name&gt;jiraMarkdownEditor&lt;/script_name&gt;&lt;sys_class_name&gt;sys_ui_script&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-02-16 14:20:05&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;b98f5ff01bcb401048a242e58d4bcb63&lt;/sys_id&gt;&lt;sys_mod_count&gt;0&lt;/sys_mod_count&gt;&lt;sys_name&gt;x_momo_jira_integr.jiraMarkdownEditor&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ui_script_b98f5ff01bcb401048a242e58d4bcb63&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-02-16 14:20:05&lt;/sys_updated_on&gt;&lt;ui_type&gt;0&lt;/ui_type&gt;&lt;use_scoped_format&gt;true&lt;/use_scoped_format&gt;&lt;/sys_ui_script&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>1955635691</payload_hash>
+        <record_name>x_momo_jira_integr.jiraMarkdownEditor</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-16 14:20:05</sys_created_on>
+        <sys_id>2bcf93341bcb401048a242e58d4bcbe5</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1704e5edfff0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-16 14:20:05</sys_updated_on>
+        <type>UI Script</type>
+        <update_guid>efcf17fc418b40102ce9c1f8a39cbcd1</update_guid>
+        <update_guid_history>efcf17fc418b40102ce9c1f8a39cbcd1:1955635691</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-16 14:44:12</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_ui_script">sys_ui_script</sys_db_object>
+        <sys_id>1761737c24154a78a38ee1184663b924</sys_id>
+        <sys_metadata>b98f5ff01bcb401048a242e58d4bcb63</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_momo_jira_integr.jiraMarkdownEditor</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_ui_script_b98f5ff01bcb401048a242e58d4bcb63</sys_update_name>
+        <sys_update_version display_value="sys_ui_script_b98f5ff01bcb401048a242e58d4bcb63">2bcf93341bcb401048a242e58d4bcbe5</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-16 14:44:12</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

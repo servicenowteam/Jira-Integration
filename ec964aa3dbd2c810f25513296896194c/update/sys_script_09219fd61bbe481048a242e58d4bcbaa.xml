@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>sys_journal_field</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="sys_journal_field">name=x_momo_jira_integr_issue^element=comments^sys_created_byNOT LIKEguest^EQ<item endquery="false" field="name" goto="false" newquery="false" operator="=" or="false" value="x_momo_jira_integr_issue"/>
+            <item endquery="false" field="element" goto="false" newquery="false" operator="=" or="false" value="comments"/>
+            <item endquery="false" field="sys_created_by" goto="false" newquery="false" operator="NOT LIKE" or="false" value="guest"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Jira Journal Field Added</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions>x_momo_jira_integr.issue_user</role_conditions>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+  if (current.getValue('sys_updated_by') == 'guest') return;
+  gs.include('JiraRequestV2');
+  
+  var gr = new GlideRecord(current.getValue('name'));
+  var sys_id = current.getValue('element_id');
+  gr.get(sys_id);
+  if (!gr || !gr.isValid()) return;
+  if (gr.getValue('active') == false || gs.nil(gr.getValue('external_id')) || gr.getValue('approval') != 'approved') return;
+  var request = new JiraRequestV2();
+
+  request.setOptions({
+    path: 'issue/' + gr.getValue('external_id') + '/comment',
+    method: 'POST',
+    body: {
+      body: 'h3.' + gs.getUserDisplayName() + ' added a ' + (current.getValue('element') == 'comments' ? 'comment' : 'note') + ' from ServiceNow:\n\n' + current.getValue('value')
+    },
+    async: true
+  });
+  request.send();
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-08 18:51:59</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>09219fd61bbe481048a242e58d4bcbaa</sys_id>
+        <sys_mod_count>27</sys_mod_count>
+        <sys_name>Jira Journal Field Added</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_09219fd61bbe481048a242e58d4bcbaa</sys_update_name>
+        <sys_updated_by>Adrian.Wilson</sys_updated_by>
+        <sys_updated_on>2022-09-15 17:58:34</sys_updated_on>
+        <template/>
+        <when>async_always</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=09219fd61bbe481048a242e58d4bcbaa"/>
+</record_update>

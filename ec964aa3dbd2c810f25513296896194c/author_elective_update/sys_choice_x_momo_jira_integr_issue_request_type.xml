@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_choice action="DELETE" field="request_type" table="x_momo_jira_integr_issue" version="3">
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>request_type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Bug Report</label>
+            <language>en</language>
+            <name>x_momo_jira_integr_issue</name>
+            <sequence>1</sequence>
+            <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+            <sys_created_on>2020-01-19 14:09:16</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>b5c0537fdb1e0c10f255132968961916</sys_id>
+            <sys_mod_count>2</sys_mod_count>
+            <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+            <sys_updated_on>2020-01-19 14:09:43</sys_updated_on>
+            <value>1</value>
+        </sys_choice>
+        <sys_choice_set action="DELETE">
+            <element>request_type</element>
+            <name>x_momo_jira_integr_issue</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+            <sys_created_on>2020-01-19 14:09:16</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_id>c0d0537fdb1e0c10f255132968961988</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>request_type</sys_name>
+            <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+            <sys_update_name>sys_choice_x_momo_jira_integr_issue_request_type</sys_update_name>
+            <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+            <sys_updated_on>2020-01-19 14:09:16</sys_updated_on>
+        </sys_choice_set>
+    </sys_choice>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_choice_x_momo_jira_integr_issue_request_type</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update><sys_choice action="INSERT_OR_UPDATE" field="request_type" table="x_momo_jira_integr_issue" version="3"><sys_choice action="INSERT_OR_UPDATE"><dependent_value/><element>request_type</element><hint/><inactive>false</inactive><label>Bug Report</label><language>en</language><name>x_momo_jira_integr_issue</name><sequence>1</sequence><sys_created_by>douglas.schamberg@movement.com</sys_created_by><sys_created_on>2020-01-19 14:09:16</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>b5c0537fdb1e0c10f255132968961916</sys_id><sys_mod_count>2</sys_mod_count><sys_updated_by>douglas.schamberg@movement.com</sys_updated_by><sys_updated_on>2020-01-19 14:09:43</sys_updated_on><value>1</value></sys_choice><sys_choice_set action="INSERT_OR_UPDATE"><element>request_type</element><name>x_momo_jira_integr_issue</name><sys_class_name>sys_choice_set</sys_class_name><sys_created_by>douglas.schamberg@movement.com</sys_created_by><sys_created_on>2020-01-19 14:09:16</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>c0d0537fdb1e0c10f255132968961988</sys_id><sys_mod_count>0</sys_mod_count><sys_name>request_type</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sys_choice_x_momo_jira_integr_issue_request_type</sys_update_name><sys_updated_by>douglas.schamberg@movement.com</sys_updated_by><sys_updated_on>2020-01-19 14:09:16</sys_updated_on></sys_choice_set></sys_choice></record_update>]]></payload>
+        <payload_hash>52430828</payload_hash>
+        <record_name>Issue.Request Type</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-20 18:10:29</sys_created_on>
+        <sys_id>df919150dbea8c10f255132968961955</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fc4261b960000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-20 18:10:29</sys_updated_on>
+        <type>Choice list</type>
+        <update_guid>9791915052ea8c10f5024d13ba006955</update_guid>
+        <update_guid_history>9791915052ea8c10f5024d13ba006955:52430828,d791dd1061ea8c103c430dd690c0f858:1670403710,1bf097bfc41e0c10ac8f2215e3fc1744:1992942223,7af057bfa31e0c10970f2ed31a303fa2:1580518277,16f01bbf9e1e0c106161d3e519be5033:902076203,d9f01bbf731e0c10cfdb2075a518467a:1670403710,54f0df3ff51e0c107fe9cbcdd602d495:-839219369,bbe01bbf9d1e0c10e058b3db448b3692:814256348,76e01bbf791e0c100b75abb62302732f:52430828,6ae0937ff51e0c10e3d4529c6b32e829:1306917512,0cd097bf901e0c107150d6c4ebceef3b:1436602276</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-20 18:10:29</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_choice_set">sys_choice_set</sys_db_object>
+        <sys_id>c0d0537fdb1e0c10f255132968961988</sys_id>
+        <sys_metadata>c0d0537fdb1e0c10f255132968961988</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>request_type</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_choice_x_momo_jira_integr_issue_request_type</sys_update_name>
+        <sys_update_version display_value="sys_choice_x_momo_jira_integr_issue_request_type">df919150dbea8c10f255132968961955</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-20 18:10:29</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

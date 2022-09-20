@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_dependency_js_include">
+    <m2m_sp_dependency_js_include action="DELETE">
+        <order>100</order>
+        <sp_dependency display_value="jiraStepper">ede599f9db7ec410f2551329689619da</sp_dependency>
+        <sp_js_include display_value="/scripts/thirdparty/stepper.js">3216d1f9db7ec410f2551329689619ef</sp_js_include>
+        <sys_class_name>m2m_sp_dependency_js_include</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-06 20:37:01</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>b726ddf9db7ec410f255132968961973</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>jiraStepper./scripts/thirdparty/stepper.js</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>m2m_sp_dependency_js_include_b726ddf9db7ec410f255132968961973</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-06 20:37:01</sys_updated_on>
+    </m2m_sp_dependency_js_include>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>m2m_sp_dependency_js_include_b726ddf9db7ec410f255132968961973</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_dependency_js_include"><m2m_sp_dependency_js_include action="INSERT_OR_UPDATE"><order>100</order><sp_dependency display_value="jiraStepper">ede599f9db7ec410f2551329689619da</sp_dependency><sp_js_include display_value="/scripts/thirdparty/stepper.js">3216d1f9db7ec410f2551329689619ef</sp_js_include><sys_class_name>m2m_sp_dependency_js_include</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-02-06 20:37:01</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>b726ddf9db7ec410f255132968961973</sys_id><sys_mod_count>0</sys_mod_count><sys_name>jiraStepper./scripts/thirdparty/stepper.js</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>m2m_sp_dependency_js_include_b726ddf9db7ec410f255132968961973</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-02-06 20:37:01</sys_updated_on></m2m_sp_dependency_js_include></record_update>]]></payload>
+        <payload_hash>638135462</payload_hash>
+        <record_name>jiraStepper./scripts/thirdparty/stepper.js</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-06 20:37:01</sys_created_on>
+        <sys_id>b326513ddb7ec410f255132968961967</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1701c3861530000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-06 20:37:01</sys_updated_on>
+        <type>Dependency JS Includes</type>
+        <update_guid>bb26513db47ec410ba2f39b6c4377066</update_guid>
+        <update_guid_history>bb26513db47ec410ba2f39b6c4377066:638135462</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">bfe073381b0f401048a242e58d4bcbc2</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-16 15:34:56</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="m2m_sp_dependency_js_include">m2m_sp_dependency_js_include</sys_db_object>
+        <sys_id>0f72cad7191d4528817de45341e9b1e4</sys_id>
+        <sys_metadata>b726ddf9db7ec410f255132968961973</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>jiraStepper./scripts/thirdparty/stepper.js</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>m2m_sp_dependency_js_include_b726ddf9db7ec410f255132968961973</sys_update_name>
+        <sys_update_version display_value="m2m_sp_dependency_js_include_b726ddf9db7ec410f255132968961973">b326513ddb7ec410f255132968961967</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-16 15:34:56</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

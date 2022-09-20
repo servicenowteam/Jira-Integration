@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_momo_jira_integr.MultipartRest</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>MultipartRest</name>
+        <script><![CDATA[var MultipartRest = Class.create();
+MultipartRest.prototype = {
+  initialize: function (request) {
+    this.RESTAPIRequest = request;
+    this.queryParams = this.RESTAPIRequest.queryParams;
+  },
+
+  setResponse: function (response) {
+    // mandatory params
+    var attachmentID = this.queryParams.attachment_id.toString();
+    var boundaryValue = this.queryParams.boundary_id.toString();
+    if (attachmentID == "" || boundaryValue == "") {
+      response.setContentType('text/plain');
+      response.setStatus(500);
+      return false;
+    }
+
+    // optional params
+    var formName = this.queryParams.form_name.toString();
+    if (formName == "undefined" || formName == "") {
+      formName = 'file';
+    }
+
+    var attachmentGR = this._getAttachmentGR(attachmentID);
+    if (attachmentGR) {
+      
+      
+      // the loopback response is text-formatted.
+      response.setContentType('text/plain');
+      response.setStatus(200);
+
+      // start the multipart data
+      var writer = response.getStreamWriter();
+      writer.writeString("--" + boundaryValue + "\r\n");
+
+      // set the metadata for thsi data part
+      var fileName = attachmentGR.file_name.toString();
+      writer.writeString('Content-Disposition: form-data; name="' + formName + '"; filename="' + fileName + '"\r\n');
+
+      // set the content type for this part of the datastream
+      var contentType = attachmentGR.content_type.toString();
+      writer.writeString('Content-Type: ' + contentType + '\r\n');
+      writer.writeString('\r\n');
+
+      // get the input stream for the sys attachment & stream the file into the datastream
+      var inputStream = new GlideSysAttachment().getContentStream(attachmentID);
+      writer.writeStream(inputStream);
+
+      // finalize the payload by ending the boundary
+      writer.writeString("\r\n--" + boundaryValue + "--\r\n");
+
+    } else {
+
+      // attachment gr not found?
+      response.setContentType('text/plain');
+      response.setStatus(404);
+
+    }
+
+  },
+
+  _getAttachmentGR: function (attachmentSysId) {
+    var grSysAttachment = new GlideRecord("sys_attachment");
+    if (grSysAttachment.get(attachmentSysId)) {
+      return grSysAttachment;
+    }
+    return false;
+  },
+
+  type: 'MultipartRest'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-25 15:07:40</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>0e771af5dbe68450f255132968961996</sys_id>
+        <sys_mod_count>9</sys_mod_count>
+        <sys_name>MultipartRest</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_include_0e771af5dbe68450f255132968961996</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-26 14:12:10</sys_updated_on>
+    </sys_script_include>
+</record_update>

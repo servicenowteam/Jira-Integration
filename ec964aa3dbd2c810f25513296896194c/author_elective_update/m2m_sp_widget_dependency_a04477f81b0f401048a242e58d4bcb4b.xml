@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_widget_dependency">
+    <m2m_sp_widget_dependency action="DELETE">
+        <sp_dependency display_value="markdownEditor">c053ffb81b0f401048a242e58d4bcb93</sp_dependency>
+        <sp_widget display_value="Jira Markdown Editor">7125e3381bcb401048a242e58d4bcbd0</sp_widget>
+        <sys_class_name>m2m_sp_widget_dependency</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-16 15:49:27</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>a04477f81b0f401048a242e58d4bcb4b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>markdownEditor.Jira Markdown Editor</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>m2m_sp_widget_dependency_a04477f81b0f401048a242e58d4bcb4b</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-16 15:49:27</sys_updated_on>
+    </m2m_sp_widget_dependency>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>m2m_sp_widget_dependency_a04477f81b0f401048a242e58d4bcb4b</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_widget_dependency"><m2m_sp_widget_dependency action="INSERT_OR_UPDATE"><sp_dependency display_value="markdownEditor">c053ffb81b0f401048a242e58d4bcb93</sp_dependency><sp_widget display_value="Jira Markdown Editor">7125e3381bcb401048a242e58d4bcbd0</sp_widget><sys_class_name>m2m_sp_widget_dependency</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-02-16 15:49:27</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>a04477f81b0f401048a242e58d4bcb4b</sys_id><sys_mod_count>0</sys_mod_count><sys_name>markdownEditor.Jira Markdown Editor</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>m2m_sp_widget_dependency_a04477f81b0f401048a242e58d4bcb4b</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-02-16 15:49:27</sys_updated_on></m2m_sp_widget_dependency></record_update>]]></payload>
+        <payload_hash>418223890</payload_hash>
+        <record_name>markdownEditor.Jira Markdown Editor</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-16 15:49:27</sys_created_on>
+        <sys_id>2044f33c1b0f401048a242e58d4bcbe1</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1704eb0afa90000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-16 15:49:27</sys_updated_on>
+        <type>Widget Dependency</type>
+        <update_guid>2844f33ced0f4010eb9f6adf0e45d3e0</update_guid>
+        <update_guid_history>2844f33ced0f4010eb9f6adf0e45d3e0:418223890</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">a81f35ee1b8b481048a242e58d4bcb47</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-21 17:46:49</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="m2m_sp_widget_dependency">m2m_sp_widget_dependency</sys_db_object>
+        <sys_id>9e2f43b93fbd4520bb993e29f1fa4fe1</sys_id>
+        <sys_metadata>a04477f81b0f401048a242e58d4bcb4b</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>markdownEditor.Jira Markdown Editor</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>m2m_sp_widget_dependency_a04477f81b0f401048a242e58d4bcb4b</sys_update_name>
+        <sys_update_version display_value="m2m_sp_widget_dependency_a04477f81b0f401048a242e58d4bcb4b">2044f33c1b0f401048a242e58d4bcbe1</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-21 17:46:49</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_operation">
+    <sys_ws_operation action="DELETE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <http_method>POST</http_method>
+        <name>Create Issue</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+  var userAgent = request.getHeader('user-agent');
+  if (!request.getHeader('x-atlassian-webhook-identifier') || !userAgent || !/Atlassian Webhook/gi.test(userAgent)) {
+    response.setError(new sn_ws_err.BadRequestError('Unauthorized'));
+  }
+  var body = request.body.data;
+  var keys = Object.keys(body);
+  if (!body || keys.length === 0) {
+    response.setError(new sn_ws_err.BadRequestError('Empty bodies are not allowed'));
+  }
+
+  if (body.webhookEvent !== 'jira:issue_created') {
+    response.setStatus(304);
+    response.setError(new sn_ws_err.BadRequestError('Invalid request'));
+  } else {
+    var user = getChangeUser(body.user.accountId);
+    var changes = getChangeLog(body);
+    if (!user) {
+      user = body.user.displayName;
+    }
+
+    if (user !== 'Mulesoft Test') {
+      var externalID = body.issue.id;
+      var issue = createIssue(externalID);
+
+      if (!issue) {
+        response.setStatus(409);
+        response.setError('');
+      } else {
+        issue.status = getFromExternalId('x_momo_jira_integr_status', body.issue.fields.status.id);
+        issue.external_key = body.issue.key;
+        issue.external_id = body.issue.id;
+        issue.priority = getFromExternalId('x_momo_jira_integr_priority', body.issue.fields.priority.id);
+        issue.project = getFromExternalId('x_momo_jira_integr_project', body.issue.fields.project.id);
+        issue.issue_type = getFromExternalId('x_momo_jira_integr_issue_type', body.issue.fields.issuetype.id);
+        var requested_for = getChangeUser(body.issue.fields.creator.accountId, true);
+        if (requested_for) {
+          issue.requested_for = requested_for;
+        }
+        var EXCLUDED_CHANGES = ['status', 'project', 'priority', 'issuetype'];
+        for (var i in changes) {
+          var change = changes[i];
+          if (EXCLUDED_CHANGES.indexOf(change.fieldId) < 0) {
+            var result = getChangeColumnAndValue(change, issue);
+            if (!result.displayValue) {
+              issue[result.column] = result.value;
+            } else {
+              issue.setValue(result.column, result.value, result.displayValue);
+            }
+          }
+        }
+        issue.approval = 'approved';
+        issue.active = true;
+        issue.insert();
+        if (body.issue.fields.attachment.length > 0) {
+          var bAttachments = body.issue.fields.attachment
+          for (var a in bAttachments) {
+            var attachment = new JiraAttachment();
+            var created = attachment.createAttachmentFromContentUrl(issue, bAttachments[a]);
+          }
+        }
+        if (body.issue.fields.issuelinks.length > 0) {
+          for (var l in body.issue.fields.issuelinks) {
+            var bIssueLink = body.issue.fields.issuelinks[l];
+            var issueLinkTable = 'x_momo_jira_integr_issue_link';
+            var issueLinkTypeTable = 'x_momo_jira_integr_issue_link_type';
+            var issueLink = getFromExternalId(issueLinkTable, bIssueLink.id);
+            var issueLinkType = getFromExternalId(issueLinkTypeTable, bIssueLink.type.id);
+
+            if (!issueLink) {
+              var outwardIssue = getFromExternalId(issue.getTableName(), bIssueLink.outwardIssue.id);
+              var inwardIssue = issue.getUniqueValue();
+              if (inwardIssue && outwardIssue && issueLinkType) {
+                createdIssueLink(inwardIssue, outwardIssue, issueLinkType, bIssueLink.id);
+              }
+            }
+          }
+        }
+        response.setStatus(201);
+      }
+    }
+  }
+
+  function createdIssueLink(inwardSysId, outwardSysId, issueLinkTypeSysId, issueLinkId) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue_link');
+    gr.initialize();
+    gr.external_id = issueLinkId;
+    gr.outward_issues = outwardSysId;
+    gr.inward_issue = inwardSysId;
+    gr.type_id = issueLinkTypeSysId;
+    gr.insert();
+    return gr.getUniqueValue();
+  }
+
+  function getChangeColumnAndValue(field, record) {
+    var gr = new GlideRecord('x_momo_jira_integr_jira_fields');
+    gr.addQuery('active', true);
+    gr.addQuery('field_id', field.fieldId);
+    gr.query();
+    while (gr.next()) {
+      var column = gr.getValue('issue_field');
+      var schemaType = gr.getValue('schema_type');
+      var webhookPropertyField = gr.getValue('webhook_change_property');
+      var element = record.getElement(column);
+      var ed = element.getED();
+      var ref_table;
+      try {
+        ref_table = element.getReferenceTable();
+      } catch (e) {}
+      if (ed.getInternalType() == 'glide_list') {
+        if (!ref_table) {
+          ref_table = 'x_momo_jira_integr_product';
+        }
+        var ref_list_rec = new GlideRecord(ref_table);
+        var cur = record.getValue(column);
+        if (/,/gi.test(cur)) {
+          cur = cur.split(',');
+        } else if (!gs.nil(cur)) {
+          cur = [cur];
+        } else {
+          cur = [];
+        }
+        if (!field[webhookPropertyField]) {
+          if (ref_list_rec.get("external_id", field['from'])) {
+            if (cur.indexOf(ref_list_rec.sys_id.toString()) >= 0) {
+              cur = cur.filter(function (id) {
+                return id != ref_list_rec.sys_id.toString();
+              });
+            }
+            hasChanges = true;
+
+            return {
+              column: column, 
+              value: cur.join(',')
+            };
+          }
+        } else if (ref_list_rec.get("external_id", field[webhookPropertyField])) {
+          if (cur.indexOf(ref_list_rec.sys_id.toString()) < 0) {
+            cur.push(ref_list_rec.sys_id.toString());
+          }
+          return {
+            column: column, 
+            value: cur.join(',')
+          };
+        }
+      } else if (ed.getInternalType() == 'reference' && schemaType != 'user') {
+        var ref_rec = new GlideRecord(ref_table);
+        if (ref_rec.get("external_id", field[webhookPropertyField]) && field[webhookPropertyField]) {
+
+          var ref_element = ref_rec.getDisplayName();
+          return {
+            column: column,
+            value: ref_rec.sys_id.toString(),
+            displayValue: ref_rec.getValue(ref_element)
+          }
+        } else if (!field[webhookPropertyField]) {
+          hasChanges = true;
+          return {
+            column: column,
+            value: ""
+          };
+        }
+      } else if (ed.getInternalType() == 'reference' && schemaType == 'user') {
+        var user_ref_record = new GlideRecord('sys_user');
+        if (!field[webhookPropertyField]) {
+          return {
+            column: column,
+            value: ""
+          };
+        } else if (user_ref_record.get("x_momo_jira_integr_account_id", field[webhookPropertyField])) {
+          return {
+            column: column,
+            value: user_ref_record.sys_id.toString(),
+            displayValue: user_ref_record.name.toString()
+          }
+        } else {
+          return {
+            column: column,
+            value: ""
+          };
+        }
+      } else if (ed.getInternalType() != 'reference') {
+        return {
+          column: column,
+          value: field[webhookPropertyField]
+        }
+      }
+    }
+  }
+
+  function getChangeUser(accountId, getSysId) {
+    var gUser = new GlideRecord('sys_user');
+    gUser.addQuery('active', true);
+    gUser.addQuery('x_momo_jira_integr_account_id', accountId);
+    gUser.query();
+    while (gUser.next()) {
+      if (!getSysId) {
+        return gUser.getValue('name');
+      } else {
+        return gUser.getUniqueValue();
+      }
+      
+    }
+  }
+
+  function getFromExternalId(table, external_id) {
+    var instance = new GlideRecord(table);
+    if (instance.get("external_id", external_id)) {
+      return instance.getUniqueValue();
+    }
+    return "";
+  }
+
+  function createIssue(external_id) {
+    var gIssue = new GlideRecord('x_momo_jira_integr_issue');
+    if (!gIssue.get('external_id', external_id)) {
+      gIssue.initialize();
+      return gIssue;
+    }
+    return false;
+  }
+
+  function getChangeLog(body) {
+    if (body.hasOwnProperty('changelog')) {
+      return body.changelog.items;
+    }
+    return [];
+  }
+
+})(request, response);]]></operation_script>
+        <operation_uri>/api/x_momo_jira_integr/webhooks/issue</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/issue</relative_path>
+        <request_example/>
+        <requires_acl_authorization>true</requires_acl_authorization>
+        <requires_authentication>false</requires_authentication>
+        <requires_snc_internal_role>true</requires_snc_internal_role>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-28 09:10:01</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>4fbb8cf41b93045048a242e58d4bcb23</sys_id>
+        <sys_mod_count>29</sys_mod_count>
+        <sys_name>Create Issue</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ws_operation_4fbb8cf41b93045048a242e58d4bcb23</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-29 10:43:13</sys_updated_on>
+        <web_service_definition display_value="Webhooks">bd56d3811b66405048a242e58d4bcb33</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_ws_operation_4fbb8cf41b93045048a242e58d4bcb23</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ws_operation"&gt;&lt;sys_ws_operation action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;consumes&gt;application/json,application/xml,text/xml&lt;/consumes&gt;&lt;consumes_customized&gt;false&lt;/consumes_customized&gt;&lt;default_operation_uri/&gt;&lt;enforce_acl&gt;cf9d01d3e73003009d6247e603f6a990&lt;/enforce_acl&gt;&lt;http_method&gt;POST&lt;/http_method&gt;&lt;name&gt;Create Issue&lt;/name&gt;&lt;operation_script&gt;&lt;![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+  var userAgent = request.getHeader('user-agent');
+  if (!request.getHeader('x-atlassian-webhook-identifier') || !userAgent || !/Atlassian Webhook/gi.test(userAgent)) {
+    response.setError(new sn_ws_err.BadRequestError('Unauthorized'));
+  }
+  var body = request.body.data;
+  var keys = Object.keys(body);
+  if (!body || keys.length === 0) {
+    response.setError(new sn_ws_err.BadRequestError('Empty bodies are not allowed'));
+  }
+
+  if (body.webhookEvent !== 'jira:issue_created') {
+    response.setStatus(304);
+    response.setError(new sn_ws_err.BadRequestError('Invalid request'));
+  } else {
+    var user = getChangeUser(body.user.accountId);
+    var changes = getChangeLog(body);
+    if (!user) {
+      user = body.user.displayName;
+    }
+
+    if (user !== 'Mulesoft Test') {
+      var externalID = body.issue.id;
+      var issue = createIssue(externalID);
+
+      if (!issue) {
+        response.setStatus(409);
+        response.setError('');
+      } else {
+        issue.status = getFromExternalId('x_momo_jira_integr_status', body.issue.fields.status.id);
+        issue.external_key = body.issue.key;
+        issue.external_id = body.issue.id;
+        issue.priority = getFromExternalId('x_momo_jira_integr_priority', body.issue.fields.priority.id);
+        issue.project = getFromExternalId('x_momo_jira_integr_project', body.issue.fields.project.id);
+        issue.issue_type = getFromExternalId('x_momo_jira_integr_issue_type', body.issue.fields.issuetype.id);
+        var requested_for = getChangeUser(body.issue.fields.creator.accountId, true);
+        if (requested_for) {
+          issue.requested_for = requested_for;
+        }
+        var EXCLUDED_CHANGES = ['status', 'project', 'priority', 'issuetype'];
+        for (var i in changes) {
+          var change = changes[i];
+          if (EXCLUDED_CHANGES.indexOf(change.fieldId) &lt; 0) {
+            var result = getChangeColumnAndValue(change, issue);
+            if (!result.displayValue) {
+              issue[result.column] = result.value;
+            } else {
+              issue.setValue(result.column, result.value, result.displayValue);
+            }
+          }
+        }
+        issue.approval = 'approved';
+        issue.active = true;
+        issue.insert();
+        if (body.issue.fields.attachment.length &gt; 0) {
+          var bAttachments = body.issue.fields.attachment
+          for (var a in bAttachments) {
+            var attachment = new JiraAttachment();
+            var created = attachment.createAttachmentFromContentUrl(issue, bAttachments[a]);
+          }
+        }
+        if (body.issue.fields.issuelinks.length &gt; 0) {
+          for (var l in body.issue.fields.issuelinks) {
+            var bIssueLink = body.issue.fields.issuelinks[l];
+            var issueLinkTable = 'x_momo_jira_integr_issue_link';
+            var issueLinkTypeTable = 'x_momo_jira_integr_issue_link_type';
+            var issueLink = getFromExternalId(issueLinkTable, bIssueLink.id);
+            var issueLinkType = getFromExternalId(issueLinkTypeTable, bIssueLink.type.id);
+
+            if (!issueLink) {
+              var outwardIssue = getFromExternalId(issue.getTableName(), bIssueLink.outwardIssue.id);
+              var inwardIssue = issue.getUniqueValue();
+              if (inwardIssue &amp;&amp; outwardIssue &amp;&amp; issueLinkType) {
+                createdIssueLink(inwardIssue, outwardIssue, issueLinkType, bIssueLink.id);
+              }
+            }
+          }
+        }
+        response.setStatus(201);
+      }
+    }
+  }
+
+  function createdIssueLink(inwardSysId, outwardSysId, issueLinkTypeSysId, issueLinkId) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue_link');
+    gr.initialize();
+    gr.external_id = issueLinkId;
+    gr.outward_issues = outwardSysId;
+    gr.inward_issue = inwardSysId;
+    gr.type_id = issueLinkTypeSysId;
+    gr.insert();
+    return gr.getUniqueValue();
+  }
+
+  function getChangeColumnAndValue(field, record) {
+    var gr = new GlideRecord('x_momo_jira_integr_jira_fields');
+    gr.addQuery('active', true);
+    gr.addQuery('field_id', field.fieldId);
+    gr.query();
+    while (gr.next()) {
+      var column = gr.getValue('issue_field');
+      var schemaType = gr.getValue('schema_type');
+      var webhookPropertyField = gr.getValue('webhook_change_property');
+      var element = record.getElement(column);
+      var ed = element.getED();
+      var ref_table;
+      try {
+        ref_table = element.getReferenceTable();
+      } catch (e) {}
+      if (ed.getInternalType() == 'glide_list') {
+        if (!ref_table) {
+          ref_table = 'x_momo_jira_integr_product';
+        }
+        var ref_list_rec = new GlideRecord(ref_table);
+        var cur = record.getValue(column);
+        if (/,/gi.test(cur)) {
+          cur = cur.split(',');
+        } else if (!gs.nil(cur)) {
+          cur = [cur];
+        } else {
+          cur = [];
+        }
+        if (!field[webhookPropertyField]) {
+          if (ref_list_rec.get("external_id", field['from'])) {
+            if (cur.indexOf(ref_list_rec.sys_id.toString()) &gt;= 0) {
+              cur = cur.filter(function (id) {
+                return id != ref_list_rec.sys_id.toString();
+              });
+            }
+            hasChanges = true;
+
+            return {
+              column: column, 
+              value: cur.join(',')
+            };
+          }
+        } else if (ref_list_rec.get("external_id", field[webhookPropertyField])) {
+          if (cur.indexOf(ref_list_rec.sys_id.toString()) &lt; 0) {
+            cur.push(ref_list_rec.sys_id.toString());
+          }
+          return {
+            column: column, 
+            value: cur.join(',')
+          };
+        }
+      } else if (ed.getInternalType() == 'reference' &amp;&amp; schemaType != 'user') {
+        var ref_rec = new GlideRecord(ref_table);
+        if (ref_rec.get("external_id", field[webhookPropertyField]) &amp;&amp; field[webhookPropertyField]) {
+
+          var ref_element = ref_rec.getDisplayName();
+          return {
+            column: column,
+            value: ref_rec.sys_id.toString(),
+            displayValue: ref_rec.getValue(ref_element)
+          }
+        } else if (!field[webhookPropertyField]) {
+          hasChanges = true;
+          return {
+            column: column,
+            value: ""
+          };
+        }
+      } else if (ed.getInternalType() == 'reference' &amp;&amp; schemaType == 'user') {
+        var user_ref_record = new GlideRecord('sys_user');
+        if (!field[webhookPropertyField]) {
+          return {
+            column: column,
+            value: ""
+          };
+        } else if (user_ref_record.get("x_momo_jira_integr_account_id", field[webhookPropertyField])) {
+          return {
+            column: column,
+            value: user_ref_record.sys_id.toString(),
+            displayValue: user_ref_record.name.toString()
+          }
+        } else {
+          return {
+            column: column,
+            value: ""
+          };
+        }
+      } else if (ed.getInternalType() != 'reference') {
+        return {
+          column: column,
+          value: field[webhookPropertyField]
+        }
+      }
+    }
+  }
+
+  function getChangeUser(accountId, getSysId) {
+    var gUser = new GlideRecord('sys_user');
+    gUser.addQuery('active', true);
+    gUser.addQuery('x_momo_jira_integr_account_id', accountId);
+    gUser.query();
+    while (gUser.next()) {
+      if (!getSysId) {
+        return gUser.getValue('name');
+      } else {
+        return gUser.getUniqueValue();
+      }
+      
+    }
+  }
+
+  function getFromExternalId(table, external_id) {
+    var instance = new GlideRecord(table);
+    if (instance.get("external_id", external_id)) {
+      return instance.getUniqueValue();
+    }
+    return "";
+  }
+
+  function createIssue(external_id) {
+    var gIssue = new GlideRecord('x_momo_jira_integr_issue');
+    if (!gIssue.get('external_id', external_id)) {
+      gIssue.initialize();
+      return gIssue;
+    }
+    return false;
+  }
+
+  function getChangeLog(body) {
+    if (body.hasOwnProperty('changelog')) {
+      return body.changelog.items;
+    }
+    return [];
+  }
+
+})(request, response);]]&gt;&lt;/operation_script&gt;&lt;operation_uri&gt;/api/x_momo_jira_integr/webhooks/issue&lt;/operation_uri&gt;&lt;produces&gt;application/json,application/xml,text/xml&lt;/produces&gt;&lt;produces_customized&gt;false&lt;/produces_customized&gt;&lt;relative_path&gt;/issue&lt;/relative_path&gt;&lt;request_example/&gt;&lt;requires_acl_authorization&gt;true&lt;/requires_acl_authorization&gt;&lt;requires_authentication&gt;false&lt;/requires_authentication&gt;&lt;requires_snc_internal_role&gt;true&lt;/requires_snc_internal_role&gt;&lt;short_description/&gt;&lt;sys_class_name&gt;sys_ws_operation&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-02-28 09:10:01&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;4fbb8cf41b93045048a242e58d4bcb23&lt;/sys_id&gt;&lt;sys_mod_count&gt;29&lt;/sys_mod_count&gt;&lt;sys_name&gt;Create Issue&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ws_operation_4fbb8cf41b93045048a242e58d4bcb23&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg@movement.com&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-02-29 10:43:13&lt;/sys_updated_on&gt;&lt;web_service_definition display_value="Webhooks"&gt;bd56d3811b66405048a242e58d4bcb33&lt;/web_service_definition&gt;&lt;web_service_version/&gt;&lt;/sys_ws_operation&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>-1708480704</payload_hash>
+        <record_name>Create Issue</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-02-29 10:43:13</sys_created_on>
+        <sys_id>6dda29c91b5f445048a242e58d4bcbd5</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>170908b00370000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-29 10:43:13</sys_updated_on>
+        <type>Scripted REST Resource</type>
+        <update_guid>e1da29c9e35f445096e284ea3632cbd5</update_guid>
+        <update_guid_history>e1da29c9e35f445096e284ea3632cbd5:-1708480704,40d7c5f0d65f4450470802e05b60becb:178108277,202fb438f91f445018e68145c17bcd85:-1165357519,f65eb0f41b1f44508bda695659ca51ef:52581243,0f393070691f44502eaa6df68120dabe:585491193,5e29b030c11f4450b7ec83e85b6d51f8:-783155084,3728b0fc12db4450d8c1a36ae9ff53df:240505808,92a77cbceadb44500ba8544dfaab9def:1275365844,a5a77cbc7bdb4450a0cf3587a8729251:892484526,7a97bc7ccadb44506def7afd2ae443c5:-418698798,bc76383cc2db445070ec7187d59613c3:-94269458,d76ad4f851d30450a2b9fa133339e175:326716475,406ad0b83cd304507f8da361ebe6e81f:-1366758766,4da918b8d7d30450205272e41a6ec526:-929614242,4169d8787fd30450ebb118a43dc58b99:-1981025602,7cc89478cfd30450cfb31ae58c093278:-1815258138,1e881c387fd30450f61e8c6c84297e48:-88180401,46f7943829d304508347c4450bf1ed56:-1419227662,b4e69cb4afd30450fcc0c9257a8f86c6:-2114466615,46d65cb46bd3045005818d8e9cdbcedc:-312910516,25d6d8b418d30450e833d7ecc02cf13e:-31622465,85c69c7473d30450ec3c5bc6e00fccd0:-1127572098,84351c3430d30450f870bc2d45b7eb94:654443796,2fd45034d0d304502eb040483ffa9038:-857387187,d7a410f07fd30450a0551788c53688b6:-929614242,849450f0e8d3045008bd5ef3b123c959:931235336,62cfc47c78930450656ae60f51518aea:391678436,bafccc78ef930450ef5f9dbd9d1b9836:-2068710003,131c4c38fe9304508fe37109f6bfc8a5:2107683770,6eeb443821930450ebc79e55c86149b7:448014456</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-05 09:23:39</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_ws_operation">sys_ws_operation</sys_db_object>
+        <sys_id>02d733a0aaa54e588150f969d654eb10</sys_id>
+        <sys_metadata>4fbb8cf41b93045048a242e58d4bcb23</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Create Issue</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_ws_operation_4fbb8cf41b93045048a242e58d4bcb23</sys_update_name>
+        <sys_update_version display_value="sys_ws_operation_4fbb8cf41b93045048a242e58d4bcb23">6dda29c91b5f445048a242e58d4bcbd5</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-05 09:23:39</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

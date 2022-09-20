@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_script">
+    <sys_ui_script action="DELETE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_momo_jira_integr.readmore</name>
+        <script><![CDATA['use strict';
+
+readMore.$inject = ["$templateCache"];
+angular
+  .module('hm.readmore', ['ngAnimate', 'ngSanitize'])
+  .directive('hmReadMore', readMore)
+  .config(["$logProvider", function ($logProvider) {
+    $logProvider.debugEnabled(false);
+  }]);
+
+/** @ngInject */
+function readMore($templateCache) {
+  hmReadMoreController.$inject = ["$filter", "$scope", "$log"];
+  var directive = {
+    restrict: 'AE',
+    scope: {
+      hmText: '@',
+      hmLimit: '@',
+      hmMoreText: '@',
+      hmLessText: '@',
+      hmDotsClass: '@',
+      hmLinkClass: '@',
+      hmResetState: '@'
+    },
+    template: $templateCache.get('readmore.template.html'),
+    controller: hmReadMoreController,
+    controllerAs: 'vm',
+    bindToController: true
+  };
+
+  return directive;
+
+  /** @ngInject */
+  // "bindToController: true" binds scope variables to Controller
+  function hmReadMoreController($filter, $scope, $log) {
+    var vm = this;
+    vm.toggle = {
+      dots: ' ...',
+      dotsClass: vm.hmDotsClass,
+      linkClass: vm.hmLinkClass
+    }
+
+    vm.$onInit = function () {
+      setToggleMoreText();
+      setToggleLessText();
+      validateLimit();
+      setLessAndMoreText();
+      setShowToggle();
+      setCurrentToggleText();
+      setLinkClass();
+      setDotsClass();
+    }
+
+    // Toggle functions
+    function setToggleMoreText() {
+      vm.toggle.moreText = vm.hmMoreText || 'Read More...';
+    }
+
+    function setToggleLessText() {
+      if (!vm.toggle.state) {
+        vm.toggle.lessText = 'Read Less';
+      }
+
+    }
+
+    function setCurrentToggleText() {
+      vm.toggle.text = vm.toggle.state ? vm.toggle.lessText : vm.toggle.moreText;
+    }
+
+    function setShowToggle() {
+      vm.toggle.show = vm.moreText && vm.moreText.length > 0;
+    }
+
+    function setLinkClass() {
+      if (vm.toggle.state) {
+        vm.toggle.linkClass = vm.hmLinkClass + ' move-read-less';
+      } else {
+        vm.toggle.linkClass = vm.hmLinkClass
+      }
+
+    }
+
+    function setDotsClass() {
+      vm.toggle.dotsClass = vm.hmDotsClass;
+    }
+
+    vm.doToggle = function (evt) {
+      if (evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+      }
+
+      vm.toggle.state = !vm.toggle.state;
+      vm.showMoreText = !vm.showMoreText;
+      setCurrentToggleText();
+      setLinkClass();
+    }
+
+    $scope.$watch('vm.hmResetState', function (v, old) {
+      if (v && vm.toggle.state) {
+        vm.doToggle();
+      }
+    });
+
+    $scope.$watch('vm.hmMoreText', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        setToggleMoreText();
+        setLinkClass();
+        setCurrentToggleText();
+      }
+    });
+
+    $scope.$watch('vm.hmLessText', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        setToggleLessText();
+        setLinkClass();
+        setCurrentToggleText();
+      }
+    });
+
+    $scope.$watch('vm.hmDotsClass', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        setDotsClass();
+      }
+    });
+
+    $scope.$watch('vm.hmLinkClass', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        setLinkClass();
+      }
+    });
+
+    // ----------
+
+    // If negative number, set to undefined
+    function validateLimit() {
+      vm.hmLimit = (vm.hmLimit && vm.hmLimit <= 0) ? undefined : vm.hmLimit;
+    }
+
+    function getMoreTextLimit() {
+      return vm.hmLimit && vm.hmLimit < vm.hmText.length ? vm.hmLimit - vm.hmText.length : 0;
+    }
+
+    function setLessAndMoreText() {
+      vm.lessText = $filter('limitTo')(vm.hmText, vm.hmLimit);
+      vm.moreText = $filter('limitTo')(vm.hmText, getMoreTextLimit());
+    }
+
+    $scope.$watch('vm.hmText', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        validateLimit();
+        setLessAndMoreText();
+        setShowToggle();
+      }
+    });
+
+    $scope.$watch('vm.hmLimit', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        validateLimit();
+        setLessAndMoreText();
+        setShowToggle();
+      }
+    });
+  }
+};
+
+angular.module('hm.readmore').run(['$templateCache', function ($templateCache) {
+  $templateCache.put('readmore.template.html', '<span name="text" style="white-space:pre-wrap;"><span ng-bind-html="vm.lessText" style="white-space:pre-wrap;word-break:break-all;"></span><span ng-show="vm.showMoreText" class="more-show-hide" ng-bind-html="vm.moreText" style="white-space:pre-wrap;word-break:break-all;"></span></span><span name="toggle" ng-show="vm.toggle.show"><span ng-class="vm.toggle.dotsClass" ng-show="!vm.toggle.state">{{ vm.toggle.dots }}</span><a ng-class="vm.toggle.linkClass" ng-click="vm.doToggle($event)">{{ vm.toggle.text }}</a></span>');
+}]);]]></script>
+        <script_name>readmore</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-02 11:27:18</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>5291b6501bf2001048a242e58d4bcb8c</sys_id>
+        <sys_mod_count>40</sys_mod_count>
+        <sys_name>x_momo_jira_integr.readmore</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ui_script_5291b6501bf2001048a242e58d4bcb8c</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-06 20:00:57</sys_updated_on>
+        <ui_type>0</ui_type>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_ui_script_5291b6501bf2001048a242e58d4bcb8c</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ui_script"&gt;&lt;sys_ui_script action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;description/&gt;&lt;global&gt;false&lt;/global&gt;&lt;name&gt;x_momo_jira_integr.readmore&lt;/name&gt;&lt;script&gt;&lt;![CDATA['use strict';
+
+readMore.$inject = ["$templateCache"];
+angular
+  .module('hm.readmore', ['ngAnimate', 'ngSanitize'])
+  .directive('hmReadMore', readMore)
+  .config(["$logProvider", function ($logProvider) {
+    $logProvider.debugEnabled(false);
+  }]);
+
+/** @ngInject */
+function readMore($templateCache) {
+  hmReadMoreController.$inject = ["$filter", "$scope", "$log"];
+  var directive = {
+    restrict: 'AE',
+    scope: {
+      hmText: '@',
+      hmLimit: '@',
+      hmMoreText: '@',
+      hmLessText: '@',
+      hmDotsClass: '@',
+      hmLinkClass: '@',
+      hmResetState: '@'
+    },
+    template: $templateCache.get('readmore.template.html'),
+    controller: hmReadMoreController,
+    controllerAs: 'vm',
+    bindToController: true
+  };
+
+  return directive;
+
+  /** @ngInject */
+  // "bindToController: true" binds scope variables to Controller
+  function hmReadMoreController($filter, $scope, $log) {
+    var vm = this;
+    vm.toggle = {
+      dots: ' ...',
+      dotsClass: vm.hmDotsClass,
+      linkClass: vm.hmLinkClass
+    }
+
+    vm.$onInit = function () {
+      setToggleMoreText();
+      setToggleLessText();
+      validateLimit();
+      setLessAndMoreText();
+      setShowToggle();
+      setCurrentToggleText();
+      setLinkClass();
+      setDotsClass();
+    }
+
+    // Toggle functions
+    function setToggleMoreText() {
+      vm.toggle.moreText = vm.hmMoreText || 'Read More...';
+    }
+
+    function setToggleLessText() {
+      if (!vm.toggle.state) {
+        vm.toggle.lessText = 'Read Less';
+      }
+
+    }
+
+    function setCurrentToggleText() {
+      vm.toggle.text = vm.toggle.state ? vm.toggle.lessText : vm.toggle.moreText;
+    }
+
+    function setShowToggle() {
+      vm.toggle.show = vm.moreText &amp;&amp; vm.moreText.length &gt; 0;
+    }
+
+    function setLinkClass() {
+      if (vm.toggle.state) {
+        vm.toggle.linkClass = vm.hmLinkClass + ' move-read-less';
+      } else {
+        vm.toggle.linkClass = vm.hmLinkClass
+      }
+
+    }
+
+    function setDotsClass() {
+      vm.toggle.dotsClass = vm.hmDotsClass;
+    }
+
+    vm.doToggle = function (evt) {
+      if (evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+      }
+
+      vm.toggle.state = !vm.toggle.state;
+      vm.showMoreText = !vm.showMoreText;
+      setCurrentToggleText();
+      setLinkClass();
+    }
+
+    $scope.$watch('vm.hmResetState', function (v, old) {
+      if (v &amp;&amp; vm.toggle.state) {
+        vm.doToggle();
+      }
+    });
+
+    $scope.$watch('vm.hmMoreText', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        setToggleMoreText();
+        setLinkClass();
+        setCurrentToggleText();
+      }
+    });
+
+    $scope.$watch('vm.hmLessText', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        setToggleLessText();
+        setLinkClass();
+        setCurrentToggleText();
+      }
+    });
+
+    $scope.$watch('vm.hmDotsClass', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        setDotsClass();
+      }
+    });
+
+    $scope.$watch('vm.hmLinkClass', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        setLinkClass();
+      }
+    });
+
+    // ----------
+
+    // If negative number, set to undefined
+    function validateLimit() {
+      vm.hmLimit = (vm.hmLimit &amp;&amp; vm.hmLimit &lt;= 0) ? undefined : vm.hmLimit;
+    }
+
+    function getMoreTextLimit() {
+      return vm.hmLimit &amp;&amp; vm.hmLimit &lt; vm.hmText.length ? vm.hmLimit - vm.hmText.length : 0;
+    }
+
+    function setLessAndMoreText() {
+      vm.lessText = $filter('limitTo')(vm.hmText, vm.hmLimit);
+      vm.moreText = $filter('limitTo')(vm.hmText, getMoreTextLimit());
+    }
+
+    $scope.$watch('vm.hmText', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        validateLimit();
+        setLessAndMoreText();
+        setShowToggle();
+      }
+    });
+
+    $scope.$watch('vm.hmLimit', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        validateLimit();
+        setLessAndMoreText();
+        setShowToggle();
+      }
+    });
+  }
+};
+
+angular.module('hm.readmore').run(['$templateCache', function ($templateCache) {
+  $templateCache.put('readmore.template.html', '&lt;span name="text" style="white-space:pre-wrap;"&gt;&lt;span ng-bind-html="vm.lessText" style="white-space:pre-wrap;word-break:break-all;"&gt;&lt;/span&gt;&lt;span ng-show="vm.showMoreText" class="more-show-hide" ng-bind-html="vm.moreText" style="white-space:pre-wrap;word-break:break-all;"&gt;&lt;/span&gt;&lt;/span&gt;&lt;span name="toggle" ng-show="vm.toggle.show"&gt;&lt;span ng-class="vm.toggle.dotsClass" ng-show="!vm.toggle.state"&gt;{{ vm.toggle.dots }}&lt;/span&gt;&lt;a ng-class="vm.toggle.linkClass" ng-click="vm.doToggle($event)"&gt;{{ vm.toggle.text }}&lt;/a&gt;&lt;/span&gt;');
+}]);]]&gt;&lt;/script&gt;&lt;script_name&gt;readmore&lt;/script_name&gt;&lt;sys_class_name&gt;sys_ui_script&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-02-02 11:27:18&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;5291b6501bf2001048a242e58d4bcb8c&lt;/sys_id&gt;&lt;sys_mod_count&gt;40&lt;/sys_mod_count&gt;&lt;sys_name&gt;x_momo_jira_integr.readmore&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ui_script_5291b6501bf2001048a242e58d4bcb8c&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg@movement.com&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-02-06 20:00:57&lt;/sys_updated_on&gt;&lt;ui_type&gt;0&lt;/ui_type&gt;&lt;use_scoped_format&gt;false&lt;/use_scoped_format&gt;&lt;/sys_ui_script&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>-1208235187</payload_hash>
+        <record_name>x_momo_jira_integr.readmore</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-02-06 20:00:57</sys_created_on>
+        <sys_id>5bed0971db7ec410f255132968961947</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1701c175af10000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-06 20:00:57</sys_updated_on>
+        <type>UI Script</type>
+        <update_guid>dfed4dfda93ec41034f464ce27dd8381</update_guid>
+        <update_guid_history>dfed4dfda93ec41034f464ce27dd8381:-1208235187,5c03886cfb7a00104ee4e3a62a87e007:-2112127916,b372cc6c347a0010bea3ae1a486910bb:1002108490,04a44310c176001089dc3e1c8af91b50:-1977323482,02940310b7760010577fc9a269649f7d:122858310,d8e3c3dc823600102424a7257149d821:-1931979681,9093039cb536001060c9da056c9daf2b:2057454303,8f53079c953600104c55648871cd0da9:-1931979681,0053435ce03600108a7ade142439cddd:-902045384,5413039c58360010dc236490fc465f24:758110215,6ad2475c373600105a031a157cfc31b2:-1171963373,4ac24f5c5c360010451a21384c769713:-1917737081,81b2475c9436001017a7800881e18f6d:905355155,f362475ceb360010ad869aab347f4f64:-955396564,2e62075c0236001087d4320b559918d1:1134664054,0c32cb1cc23600104b068147155f22f1:790654251,aff10b1c643600102ef642201f7b2cc7:-1811329143,11d1c31c02360010007130afcda7bb68:-1021660524,8281831c5336001068c6b5a86da4de11:1331931201,0ee043d81636001084747c204779165c:-172447915,28e08f98e236001032c5a8be00c0cbfd:958974507,3fd007d8f13600109098b12867c6a10f:-1132678053,d2c08b9867360010369a6c46cd741f45:-1096437583,2480cb9886360010f6ba9e2ef9c69763:-861404040,6760cb98d83600103f7b9eb4b7138c5c:-407648939,85600b58b6360010812cfb76b8b54405:940803021,d4504b989b360010c91b2371f14e2b1a:1607616582,c49fba580e3600105dea23aa89587b9d:-1338512345,363f7a18a03600101e3f3a0709e3b2eb:261188995,6bdc3654103600100a4923740cb3716d:963168376,ebcc3654283600106ba55f48b2102579:-12836584,8e5cb254013600106886b34bf7e0e9d7:2075226477,f91cba14c7360010c426c4d640909637:-12836584,508bf6d082360010cb259ece879ff9c6:874623368,5159fe10ff3600107e8fd4cc380239e1:-568397744,c707f29ce2f20010a04af467b59f27bf:1664066313,c795b698c9f2001095cacf1ad094088f:-1836181699,b175bad8f2f20010bde2ca873abf1dc9:1879854085,6a15f2d8c1f200106ade183f55cc7c59:354287299,0b74b698d0f20010ced531cf0a1b8683:1879854085,c40236d09af200103d2543e8cfb2ca7e:-922635534</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-16 15:36:55</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_ui_script">sys_ui_script</sys_db_object>
+        <sys_id>b948e1e63c5643a495f7e43fa5abb2e4</sys_id>
+        <sys_metadata>5291b6501bf2001048a242e58d4bcb8c</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_momo_jira_integr.readmore</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_ui_script_5291b6501bf2001048a242e58d4bcb8c</sys_update_name>
+        <sys_update_version display_value="sys_ui_script_5291b6501bf2001048a242e58d4bcb8c">5bed0971db7ec410f255132968961947</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-16 15:36:55</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

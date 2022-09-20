@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_operation">
+    <sys_ws_operation action="DELETE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <http_method>POST</http_method>
+        <name>Add Issue Comments</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+  var userAgent = request.getHeader('user-agent');
+  if (!request.getHeader('x-atlassian-webhook-identifier') || !userAgent || !/Atlassian Webhook/gi.test(userAgent)) {
+    response.setError(new sn_ws_err.BadRequestError('Unauthorized'));
+  }
+  var body = request.body.data;
+  var keys = Object.keys(body);
+  if (!body || keys.length === 0) {
+    response.setError(new sn_ws_err.BadRequestError('Empty bodies are not allowed'));
+    return;
+  }
+  var user = getCommentingUser('x_momo_jira_integr_account_id', body.comment.updateAuthor.accountId);
+  if (!user) {
+    user = getCommentingUser('name', body.comment.updateAuthor.displayName);
+  }
+  var issue = getIssue(body.issue.id);
+
+  if (!issue) {
+    response.setError(new sn_ws_err.NotFoundError('Issue ' + body.issue.key + ' could not be found'));
+    return;
+  }
+  var commentBody = body.comment.body;
+  var displayUser = body.comment.updateAuthor.displayName;
+  if (!/Mulesoft/gi.test(displayUser)) {
+    issue.work_notes = displayUser + ' added a comment:\n\n' + commentBody;
+    issue.update();
+  }
+  
+  
+  response.setStatus(201);
+  return;
+
+  function getIssue(external_id) {
+    var gIssue = new GlideRecord('x_momo_jira_integr_issue');
+    gIssue.addQuery('active', true);
+    gIssue.addQuery('external_id', external_id);
+    gIssue.query();
+    while (gIssue.next()) {
+      return gIssue;
+    }
+  }
+  function getCommentingUser(column, value) {
+    var gr = new GlideRecord('sys_user');
+    gr.addQuery('active', true);
+    gr.addQuery(column, value);
+    gr.query();
+
+    while (gr.next()) {
+      return gr.sys_id.toString();
+    }
+  }
+
+})(request, response);]]></operation_script>
+        <operation_uri>/api/x_momo_jira_integr/webhooks/issue/{issue_id}/comments</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/issue/{issue_id}/comments</relative_path>
+        <request_example/>
+        <requires_acl_authorization>true</requires_acl_authorization>
+        <requires_authentication>false</requires_authentication>
+        <requires_snc_internal_role>true</requires_snc_internal_role>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-23 11:48:48</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>f9a61b811b66405048a242e58d4bcbf8</sys_id>
+        <sys_mod_count>46</sys_mod_count>
+        <sys_name>Add Issue Comments</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ws_operation_f9a61b811b66405048a242e58d4bcbf8</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-28 09:14:24</sys_updated_on>
+        <web_service_definition display_value="Issue Webhooks">bd56d3811b66405048a242e58d4bcb33</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_ws_operation_f9a61b811b66405048a242e58d4bcbf8</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ws_operation"&gt;&lt;sys_ws_operation action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;consumes&gt;application/json,application/xml,text/xml&lt;/consumes&gt;&lt;consumes_customized&gt;false&lt;/consumes_customized&gt;&lt;default_operation_uri/&gt;&lt;enforce_acl&gt;cf9d01d3e73003009d6247e603f6a990&lt;/enforce_acl&gt;&lt;http_method&gt;POST&lt;/http_method&gt;&lt;name&gt;Add Issue Comments&lt;/name&gt;&lt;operation_script&gt;&lt;![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+  var userAgent = request.getHeader('user-agent');
+  if (!request.getHeader('x-atlassian-webhook-identifier') || !userAgent || !/Atlassian Webhook/gi.test(userAgent)) {
+    response.setError(new sn_ws_err.BadRequestError('Unauthorized'));
+  }
+  var body = request.body.data;
+  var keys = Object.keys(body);
+  if (!body || keys.length === 0) {
+    response.setError(new sn_ws_err.BadRequestError('Empty bodies are not allowed'));
+    return;
+  }
+  var user = getCommentingUser('x_momo_jira_integr_account_id', body.comment.updateAuthor.accountId);
+  if (!user) {
+    user = getCommentingUser('name', body.comment.updateAuthor.displayName);
+  }
+  var issue = getIssue(body.issue.id);
+
+  if (!issue) {
+    response.setError(new sn_ws_err.NotFoundError('Issue ' + body.issue.key + ' could not be found'));
+    return;
+  }
+  var commentBody = body.comment.body;
+  var displayUser = body.comment.updateAuthor.displayName;
+  if (!/Mulesoft/gi.test(displayUser)) {
+    issue.work_notes = displayUser + ' added a comment:\n\n' + commentBody;
+    issue.update();
+  }
+  
+  
+  response.setStatus(201);
+  return;
+
+  function getIssue(external_id) {
+    var gIssue = new GlideRecord('x_momo_jira_integr_issue');
+    gIssue.addQuery('active', true);
+    gIssue.addQuery('external_id', external_id);
+    gIssue.query();
+    while (gIssue.next()) {
+      return gIssue;
+    }
+  }
+  function getCommentingUser(column, value) {
+    var gr = new GlideRecord('sys_user');
+    gr.addQuery('active', true);
+    gr.addQuery(column, value);
+    gr.query();
+
+    while (gr.next()) {
+      return gr.sys_id.toString();
+    }
+  }
+
+})(request, response);]]&gt;&lt;/operation_script&gt;&lt;operation_uri&gt;/api/x_momo_jira_integr/webhooks/issue/{issue_id}/comments&lt;/operation_uri&gt;&lt;produces&gt;application/json,application/xml,text/xml&lt;/produces&gt;&lt;produces_customized&gt;false&lt;/produces_customized&gt;&lt;relative_path&gt;/issue/{issue_id}/comments&lt;/relative_path&gt;&lt;request_example/&gt;&lt;requires_acl_authorization&gt;true&lt;/requires_acl_authorization&gt;&lt;requires_authentication&gt;false&lt;/requires_authentication&gt;&lt;requires_snc_internal_role&gt;true&lt;/requires_snc_internal_role&gt;&lt;short_description/&gt;&lt;sys_class_name&gt;sys_ws_operation&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg@movement.com&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-01-23 11:48:48&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;f9a61b811b66405048a242e58d4bcbf8&lt;/sys_id&gt;&lt;sys_mod_count&gt;46&lt;/sys_mod_count&gt;&lt;sys_name&gt;Add Issue Comments&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ws_operation_f9a61b811b66405048a242e58d4bcbf8&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-02-28 09:14:24&lt;/sys_updated_on&gt;&lt;web_service_definition display_value="Issue Webhooks"&gt;bd56d3811b66405048a242e58d4bcb33&lt;/web_service_definition&gt;&lt;web_service_version/&gt;&lt;/sys_ws_operation&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>-2126620784</payload_hash>
+        <record_name>Add Issue Comments</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-28 09:14:24</sys_created_on>
+        <sys_id>7aec40b81b93045048a242e58d4bcbe7</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1708b13532c0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-28 09:14:24</sys_updated_on>
+        <type>Scripted REST Resource</type>
+        <update_guid>32ec40b8d09304509009ced58f7fc8e7</update_guid>
+        <update_guid_history>32ec40b8d09304509009ced58f7fc8e7:-2126620784,366b65e6644b48106868afd81a40eb28:175305037,d26ba966bd4b48106e8712497f7d0e49:746994192,c1a86ee833870010e6547c5902341260:-274253340,69982ee800870010b27138c6fa72940d:2000147614,164826e82e870010eec3cf6a4d0cb3ca:1370458314,7d3826e85487001081d40b48b7ac6cc3:-1149481254,0b18ae6841870010a44f20fa19da922a:-1126647271,45e662288087001049b18a580825c374:-1570803667,56d62e2832870010e28b2cabb67ee92c:177834238,e10662287d870010fc7c751caf018a9e:-1962080047,f725aaa43387001002ddc61596e9666d:712479195,32d4aaa4d4870010e32528f567b76665:679223596,884f16ecc9470010667c6fe23e9e67d0:228042298,71ce16ac424700104de2426e9236f02a:-1755049474,d68e5a2ce74700102eaa9296fbcce773:-1812678367,f0dd38557e2e4050b032e3bcf49529bc:1350640772,5afb638981a64050ccb96124fb4e210a:1948357477,4196a7813ba64050c7cfcb7bdab3ff3d:-136954195,5b466b8db5a2c050244e2d6d599e7fd8:-536199099,2646e78d48a2c05084ad857b4bf92306:1700314311,4416678d87a2c050a5fa190a49024399:736404507,de06238d49a2c0502b22d4660e517508:1757885582,9ce56b4d0ba2c050b7695f2d84dbaa91:-1647153795,bd856b4d0fa2c050ca130929d560ebd5:1920254053,5d85eb4d44a2c0502364b718007e904f:2142928727,e644e30d21a2c0504a51d674b3b727dd:-141154441,4844a7c964a2c0504b71d61c238313a4:879518569,16f36fc9b4a2c05024a72991035038eb:1264131163,5b8367c94ca2c050111bcf3e15598fdb:887131243,b73f1f49146640502c502f78fc6c96e4:243702710,112f97c1e2a2c050deda758ac493a2be:-161250708,fd0f134587a2c05002a15ef1b1084201:-752144084,01dedf05d1a2c05006dd372b3cb108fd:475088770,bc5d1f49b6664050fec29f3378c06a52:226231295,784d1bc1bda2c050f3f55b9c8c5aa7b3:518365979,9f4bd341d8a2c0506929e6fc8b2469a1:-207865056,bc9a930199a2c0509a7befa1cfa06cc6:158382888,3c5a53012ca2c0509854767465c87a12:2147457540,1ee99f8d5162c050b39046a5a53bcc65:-1353851004,c4e9d7cdd362c05081b5c27925d0a364:-1817866556,b5b917cd6a62c05020d5a86270ef9f10:1244321757,61b917cd6962c050bc0b6136a5efad00:-704483615,2789974d0c62c050f27527b70c5aeb49:-849685521,04799fc96762c0507423875c18142098:-1423005362,aa275b8162664050ea5e1fe25cb6990e:-1355651749,a507df81fa66405064f4118617cc20b1:-965819265</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-05 09:23:37</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_ws_operation">sys_ws_operation</sys_db_object>
+        <sys_id>53e99c5cfb5e42f9bba3a647901b54d9</sys_id>
+        <sys_metadata>f9a61b811b66405048a242e58d4bcbf8</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Add Issue Comments</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_ws_operation_f9a61b811b66405048a242e58d4bcbf8</sys_update_name>
+        <sys_update_version display_value="sys_ws_operation_f9a61b811b66405048a242e58d4bcbf8">7aec40b81b93045048a242e58d4bcbe7</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-05 09:23:37</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

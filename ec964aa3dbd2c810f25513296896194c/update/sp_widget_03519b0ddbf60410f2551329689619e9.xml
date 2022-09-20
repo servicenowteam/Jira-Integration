@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function ($scope, $rootScope) {
+  /* widget controller */
+  var c = this;
+
+  $scope.watcher = {
+    query: '',
+    issueType: $scope.data.issue_link_types[0].sys_id,
+    selectedResults: $scope.data.linked_issues
+  };
+  $scope.loading = false;
+  $scope.results = $scope.data.results;
+  $scope.selectedResults = [];
+  $scope.ngModelOptions = {
+    debounce: 500,
+    getterSetter: true
+  };
+
+  $scope.toggleSelection = function (evt, id) {
+    evt.stopPropagation();
+    evt.preventDefault();
+    var isSelected = $scope.watcher.selectedResults.filter(function(item) {
+      return item.outward == id && item.type == $scope.watcher.issueType;
+    });
+    if (isSelected.length === 0) {
+      var selection = {
+        outward: id,
+        type: $scope.issueType,
+        inward: $scope.data.sys_id
+      };
+      $scope.data.selection = selection;
+      $scope.server.update();
+      $scope.watcher.selectedResults.push(selection);
+    } else {
+      var deletion = {
+        outward: id,
+        type: $scope.watcher.issueType,
+        inward: $scope.data.sys_id
+      };
+      $scope.data.delete = deletion;
+      $scope.server.update();
+      $scope.watcher.selectedResults = $scope.watcher.selectedResults.filter(function(item) {
+        return item.outward != id;
+      });
+    }
+  };
+
+  $scope.isSelectedInResults = function (id) {
+    var isSelected = $scope.watcher.selectedResults.filter(function(item) {
+      return item.outward == id && item.type == $scope.watcher.issueType;
+    });
+    if (isSelected.length === 0) return false;
+    return 'jira-is-selected';
+  };
+  $scope.$watch('watcher.issueType', function (issueType) {
+    $scope.issueType = issueType;
+  });
+
+  $scope.truncate = function (str) {
+    if (!str) return;
+
+    if (typeof str !== 'string') return;
+
+    if (str.length > 20) {
+      return str.slice(0, 20) + '...';
+    }
+    return str;
+  };
+
+
+  $scope.$watch('watcher.query', function (value) {
+    if (value === '' && $scope.results.length === 0) {
+      $scope.server.refresh().then(function (response) {
+        $scope.results = response.data.results;
+      });
+      return;
+    }
+    if (value.length > 0) {
+      $scope.loading = true;
+      $scope.results = $scope.results.filter(function (item) {
+        var regex = new RegExp(value, 'gi');
+        return (regex.test(item.short_description) || regex.test(item.external_key));
+      });
+
+      if ($scope.results.length === 0) {
+        $scope.data.query = value;
+        $scope.server.update().then(function (data) {
+          $scope.loading = false;
+          $scope.results = data.results;
+          return;
+        });
+      } else {
+        $scope.loading = false;
+      }
+    }
+  });
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.modal-header {&#13;
+  padding: 15px;&#13;
+}&#13;
+&#13;
+.issue-type {&#13;
+  margin-top: 10px;&#13;
+}&#13;
+&#13;
+select.custom-select {&#13;
+  border: none;&#13;
+  box-shadow: none;&#13;
+  color: #000;&#13;
+  border-radius: 2px;&#13;
+  outline: none;&#13;
+  font-weight: 350;&#13;
+&#13;
+  &amp;:hover {&#13;
+    background-color: rgba(9, 30, 66, .04);&#13;
+    outline: none;&#13;
+    transition: all 0.2s;&#13;
+  }&#13;
+&#13;
+  &amp;:active,&#13;
+  &amp;:focus {&#13;
+    color: #000;&#13;
+    background-color: #fff;&#13;
+    transition: all 0.2s&#13;
+  }&#13;
+&#13;
+  &amp; option {&#13;
+    font-size: 14px;&#13;
+    background-color: initial;&#13;
+&#13;
+    &amp;:hover {&#13;
+      background-color: rgba(9, 30, 66, .03);&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+.jira-flex {&#13;
+  display: flex;&#13;
+&#13;
+  &amp;.flex-30 {&#13;
+    width: 30%;&#13;
+  }&#13;
+&#13;
+  &amp;.flex-35 {&#13;
+    width: 35%;&#13;
+  }&#13;
+&#13;
+  &amp;.flex-50 {&#13;
+    width: 50%;&#13;
+  }&#13;
+}&#13;
+&#13;
+.inline-flex {&#13;
+  display: inline-flex;&#13;
+  width: 100%;&#13;
+&#13;
+  &amp;.loader {&#13;
+    width: 100%;&#13;
+    height: 100%;&#13;
+    background: rgba(255, 255, 255, 0.7);&#13;
+    transition: all 0.4s ease;&#13;
+    justify-content: center;&#13;
+    align-items: center;&#13;
+    vertical-align: middle;&#13;
+    display: flex;&#13;
+    position: absolute;&#13;
+    top: 0;&#13;
+    left: 0;&#13;
+    z-index: 5000;&#13;
+&#13;
+    &amp;&gt;.sp-loading-indicator {&#13;
+      display: flex;&#13;
+      width: 54px;&#13;
+      height: 18px;&#13;
+      vertical-align: middle;&#13;
+      justify-content: center;&#13;
+      color: $brand-primary;&#13;
+    }&#13;
+  }&#13;
+&#13;
+  &amp;.inline-flex-50 {&#13;
+    width: 50%;&#13;
+  }&#13;
+&#13;
+  &amp;.inline-flex-35 {&#13;
+    width: 35%;&#13;
+  }&#13;
+&#13;
+  &amp;.inline-flex-15 {&#13;
+    width: 15%;&#13;
+  }&#13;
+}&#13;
+&#13;
+.jira-icon {&#13;
+  vertical-align: middle;&#13;
+  display: inline-flex;&#13;
+&#13;
+  &amp;.jira-icon-xs {&#13;
+    width: 20px;&#13;
+    height: 20px;&#13;
+  }&#13;
+}&#13;
+&#13;
+.jira-is-selected:not(.jira-text) {&#13;
+  background: #eee;&#13;
+  transition: all 0.3s;&#13;
+}&#13;
+&#13;
+.jira-text {&#13;
+  color: #000;&#13;
+&#13;
+  &amp;:not(.jira-is-selected) {&#13;
+&#13;
+    color: rgba(0, 0, 0, 0.6);&#13;
+    transition: color 0.4s;&#13;
+  }&#13;
+&#13;
+  &amp;.jira-title {&#13;
+    font-weight: 600;&#13;
+    color: #000;&#13;
+&#13;
+    text-decoration: underline;&#13;
+    outline: none;&#13;
+    white-space: nowrap;&#13;
+  }&#13;
+&#13;
+  &amp;.jira-title:not(.jira-is-selected) {&#13;
+    font-weight: 600;&#13;
+    color: rgb(137, 147, 164);&#13;
+    text-decoration: underline;&#13;
+    outline: none;&#13;
+    white-space: nowrap;&#13;
+  }&#13;
+&#13;
+  &amp;.jira-status {&#13;
+    font-size: 12px;&#13;
+    text-align: center;&#13;
+    font-weight: 700;&#13;
+    background: inherit;&#13;
+    text-transform: uppercase;&#13;
+  }&#13;
+}&#13;
+&#13;
+;&#13;
+&#13;
+.no-results {&#13;
+  color: rgba(0, 0, 0, 0.6);&#13;
+&#13;
+  &amp;:hover {&#13;
+    background: #eee;&#13;
+    transition: all 0.2s;&#13;
+  }&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira-linked-issue-form</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) { 
+
+ }]]></link>
+        <name>Jira Linked Issue Form</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  var table = (input ? input.table : undefined) || options.table || $sp.getParameter('table');
+  var sys_id = (input ? input.sys_id : undefined) || options.sys_id || $sp.getParameter('sys_id');
+  data.sys_id = sys_id;
+  data.table = table;
+  data.query = (input ? input.query : undefined);
+
+  var gr = new GlideRecord(data.table);
+
+  gr.get(data.sys_id);
+
+  data.canWrite = gr.isValid() && gr.canWrite() && gs.hasRole('x_momo_jira_integr.issue_tech');
+  data.canRead = gr.isValid() && gr.canRead();
+
+  
+
+  data.issue_link_types = getIssueLinkTypes();
+
+  var links = gr.getValue('linked_issues');
+
+  if (/,/gi.test(links)) {
+    links = links.split(',');
+  } else if (!gs.nil(links)) {
+    links = [ links ];
+  } else {
+    links = [];
+  }
+  data.linked_issues = getOutwardLinkedIssues(data.sys_id, links);
+  data.results = getResults(table, sys_id, gr.getValue('project'), data.query);
+
+  if (input) {
+    if (input.selection) {
+      var selection = input.selection;
+      var __link = createIssueLink(selection.outward, selection.inward, selection.type);
+      var __linked_issues = gr.getValue('linked_issues');
+      if (!__linked_issues) {
+        __linked_issues = [];
+      }
+      if (/,/gi.test(__linked_issues)) {
+        __linked_issues = __linked_issues.split(',');
+      } else if (!gs.nil(__linked_issues)) {
+        __linked_issues = [ __linked_issues ];
+      } else {
+        __linked_issues = [];
+      }
+      if (!__linked_issues.includes(__link.toString())) {
+        __linked_issues.push(__link.toString());
+      } else if (__linked_issues.length == 0) {
+        __linked_issues.push(__link.toString());
+      }
+      gr.linked_issues = __linked_issues.join(',');
+      gr.update();
+    }
+
+    if (input.delete) {
+      var deletion = input.delete;
+      var linked_issues = gr.getValue('linked_issues');
+      if (/,/gi.test(linked_issues)) {
+        linked_issues = linked_issues.split(',');
+      } else if (!gs.nil(linked_issues)) {
+        linked_issues = [ linked_issues ];
+      } else {
+        linked_issues = [];
+      }
+      var newLinks = removeIssueLink(deletion.inward, deletion.outward, deletion.type, linked_issues);
+
+      gr.setValue('linked_issues', newLinks.join(','));
+      gr.update();
+      
+    }
+  }
+
+  function removeIssueLink(inward, outward, typeId, links) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue_link');
+    var linked_issues = [];
+    gr.addQuery('inward_issue', inward);
+    gr.addQuery('outward_issues', outward);
+    gr.addQuery('type_id', typeId);
+    gr.query();
+
+    while(gr.next()) {
+      gr.setValue('active', false);
+      gr.update();
+    }
+    return links.filter(function(item) {
+      return !linked_issues.includes(item);
+    });
+  }
+  function createIssueLink(outwardIssueSysId, inwardSysId, typeId) {
+    if (!hasIssueLink(outwardIssueSysId, inwardSysId, typeId)) {
+      var gr = new GlideRecord('x_momo_jira_integr_issue_link');
+      gr.initialize();
+      gr.outward_issues = outwardIssueSysId;
+      gr.inward_issue = inwardSysId;
+      gr.type_id = typeId;
+      gr.insert();
+      return gr.getUniqueValue();
+    }
+  }
+
+  function hasIssueLink(outwardSysId, inwardSysId, typeId) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue_link');
+    gr.addQuery('outward_issues', outwardSysId);
+    gr.addQuery('inward_issue', inwardSysId);
+    gr.addQuery('type_id', typeId);
+    gr.addQuery('active', true);
+    gr.query();
+    return gr.next();
+  }
+
+  function getOutwardLinkedIssues(sys_id, links) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue_link');
+    gr.addQuery('active', true);
+    gr.addQuery('inward_issue', sys_id);
+    gr.query();
+    var outward = [];
+    while (gr.next()) {
+      outward.push({
+        outward: gr.getValue('outward_issues'),
+        type: gr.getValue('type_id'),
+        inward: gr.getValue('inward_issue')
+      });
+    }
+
+    return outward;
+  }
+
+  function getIssueLinkTypes() {
+    var issueLinkTypes = [];
+    var gr = new GlideRecord('x_momo_jira_integr_issue_link_type');
+    gr.addEncodedQuery('external_idISNOTEMPTY');
+    gr.orderBy('name');
+    gr.query();
+
+    while (gr.next()) {
+      issueLinkTypes.push({
+        sys_id: gr.sys_id.toString(),
+        name: gr.name.toString()        
+      });
+    }
+
+    return issueLinkTypes;
+  }
+
+  function getResults(table, sys_id, project, query) {
+    var results = [];
+    var gr = new GlideRecord(table);
+
+    var encondedQuery = 'sys_id!=' + sys_id + '^status.category.external_key!=done' + '^active=true';
+
+    if (query) {
+      encondedQuery += '^short_descriptionLIKE' + query + '^ORexternal_keyLIKE' + query;
+    }
+
+    gr.addEncodedQuery(encondedQuery);
+    gr.setLimit(5);
+    gr.orderByDesc('sys_created_on');
+    gr.query();
+
+    while (gr.next()) {
+      results.push({
+        sys_id: gr.getValue('sys_id'),
+        external_key: gr.getValue('external_key'),
+        priority: {
+          icon: gr.priority.icon.toString(),
+          name: gr.priority.name.toString()
+        },
+        short_description: gr.getValue('short_description'),
+        status: {
+          name: gr.status.name.toString()
+        }
+      });
+    }
+    return results;
+  }
+
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-04 21:39:45</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>03519b0ddbf60410f2551329689619e9</sys_id>
+        <sys_mod_count>272</sys_mod_count>
+        <sys_name>Jira Linked Issue Form</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_03519b0ddbf60410f2551329689619e9</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-22 16:36:27</sys_updated_on>
+        <template><![CDATA[<div class="row" ng-if="data.canRead">
+  <div class="col-md-12 modal-header">
+    <form>
+      <input ng-model="watcher.query" ng-model-options="ngModelOptions" class="form-control" autocomplete="off"
+        role="textbox" type="text" placeholder="Search for an issue" />
+      <select class="custom-select form-control" ng-model="watcher.issueType">
+        <option ng-repeat="option in data.issue_link_types" value="{{ ::option.sys_id }}">{{ ::option.name }}</option>
+      </select>
+    </form>
+  </div>
+  <div class="col-md-12">
+    <div class="inline-flex loader" ng-if="loading">
+      <div class="hidden-xs sp-loading-indicator la-sm">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    <ul class="list-group padder-l-sm padder-r-sm m-t">
+      <li class="list-group-item" ng-click="toggleSelection($event, result.sys_id)"
+        ng-class="isSelectedInResults(result.sys_id)" ng-repeat="result in results track by result.sys_id"
+        ng-if="data.results.length > 0">
+        <div class="inline-flex">
+          <div class="jira-flex flex-30">
+            <img class="jira-icon jira-icon-xs inline-flex" alt="{{ result.priority.name }}"
+              title="{{ result.priority.name }}" ng-src="{{ result.priority.icon }}">
+            <div class="inline-flex padder-l-xs">
+              <span class="jira-text jira-title"
+                ng-class="isSelectedInResults(result.sys_id)">{{ result.external_key }}</span>
+            </div>
+          </div>
+          <div class="jira-flex flex-50">
+            <span class="jira-text" ng-class="isSelectedInResults(result.sys_id)"
+              ng-bind="truncate(result.short_description)"></span>
+          </div>
+          <div class="jira-flex flex-35">
+            <span class="jira-text jira-status">{{ result.status.name }}</span>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item no-results" ng-if="data.results.length === 0">
+        <span class="text-muted">${No records found}</span>
+      </li>
+    </ul>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

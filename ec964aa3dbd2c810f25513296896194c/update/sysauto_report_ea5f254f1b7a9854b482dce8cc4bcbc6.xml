@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sysauto_report">
+    <sysauto_report action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <address_list/>
+        <business_calendar/>
+        <condition/>
+        <conditional>false</conditional>
+        <entered_time/>
+        <group_list name="BA Team">196fcef9dbc7e38042ec776b8c961944</group_list>
+        <include_detail>false</include_detail>
+        <include_with/>
+        <name>Scheduled execution of Jira Issues Needing Approval</name>
+        <offset/>
+        <offset_type>0</offset_type>
+        <omit_if_no_records>true</omit_if_no_records>
+        <output_type>PDF-landscape</output_type>
+        <page_height_in_pixels>612</page_height_in_pixels>
+        <page_size>Letter</page_size>
+        <page_width_in_pixels>792</page_width_in_pixels>
+        <report display_value="Jira Issues Needing Approval">915fa14f1b7a9854b482dce8cc4bcb98</report>
+        <report_body/>
+        <report_title>Jira Issues Awaiting Approval</report_title>
+        <run_as display_value="Douglas Schamberg">41c0da35db017e0093373c8f9d96198b</run_as>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2020-08-27 15:50:33</run_start>
+        <run_time>1970-01-01 13:00:00</run_time>
+        <run_type>daily</run_type>
+        <sys_class_name>sysauto_report</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-08-27 15:51:30</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>ea5f254f1b7a9854b482dce8cc4bcbc6</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Scheduled execution of Jira Issues Needing Approval</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sysauto_report_ea5f254f1b7a9854b482dce8cc4bcbc6</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-08-27 15:51:30</sys_updated_on>
+        <time_zone/>
+        <upgrade_safe>false</upgrade_safe>
+        <user_list>961913addb038810adba3e0b7c961952,cf4c78efdb9e5300a3d25d104b961983</user_list>
+        <zip>false</zip>
+    </sysauto_report>
+</record_update>

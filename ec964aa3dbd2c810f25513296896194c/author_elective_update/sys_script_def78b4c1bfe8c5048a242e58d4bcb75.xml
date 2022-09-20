@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="DELETE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>false</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>false</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_momo_jira_integr_issue</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="x_momo_jira_integr_issue">descriptionISNOTEMPTY^EQ<item endquery="false" field="description" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Test Jira ADF Builder</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+	gs.include('JiraADFBuilder');
+
+  var a = new JiraADFBuilder();
+  a.initialize(1);
+  var b = a.paragraph();
+  gs.error(b.toJSON());
+
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-01 18:26:01</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>def78b4c1bfe8c5048a242e58d4bcb75</sys_id>
+        <sys_mod_count>21</sys_mod_count>
+        <sys_name>Test Jira ADF Builder</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_def78b4c1bfe8c5048a242e58d4bcb75</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-01 18:58:16</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+    <sys_translated_text action="DELETE" query="documentkey=def78b4c1bfe8c5048a242e58d4bcb75"/>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_script_def78b4c1bfe8c5048a242e58d4bcb75</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update sys_domain="global" table="sys_script"&gt;&lt;sys_script action="INSERT_OR_UPDATE"&gt;&lt;abort_action&gt;false&lt;/abort_action&gt;&lt;access&gt;package_private&lt;/access&gt;&lt;action_delete&gt;false&lt;/action_delete&gt;&lt;action_insert&gt;false&lt;/action_insert&gt;&lt;action_query&gt;false&lt;/action_query&gt;&lt;action_update&gt;true&lt;/action_update&gt;&lt;active&gt;false&lt;/active&gt;&lt;add_message&gt;false&lt;/add_message&gt;&lt;advanced&gt;true&lt;/advanced&gt;&lt;change_fields&gt;false&lt;/change_fields&gt;&lt;client_callable&gt;false&lt;/client_callable&gt;&lt;collection&gt;x_momo_jira_integr_issue&lt;/collection&gt;&lt;condition/&gt;&lt;description/&gt;&lt;execute_function&gt;false&lt;/execute_function&gt;&lt;filter_condition table="x_momo_jira_integr_issue"&gt;descriptionISNOTEMPTY^EQ&lt;item endquery="false" field="description" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/&gt;&lt;item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/&gt;&lt;/filter_condition&gt;&lt;is_rest&gt;false&lt;/is_rest&gt;&lt;message/&gt;&lt;name&gt;Test Jira ADF Builder&lt;/name&gt;&lt;order&gt;100&lt;/order&gt;&lt;priority&gt;100&lt;/priority&gt;&lt;rest_method/&gt;&lt;rest_method_text/&gt;&lt;rest_service/&gt;&lt;rest_service_text/&gt;&lt;rest_variables/&gt;&lt;role_conditions/&gt;&lt;script&gt;&lt;![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+	gs.include('JiraADFBuilder');
+
+  var a = new JiraADFBuilder();
+  a.initialize(1);
+  var b = a.paragraph();
+  gs.error(b.toJSON());
+
+
+})(current, previous);]]&gt;&lt;/script&gt;&lt;sys_class_name&gt;sys_script&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-02-01 18:26:01&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_domain&gt;global&lt;/sys_domain&gt;&lt;sys_domain_path&gt;/&lt;/sys_domain_path&gt;&lt;sys_id&gt;def78b4c1bfe8c5048a242e58d4bcb75&lt;/sys_id&gt;&lt;sys_mod_count&gt;21&lt;/sys_mod_count&gt;&lt;sys_name&gt;Test Jira ADF Builder&lt;/sys_name&gt;&lt;sys_overrides/&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_script_def78b4c1bfe8c5048a242e58d4bcb75&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-02-01 18:58:16&lt;/sys_updated_on&gt;&lt;template/&gt;&lt;when&gt;before&lt;/when&gt;&lt;/sys_script&gt;&lt;sys_translated_text action="delete_multiple" query="documentkey=def78b4c1bfe8c5048a242e58d4bcb75"/&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>30921678</payload_hash>
+        <record_name>Test Jira ADF Builder</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-01 18:58:17</sys_created_on>
+        <sys_id>dcaf07841b32cc5048a242e58d4bcbb2</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>170021e2d990000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-01 18:58:17</sys_updated_on>
+        <type>Business Rule</type>
+        <update_guid>14af0784c132cc50768c1eac6b867bb2</update_guid>
+        <update_guid_history>14af0784c132cc50768c1eac6b867bb2:30921678,5a9ec34836728090f2d75e10527cfd9d:-2110411417,b74d0fc430728090b83711a0f83d6d4d:941599697,89fc8bc4aa728090d6046265baaa4cee:-1965054493,adcc8bc458728090e40e5a3ba5bc7387:-999812230,038cc7049a32cc50304ffb25b2747328:-1779106579,b67c07c460728090d4c199236bdc8620:1951287388,a95c03c41c728090c81df562edee7457:558703905,e93c4f84887280909e20c81d2b4c84b9:-974645139,f12c4f8435728090e2e0cfbaa5e2b6b2:558703905,4e0c8384a37280908ece41abe793ee8c:-1118426749,046b4f443c728090f6f241b01d3e026c:754532967,b02ac3040772809086e97d336250dec4:1734587970,471ac304fb7280900a61322b631b820a:-681995636,ffd98fc0d9728090a588c306b393f516:808984837,5c59c3806e7280907957d81e67c16e10:1342634523,024983c010728090ff64845e19fed956:-2020692529,8129cf804b7280906e7578ef291633f2:48097978,6fe84f000c72809026da107db20ec3d3:1177708627,53984bcc4efe8c50f5ec2c1d7e12f115:501404873,145887cc1afe8c505448538ebeb4ad4b:-521666467,3738838c36fe8c5035094e963a3e5cfa:-1179180596</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-08 17:40:40</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_script">sys_script</sys_db_object>
+        <sys_id>54c34f57f5414f5bb4cfda7a4057c559</sys_id>
+        <sys_metadata>def78b4c1bfe8c5048a242e58d4bcb75</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Test Jira ADF Builder</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent display_value="">452d16f7db1a0c10f255132968961945</sys_parent>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_script_def78b4c1bfe8c5048a242e58d4bcb75</sys_update_name>
+        <sys_update_version display_value="sys_script_def78b4c1bfe8c5048a242e58d4bcb75">dcaf07841b32cc5048a242e58d4bcbb2</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-08 17:40:40</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

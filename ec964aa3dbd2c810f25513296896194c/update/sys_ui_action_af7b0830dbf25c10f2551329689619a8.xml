@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_action">
+    <sys_ui_action action="INSERT_OR_UPDATE">
+        <action_name>sysverb_convert_jira</action_name>
+        <active>true</active>
+        <client>false</client>
+        <client_script_v2><![CDATA[function onClick(g_form) {
+
+}]]></client_script_v2>
+        <comments/>
+        <condition>current.cat_item.category.getDisplayValue() == "ServiceNow"</condition>
+        <form_action>true</form_action>
+        <form_button>true</form_button>
+        <form_button_v2>false</form_button_v2>
+        <form_context_menu>false</form_context_menu>
+        <form_link>false</form_link>
+        <form_menu_button_v2>false</form_menu_button_v2>
+        <form_style>primary</form_style>
+        <format_for_configurable_workspace>false</format_for_configurable_workspace>
+        <hint/>
+        <isolate_script>false</isolate_script>
+        <list_action>false</list_action>
+        <list_banner_button>false</list_banner_button>
+        <list_button>false</list_button>
+        <list_choice>false</list_choice>
+        <list_context_menu>false</list_context_menu>
+        <list_link>false</list_link>
+        <list_save_with_form_button>false</list_save_with_form_button>
+        <list_style/>
+        <messages/>
+        <name>Create Jira Issue</name>
+        <onclick/>
+        <order>100</order>
+        <script><![CDATA[var questions = getVariableSet(current.variables);
+var requestRef = current.request.getRefRecord();
+var catItemRef = current.cat_item.getRefRecord();
+
+var journals = getJournalRecords(
+  current.getTableName(),
+  current.getUniqueValue()
+);
+
+var project = getProjectByCategoryName(catItemRef.getDisplayValue('category'));
+var issueType = getIssueTypeByProject(project);
+
+var request = {
+  shortDescription: current.getValue('short_description'),
+  variables: questions,
+  project: project,
+  issueType: issueType,
+  requestedFor: requestRef.getValue('requested_for'),
+  priority: getPriority()
+};
+
+
+var issue = createJiraIssue(request);
+
+if (issue) {
+  insertJournalFields(issue, journals);
+  current.setValue('state', 3);
+  current.update();
+}
+
+/**
+ * Quick way to get the display label and value
+ * from the requested item.
+ * 
+ * @param {GlideElement_proto} variables the variables from the current record.
+ * 
+ * @returns {object[]} A array of objects contianing the label and value of the variable.
+ */
+function getVariableSet(variables) {
+  var vars = [];
+
+  var elements = variables.getElements();
+
+  for (var i = 0; i < elements.length; i++) {
+    var question = elements[i].getQuestion();
+    vars.push({
+      label: question.getLabel(),
+      value: question.getValue()
+    });
+  }
+  return vars;
+}
+
+/**
+ * Get all the journal record for the current request.
+ * 
+ * @param {string} table The table of the current record
+ * @param {string} sysId The sys_id of the current record
+ * 
+ * @returns {object[]} A array of objects with the journal type, value,
+ * and who it was created by
+ * 
+ */
+function getJournalRecords(table, sysId) {
+  var records = [];
+  var gr = new GlideRecord('sys_journal_field');
+  gr.addQuery('element_id', sysId);
+  gr.addQuery('name', table);
+
+  gr.query();
+
+  while (gr.next()) {
+    records.push({
+      type: gr.getValue('element'),
+      value: gr.getValue('value'),
+      createdBy: gr.getValue('sys_created_by')
+    });
+  }
+
+  return records;
+}
+
+/**
+ * Creates a new Jira issue that is in a approval status
+ * Once approved it will be sent to the Jira application.
+ * 
+ * @param {object} request The request object.
+ * 
+ * @returns {GlideRecord_proto|boolean} returns the glide record or false.
+ */
+function createJiraIssue(request) {
+  if (!request.project) return false;
+
+  if (!request.issueType) return false;
+
+  if (!request.priority) return false;
+
+  var gr = new GlideRecord('x_momo_jira_integr_issue');
+
+  gr.initialize();
+
+  gr.project = request.project;
+  gr.issue_type = request.issueType;
+  gr.priority = request.priority;
+  gr.requested_for = request.requestedFor;
+  gr.short_description = request.shortDescription;
+
+  var description = '';
+
+  for (var i = 0; i < request.variables.length; i++) {
+    description += request.variables[i].label + ": ";
+    description += "**" + request.variables[i].value + "**\n\n";
+  }
+
+  gr.description = description;
+  gr.active = true;
+  gr.approval = "not requested";
+  gr.insert();
+
+  return gr;
+
+}
+
+function getProjectByCategoryName(name) {
+  var gr = new GlideRecord('x_momo_jira_integr_project');
+
+  gr.get('name', name);
+
+  if (gr.isValidRecord()) {
+    return gr.getUniqueValue();
+  }
+  return null;
+}
+
+function getIssueTypeByProject(project) {
+
+  if (!project) return;
+
+  var gr = new GlideRecord('x_momo_jira_integr_issue_type');
+  gr.addQuery('project', project);
+  gr.addQuery('name', 'Story');
+  gr.query();
+
+  while (gr.next()) {
+    return gr.getUniqueValue();
+  }
+
+  return null;
+}
+
+function getPriority() {
+  var gr = new GlideRecord('x_momo_jira_integr_priority');
+  gr.get('external_id', '4');
+
+  if (gr.isValidRecord()) {
+    return gr.getUniqueValue();
+  }
+
+  return null;
+}
+
+function insertJournalFields(issue, journals) {
+  for (var i = 0; i < journals.length; i++) {
+    var journal = journals[i];
+    if (journal.type === 'work_notes') {
+      issue.work_notes = journal.value;
+    } else if (journal.type === 'comments') {
+      issue.work_notes = journal.value;
+    } else continue;
+
+    issue.update();
+  }
+}]]></script>
+        <show_insert>false</show_insert>
+        <show_multiple_update>false</show_multiple_update>
+        <show_query>false</show_query>
+        <show_update>true</show_update>
+        <sys_class_name>sys_ui_action</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-08-20 08:49:57</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>af7b0830dbf25c10f2551329689619a8</sys_id>
+        <sys_mod_count>34</sys_mod_count>
+        <sys_name>Create Jira Issue</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ui_action_af7b0830dbf25c10f2551329689619a8</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-08-20 10:38:27</sys_updated_on>
+        <table>sc_req_item</table>
+        <ui11_compatible>true</ui11_compatible>
+        <ui16_compatible>false</ui16_compatible>
+    </sys_ui_action>
+</record_update>

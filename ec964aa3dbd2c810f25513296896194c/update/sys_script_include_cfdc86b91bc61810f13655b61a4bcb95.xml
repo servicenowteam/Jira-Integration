@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_momo_jira_integr.JiraWebhookHelper</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>JiraWebhookHelper</name>
+        <script><![CDATA[var JiraWebhookHelper = Class.create();
+JiraWebhookHelper.prototype = {
+  initialize: function (request, response) {
+    this.request = request;
+    this.error = undefined;
+    this.response = response;
+
+    if (!this.isAtlassianWebhook()) {
+      this.BAD_REQUEST();
+    }
+  },
+  createSNIssue: function () {
+    var body = this.request.body.data;
+
+    if (body instanceof Array) return;
+
+    if (body.webhookEvent !== 'jira:issue_created') return;
+
+    if (body.user.displayName === 'Mulesoft Test') return;
+
+    var fields = body.issue.fields;
+
+    if (!fields) return;
+
+    var project = this.getGRFromExternalId("x_momo_jira_integr_project", fields.project.id);
+
+    if (!this.isValidProject(fields.project.key)) return;
+
+    if (!this.snIssueExists(body.issue.id)) {
+      var gr = new GlideRecord("x_momo_jira_integr_issue");
+
+      gr.initialize();
+
+      var status = this.getGRFromExternalId("x_momo_jira_integr_status", fields.status.id);
+      var priority = this.getGRFromExternalId("x_momo_jira_integr_priority", fields.priority.id);
+      var issueType = this.getGRFromExternalId("x_momo_jira_integr_issue_type", fields.issuetype.id);
+      var requestedFor = this.getRequestedForUser(fields.reporter, fields.creator);
+      var assignedTo = this.getRequestedForUser(fields.assignee);
+
+
+      gr.project = project;
+      gr.status = status;
+      gr.priority = priority;
+      gr.issue_type = issueType;
+      gr.requested_for = requestedFor;
+      gr.assigned_to = assignedTo;
+      gr.external_key = body.issue.key;
+      gr.external_id = body.issue.id;
+      gr.short_description = fields.summary;
+      gr.description = fields.description;
+      gr.approval = "approved";
+      gr.active = true;
+
+
+      var EXCLUDED_FIELDS = [
+        'project',
+        'status',
+        'priority',
+        'issue_type',
+        'requested_for',
+        'external_key',
+        'external_id',
+        'short_description',
+        'assigned_to',
+        'description',
+        'approval',
+        'active'
+      ];
+
+      var util = new global.ArrayUtil();
+
+      var keys = Object.keys(fields);
+
+      for (var k = 0; k < keys.length; k++) {
+        var key = keys[k];
+        var value = fields[key];
+
+        var field = this.getCustomField(key);
+
+        if (!field) continue;
+
+        if (field === 'cab_type' && value) {
+          value = this.getCabValueFromID(value.id);
+        }
+        if (value && !util.contains(EXCLUDED_FIELDS, field)) {
+          gr.setValue(field, value);
+        }
+      }
+
+      gr.insert();
+
+      return gr;
+    }
+  },
+  getCabValueFromID: function (id) {
+    switch (id) {
+      case '10615':
+        return 'normal';
+      case '10614':
+        return 'standard';
+      case '10616':
+        return 'emergency';
+      default:
+        return 'none';
+    }
+  },
+  getJiraAttachments: function () {
+    var attachments = [];
+    var body = this.request.body.data;
+
+    if (body instanceof Array) return attachments;
+
+    var fields = body.issue.fields;
+
+    if (!fields) return attachments;
+
+    if (!(fields.attachment instanceof Array)) return attachments;
+
+    if (fields.attachment.length > 0) {
+      attachments = fields.attachment;
+    }
+
+    return attachments;
+  },
+  createIssueLinks: function (issue) {
+    var body = this.request.body.data;
+
+    if (body instanceof Array) return;
+    var fields = body.issue.fields;
+
+    if (!fields) return;
+
+    if (!(fields.issuelinks instanceof Array)) return;
+
+    if (fields.issuelinks.length > 0) {
+      for (var i = 0; i < fields.issuelinks.length; i++) {
+        var link = fields.issuelinks[i];
+        var issueLink = this.getGRFromExternalId("x_momo_jira_integr_issue_link", link.id);
+        var issueLinkType = this.getGRFromExternalId("x_momo_jira_integr_issue_link_type", link.type.id);
+
+        if (gs.nil(issueLink)) {
+          var outward = this.getGRFromExternalId(issue.getTableName(), link.outwardIssue.id);
+          var inward = issue.getUniqueValue();
+
+          if (!gs.nil(outward) && !gs.nil(issueLinkType)) {
+            var gr = new GlideRecord("x_momo_jira_integr_issue_link");
+            gr.initialize();
+            gr.external_id = link.id;
+            gr.outward_issues = outward;
+            gr.inward_issue = inward;
+            gr.type_id = issueLinkType;
+            gr.insert();
+          }
+        }
+      }
+    }
+  },
+  getCustomField: function (fieldId) {
+    var EXCLUDED_FIELDS = [
+      'status',
+      'project',
+      'priority',
+      'issuetype',
+      'summary',
+      'description',
+      'reporter',
+      'creator'
+    ];
+    var util = new global.ArrayUtil();
+    var gr = new GlideRecord("x_momo_jira_integr_jira_fields");
+
+    gr.get("field_id", fieldId);
+
+    if (gr.isValidRecord() && !util.contains(EXCLUDED_FIELDS, fieldId)) {
+      if (!gr.issue_field.nil()) {
+        return gr.getValue('issue_field');
+      }
+
+    }
+  },
+  isValidProject: function (projectKey) {
+    var invalidProjects = gs.getProperty('x_momo_jira_integr.included_project_keys');
+    var util = new global.ArrayUtil();
+    if (!gs.nil(invalidProjects)) {
+      invalidProjects = invalidProjects.split(',');
+      return !util.contains(invalidProjects, projectKey);
+    }
+    return true;
+  },
+  getRequestedForUser: function (reporter, creator) {
+    var accountId;
+
+    if (reporter) {
+      accountId = reporter.accountId;
+    } else if (creator) {
+      accountId = creator.accountId;
+    }
+
+    if (!accountId) return "5136503cc611227c0183e96598c4f706";
+
+    var gr = new GlideRecord("sys_user");
+    gr.addQuery("active", true);
+    gr.addNotNullQuery("x_momo_jira_integr_account_id");
+    gr.addQuery("x_momo_jira_integr_account_id", accountId);
+    gr.query();
+
+    while (gr.next()) {
+      return gr.getUniqueValue();
+    }
+
+    return "5136503cc611227c0183e96598c4f706";
+  },
+  getGRFromExternalId: function (table, externalId) {
+    var gr = new GlideRecord(table);
+
+    gr.get("external_id", externalId);
+
+    if (gr.isValidRecord()) {
+      return gr.getUniqueValue();
+    }
+    return "";
+  },
+  snIssueExists: function (externalId) {
+    var gr = new GlideRecord("x_momo_jira_integr_issue");
+    gr.get("external_id", externalId);
+
+    return gr.isValidRecord();
+  },
+  getJiraIssue: function (urlParam) {
+    var body = this.request.body.data;
+
+    if (body instanceof Array) return;
+
+    if (body.issue || urlParam) {
+      var gr = new GlideRecord('x_momo_jira_integr_issue');
+      var externalId;
+      if (urlParam) {
+        externalId = urlParam;
+      } else {
+        externalId = body.issue.id;
+      }
+      gr.get('external_id', externalId);
+
+      if (gr.isValidRecord()) {
+        return gr;
+      }
+    }
+    this.NOT_FOUND("Issue could not be found.");
+  },
+  getSNCustomFieldGR: function (id) {
+    var gr = new GlideRecord('x_momo_jira_integr_jira_fields');
+    gr.addQuery('active', true);
+    gr.addQuery('field_id', id);
+    gr.query();
+
+    while (gr.next()) {
+      return gr;
+    }
+  },
+  getChangeUser: function () {
+    var body = this.request.body.data;
+    if (body instanceof Array) {
+      this.BAD_REQUEST('Malformed request.');
+      return;
+    }
+
+    if (body.user) {
+      var gr = new GlideRecord('sys_user');
+      gr.addQuery('active', true);
+      gr.addQuery('x_momo_jira_integr_account_id', body.user.accountId);
+      gr.query();
+
+      while (gr.next()) {
+        return gr.getValue('name');
+      }
+      return body.user.displayName;
+    }
+    return 'Guest';
+  },
+  getChangeLog: function () {
+    var body = this.request.body.data;
+
+    if (body instanceof Array) return [];
+
+    if (body.changelog) {
+      return body.changelog.items;
+    }
+    return [];
+  },
+  updateSNRecord: function () {
+    var changes = this.getChangeLog();
+    var issue = this.getJiraIssue();
+    if (!issue) return this.setWebhookResponse();
+    var COMPONENTS_HAVE_CHANGED = false;
+    changes = changes.map(this._mapChangesFunction.bind(this));
+
+    for (var i in changes) {
+
+      var change = changes[i];
+
+      if (!change) continue;
+
+      var isChangeEnabled = Boolean(gs.getProperty('x_momo_jira_integr.change_request'));
+
+      if (isChangeEnabled && change.isChangeTmpl) {
+        var template = this.setCABRequest(change);
+        issue.setValue('change_template', template);
+        continue;
+      }
+
+      var element = issue.getElement(change.column);
+      var descriptor = element.getED();
+      var table;
+      try {
+        table = element.getReferenceTable();
+      } catch (e) {}
+
+
+
+      if (!change.value && change.column !== 'products') {
+        issue.setValue(change.column, "");
+        continue;
+      }
+
+      if (change.column === 'requested_for') {
+        var userSysId = this.getRequestedForByName(change);
+        if (userSysId) {
+          issue.setValue(change.column, userSysId);
+        }
+        continue;
+      }
+
+      if (descriptor.getInternalType() === 'glide_list') {
+        if (!table) {
+          table = 'x_momo_jira_integr_product';
+        }
+
+        var val = issue.getValue(element.getName());
+        var list = this.getList(table, change, val);
+        if (element.getName() === 'products') {
+          COMPONENTS_HAVE_CHANGED = true;
+          continue;
+        }
+
+        issue.setValue(change.column, list);
+
+      } else if (descriptor.getInternalType() === 'reference' && table && change.schema !== "user") {
+        var ref = this.getReference(table, change);
+
+        if (ref.value && ref.display) {
+          issue.setValue(change.column, ref.value, ref.display);
+        }
+
+        if (change.column === 'status' && ref.gr) {
+          var category = ref.gr.category.getRefRecord();
+          if (category.getValue('external_key') === 'done') {
+            issue.setValue('active', false);
+          } else if (issue.getValue('active') == false) {
+            issue.setValue('active', true);
+          }
+        }
+
+      } else if (descriptor.getInternalType() === 'reference' && change.schema === 'user') {
+        var user = new GlideRecord('sys_user');
+        user.get("x_momo_jira_integr_account_id", change.value);
+
+        if (user.isValidRecord()) {
+          issue.setValue(change.column, user.getUniqueValue(), user.getDisplayValue());
+        } else {
+          issue.setValue(change.column, "");
+        }
+      } else if (descriptor.getInternalType() !== 'reference') {
+        issue.setValue(change.column, change.value);
+      }
+    }
+    if (COMPONENTS_HAVE_CHANGED) {
+
+      var components = this.request.body.data.issue.fields.components;
+      var _components = components.map(function (component) {
+        return component.id;
+      });
+      issue.setValue('products', this.getProductsList('x_momo_jira_integr_product', _components));
+    }
+    issue.update();
+    return this.setWebhookResponse();
+  },
+  getDescription: function (issue) {
+    var request = new JiraRequestV2();
+    var results = request.send({
+      path: 'issue/' + issue.getValue('external_id') + '?expand=renderedFields&fields=description',
+      method: 'GET'
+    }).getResponse();
+    try {
+      return results.renderedFields.description.replace(/src="(.*?)"/gmi, 'src="' + gs.getProperty('x_momo_jira_integr.instance_name') + '$1"');
+    } catch (e) {}
+  },
+  getProductsList: function (table, value) {
+
+    var list = [];
+    for (var v in value) {
+      var gr = new GlideRecord(table);
+      gr.get("external_id", value[v]);
+      if (gr.isValidRecord()) {
+        list.push(gr.getUniqueValue());
+      }
+    }
+    return list.join(',');
+  },
+  getList: function (table, field, current) {
+    var util = new global.ArrayUtil();
+    var list = [];
+    if (!current) {
+      list = [];
+    } else if (typeof current === 'string' && /,/gi.test(current)) {
+      list = current.split(',');
+    } else if (typeof current === 'string') {
+      list.push(current);
+    }
+
+    var gr = new GlideRecord(table);
+    if (!field.from) {
+      gr.get("external_id", field.value);
+    } else {
+      gr.get("external_id", field.from);
+    }
+
+
+    if (gr.isValidRecord()) {
+      if (!util.contains(list, gr.getUniqueValue())) {
+        list.push(gr.getUniqueValue());
+      }
+
+      return list.join(',');
+    }
+    return current;
+  },
+  getReference: function (table, field) {
+    var ref = new GlideRecord(table);
+    var col = "external_id";
+    if (!/^[0-9]+$/gi.test(field.value)) {
+      col = "external_key";
+    }
+    ref.get(col, field.value);
+
+
+    if (ref.isValidRecord()) {
+      var display = ref.getDisplayName();
+      return {
+        value: ref.getUniqueValue(),
+        display: ref.getValue(display),
+        gr: ref
+      };
+    }
+    return {};
+  },
+  setCabRequest: function (change) {
+
+    var gr = new GlideRecord('std_change_record_producer');
+    gr.get('name', change.value);
+
+    if (gr.isValidRecord()) {
+      return gr.getUniqueValue();
+    }
+
+    return '';
+  },
+  getRequestedForByName: function (change) {
+    if (!change.value) return "";
+
+    var gr = new GlideRecord('sys_user');
+
+    gr.get('name', change.value);
+
+    if (gr.isValidRecord()) {
+      return gr.getUniqueValue();
+    }
+  },
+  setWebhookResponse: function (statusCode) {
+    if (this.error) {
+      this.response.setError(this.error);
+    } else {
+      var code = statusCode ? statusCode : 200;
+      this.response.setStatus(code);
+    }
+  },
+  BAD_REQUEST: function (message) {
+    if (!message) {
+      message = 'Bad request';
+    }
+    this.error = new sn_ws_err.BadRequestError(message);
+  },
+  NOT_FOUND: function (message) {
+    if (!message) {
+      message = 'Not found';
+    }
+    this.error = new sn_ws_err.NotFoundError(message);
+  },
+  HAS_DESCRIPTION_CHANGE: false,
+  isAtlassianWebhook: function () {
+    return (this.request.getHeader('x-atlassian-webhook-identifier') &&
+      request.getHeader('user-agent') &&
+      /Atlassian Webhook/gi.test(request.getHeader('user-agent')));
+  },
+  _mapChangesFunction: function (change) {
+    var field = this.getSNCustomFieldGR(change.fieldId);
+    if (field) {
+
+      var prop = field.getValue('webhook_change_property');
+      var column = field.getValue('issue_field');
+      var value = change[prop];
+
+      if (column === 'cab_type') {
+        switch (value) {
+          case "10614":
+            value = "standard";
+            break;
+          case "10615":
+            value = "normal";
+            break;
+          case "10616":
+            value = "emergency";
+            break;
+          default:
+            value = "none";
+            break;
+        }
+      }
+
+      return {
+        column: column,
+        schema: field.getValue('schema_type'),
+        isChangeTmpl: field.getValue('change_template_field') == "true",
+        value: value,
+        from: change.from,
+        fieldId: change.fieldId
+      };
+    }
+  },
+  type: 'JiraWebhookHelper'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-07-17 14:00:11</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>cfdc86b91bc61810f13655b61a4bcb95</sys_id>
+        <sys_mod_count>124</sys_mod_count>
+        <sys_name>JiraWebhookHelper</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_include_cfdc86b91bc61810f13655b61a4bcb95</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2021-02-05 15:24:31</sys_updated_on>
+    </sys_script_include>
+</record_update>

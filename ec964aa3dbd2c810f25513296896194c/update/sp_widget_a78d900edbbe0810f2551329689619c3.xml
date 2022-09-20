@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function jiraCreateNewIssue($scope, $rootScope, nowAttachmentHandler, spUtil, spAriaUtil, $window, spModal, $document, $timeout) {
+  /* widget controller */
+  var c = this;
+  $scope.attachmentHandler = new nowAttachmentHandler(setAttachments, appendError);
+  $scope.steps = $scope.data.steps;
+  $scope.currentStep = 1;
+  $scope.errorMessages = [];
+  $scope.projectIsSelected = false;
+  $scope.fields = [];
+  $scope.data.action = "";
+  $scope.project = {
+    displayValue: "",
+    value: "",
+    name: "project"
+  };
+
+  $scope.$on('field.change', function (e, args) {
+    var hasField = $scope.fields.filter(function (field) {
+      return args.field.name === field.name;
+    });
+
+    if (hasField.length > 0) {
+      $scope.fields = $scope.fields.map(function (field) {
+        if (args.field.name === field.name) {
+          return args.field;
+        }
+        return field;
+      });
+    } else {
+      $scope.fields.push(args.field);
+    }
+    if (args.field.name === 'project') {
+      if (!args.field.value || args.field.value == '') {
+        $scope.projectIsSelected = false;
+        return;
+      }
+      $scope.data.project = args.field.value;
+      $scope.server.update().then(function (data) {
+        if (data.project) {
+          $scope.projectIsSelected = true;
+          $scope.steps = $scope.data.steps;
+          for (var s in $scope.steps) {
+            var step = $scope.steps[s];
+            if (step.form) {
+              var fieldKeys = Object.keys(step.form._fields);
+              for (var k in fieldKeys) {
+                $scope.fields.push(step.form._fields[fieldKeys[k]]);
+              }
+            }
+          }
+        }
+      });
+    }
+  });
+
+
+  spUtil.recordWatch($scope, "sys_attachment", "table_sys_id=" + $scope.data.sys_id, function (response, data) {
+    $scope.attachmentHandler.getAttachmentList();
+    if (response.data) {
+      var options = {};
+      options.operation = response.data.operation;
+      options.filename = response.data.display_value;
+      options.sys_id = $scope.data.sys_id;
+      options.table = $scope.data.table;
+      options.state = (response.data.record && response.data.record.state) ? response.data.record.state.value : "";
+      //broadcast only if operation is update...we don't need insert and other record updates for now
+      if (options.operation === "update" && options.state === "not_available")
+        $rootScope.$broadcast("attachment.updated", options);
+    }
+  });
+
+  $scope.$evalAsync(function () {
+    $scope.attachmentHandler.setParams($scope.data.table, $scope.data.sys_id, 1024 * 1024 * $scope.data.maxAttachmentSize);
+    $scope.attachmentHandler.getAttachmentList();
+  });
+
+  $scope.hasAttachments = function () {
+    return $scope.attachments && $scope.attachments.length != 0;
+  };
+
+  $scope.$on('added_attachment', function (evt) {
+    $scope.data.action = "added";
+    spUtil.update($scope);
+  });
+
+  $scope.confirmDeleteAttachment = function (attachment) {
+    var appendTo = $scope.data.appendToId ? $document.find('#' + $scope.data.appendToId) : null;
+    spModal.confirm("${Delete Attachment?}", appendTo).then(function () {
+      $scope.attachmentHandler.deleteAttachment(attachment);
+    });
+  };
+
+
+  $window.onbeforeunload = function (e) {
+    if (!$scope.hasSuccessfullyCreated) {
+      e.preventDefault();
+      e.stopPropagation();
+      $scope.data.delete = true;
+      $scope.server.update().then(function (response) {
+        delete e.returnValue;
+      });
+    }
+  };
+
+  c.$onDestroy = function (e) {
+    if (!$scope.hasSuccessfullyCreated) {
+      e.preventDefault();
+      e.stopPropagation();
+      $scope.data.delete = true;
+      $scope.server.update();
+    }
+  };
+
+  $scope.toggleStep = function (dir, isSequence) {
+    if (!$scope.projectIsSelected) return;
+
+    if (dir === 'previous' && !isSequence) {
+      $scope.currentStep--;
+    } else if (!isSequence) {
+      $scope.currentStep++;
+    } else {
+      $scope.currentStep = dir;
+    }
+
+    $scope.steps = $scope.steps.map(function (step, index) {
+      if ((index + 1) == $scope.currentStep) {
+        step.expanded = true;
+      } else if (step.expanded) {
+        step.expanded = false;
+      }
+
+      return step;
+    });
+  };
+
+  $scope.hasAllRequiredInputs = function () {
+    if (!$scope.fields.length === 0) return false;
+    for (var i in $scope.fields) {
+      var field = $scope.fields[i];
+      if (field.name == 'status' && field.value != '' && !field.value) {
+        continue;
+      }
+      if (field.mandatory == true && (field.value == "" || !field.value)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  $scope.createJiraIssue = function () {
+    var payload = {};
+    payload.fields = $scope.fields;
+    $scope.data.form = payload;
+    $scope.data.delete = true;
+    $scope.is_sending = true;
+    $scope.server.update().then(function (data) {
+      if (data.sys_id) {
+        $timeout(function () {
+          $scope.hasSuccessfullyCreated = true;
+          $scope.is_sending = false;
+          $rootScope.$broadcast('jira.issue.created', data.new_sys_id);
+          var url = '?id=jira_issues_form&table=' + $scope.data.table + '&sys_id=' + data.new_sys_id + '&action=2';
+          $window.location.href = url;
+        }, 2000);
+      }
+    });
+  };
+
+  function appendError(error) {
+    $scope.errorMessages.push(error);
+    spUtil.addErrorMessage(error.msg + error.fileName);
+  }
+
+  function setAttachments(attachments, action) {
+    if ($scope.submitting == true)
+      return;
+
+    $scope.attachments = attachments;
+    if (!action)
+      return;
+
+    if (action === "added") {
+      spAriaUtil.sendLiveMessage('Attachment uploaded');
+    }
+
+    $scope.data.action = action;
+    spUtil.update($scope);
+  }
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>&#13;
+.stepper {&#13;
+  background: rgba(255, 255, 255, 0.7);&#13;
+  padding: 30px;&#13;
+  &#13;
+  .step {&#13;
+    position: relative;&#13;
+    min-height: 32px;&#13;
+    &#13;
+    &amp; &gt; div:last-child {&#13;
+      margin-left: 32px;&#13;
+      padding-left: 16px;&#13;
+    }&#13;
+    &#13;
+    .step-heading {&#13;
+      position: static;&#13;
+      height: 33px;&#13;
+      font-weight: 700;&#13;
+      color: rgba(0, 0, 0);&#13;
+      padding-bottom: 50px;&#13;
+      &amp;.active .circle {&#13;
+        background: rgba(0, 0, 0, 0.3);;&#13;
+        color: #fff;&#13;
+      }&#13;
+      .circle {&#13;
+        background: $brand-primary;&#13;
+        width: 32px;&#13;
+        height: 32px;&#13;
+        line-height: 32px;&#13;
+        border-radius: 16px;&#13;
+        position: relative;&#13;
+        color: #fff;&#13;
+        text-align: center;&#13;
+        float: left;&#13;
+      }&#13;
+      .title {&#13;
+        line-height: 32px;&#13;
+        padding-left: 15px;&#13;
+        float: left;&#13;
+      }&#13;
+    }&#13;
+    .body {&#13;
+      padding-bottom: 30px;&#13;
+    }&#13;
+    .line {&#13;
+      position: absolute;&#13;
+      border-left: 1px solid #ccc;&#13;
+      left: 16px;&#13;
+      bottom: 0px;&#13;
+      top: 32px;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+.row.padder {&#13;
+  .button.btn-default {&#13;
+    color: #000;&#13;
+    background: rbga(0, 0, 0, 0.6);&#13;
+  }&#13;
+}&#13;
+&#13;
+div legend {&#13;
+  display: none;&#13;
+}&#13;
+&#13;
+.sp-attachments {&#13;
+  padding-bottom: 15px;&#13;
+  text-align: center;&#13;
+}&#13;
+.sp-drop-area {&#13;
+  display: block;&#13;
+  text-align: center;&#13;
+  white-space: pre-wrap;&#13;
+  padding: 30px;&#13;
+  width: 100%;&#13;
+  border: 1px dashed $panel-default-border;&#13;
+}&#13;
+&#13;
+.panel.panel-default {&#13;
+  margin-top: 10px;&#13;
+}&#13;
+&#13;
+.attachment-label {&#13;
+  &amp; .col-md-12 {&#13;
+    padding-left: 15px;&#13;
+  }&#13;
+}&#13;
+&#13;
+.sp-drop-area {&#13;
+  &amp;:hover,&#13;
+  &amp;:focus {&#13;
+    text-decoration: underline;&#13;
+  }&#13;
+}&#13;
+&#13;
+.panel-footer {&#13;
+  position: static;&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira-create-new-issue-form</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+
+}]]></link>
+        <name>Jira Create New Issue</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.table = options.table || $sp.getParameter('table') || 'x_momo_jira_integr_issue';
+  data.issueType = options.issueType || $sp.getParameter('request_type');
+  data.sys_id = (input ? input.sys_id : undefined);
+  data.appendToId = options.appendToId;
+  data.maxAttachmentSize = parseInt(gs.getProperty("com.glide.attachment.max_size", 1024));
+  if (isNaN(data.maxAttachmentSize)) {
+    data.maxAttachmentSize = 24;
+  }
+
+  var gr = new GlideRecord(data.table);
+
+  if (!data.sys_id) {
+    gr.initialize();
+    gr.active = false;
+    gr.insert();
+    data.sys_id = gr.getUniqueValue();
+    data.steps = createUISteps(data.issueType, data.table, data.sys_id);
+
+  } else {
+    gr.get(data.sys_id);
+  }
+
+  if (input && gr.isValid()) {
+    if (input.form && input.project) {
+
+      var rec = new GlideRecord(data.table);
+      rec.initialize();
+
+      for (var i in input.form.fields) {
+        var field = input.form.fields[i];
+        rec[field.name] = field.value;
+      }
+      if (gs.hasRole('x_momo_jira_integr.issue_tech')) {
+        rec.approval = 'approved';
+      }
+      rec.active = true;
+      rec.insert();
+      GlideSysAttachment.copy(data.table, gr.getUniqueValue(), data.table, rec.getUniqueValue());
+      data.new_sys_id = rec.getUniqueValue();
+    }
+
+    if (input.delete) {
+      gr.deleteRecord();
+    }
+
+    if (input.project) {
+      gr.project = input.project;
+      var requestTypeName;
+
+      if (input.issueType == 2) {
+        requestTypeName = 'Story';
+      } else if (input.issueType == 3) {
+        requestTypeName = 'Epic';
+      } else {
+        requestTypeName = 'Bug';
+      }
+      var issue_type = getIssueOrStatusType('x_momo_jira_integr_issue_type', input.project, requestTypeName);
+      gr.issue_type = issue_type;
+      if (gr.issue_type.toString() == "") {
+        gr.issue_type = getIssueOrStatusType('x_momo_jira_integr_issue_type', input.project, 'Bug');
+      }
+      gr.status = getIssueOrStatusType('x_momo_jira_integr_status', input.project, 'Backlog', issue_type.toString());
+      gr.update();
+
+      data.project = gr.getValue('project');
+      data.steps = createUISteps(data.issueType, data.table, data.sys_id);
+      data.attachmentWidget = $sp.getWidget('jira-attachment-list', {
+        record_table: data.table,
+        record_id: data.sys_id
+      });
+    }
+  }
+
+  function createUISteps(requestType, table, sys_id) {
+    var steps = [{
+      sequence: 1,
+      title: 'What team does this problem involve?',
+      expanded: true,
+      project: true
+    }, {
+      sequence: 2,
+      title: 'Give a detailed description of the problem',
+      expanded: false
+    }, {
+      sequence: 3,
+      title: 'Let\'s get some other details!',
+      expanded: false
+    }, {
+      sequence: 4,
+      title: "Almost done!",
+      expanded: false,
+      attachments: {
+        title: 'Drop or add screenshots, and documents here.'
+      },
+      form: cleanForm($sp.getForm(table, sys_id, "", "newnotesview"))
+    }];
+
+    if (requestType == 1) {
+      steps = steps.map(function (step) {
+        if (step.sequence == 2) {
+          step.title = 'Describe the feature in detail';
+          step.form = cleanForm($sp.getForm(table, sys_id, "", "newbugdescriptionview"));
+        } else if (step.sequence == 3) {
+          step.form = cleanForm($sp.getForm(table, sys_id, "", "newbugdetailsview"));
+        }
+        return step;
+      });
+    } else if (requestType == 2) {
+      steps = steps.map(function (step) {
+        if (step.sequence == 1) {
+          step.title = 'What team might this feature involve?';
+
+        } else if (step.sequence == 2) {
+          step.title = 'Describe the feature in detail';
+          step.form = cleanForm($sp.getForm(table, sys_id, "", "newbugdescriptionview"));
+        } else if (step.sequence == 3) {
+          step.form = cleanForm($sp.getForm(table, sys_id, "", "newfeaturedetailsview"));
+        }
+        return step;
+      });
+    } else if (requestType == 3) {
+      steps = steps.map(function (step) {
+        if (step.sequence == 1) {
+          step.title = 'What team might this project involve?';
+        } else if (step.sequence == 2) {
+          step.title = 'Describe the new project in detail';
+          step.form = cleanForm($sp.getForm(table, sys_id, "", "newprojectdescriptionview"));
+        } else if (step.sequence == 3) {
+          step.form = cleanForm($sp.getForm(table, sys_id, "", "newprojectdetailsview"));
+        }
+        return step;
+      });
+    }
+    return steps;
+  }
+
+  function cleanForm(form) {
+    var _form = form;
+    if (_form) {
+      if (_form.ui_scripts) {
+        _form.ui_scripts = _form.ui_scripts.filter(function (script) {
+          return !/x_momo/gmi.test(script.name);
+        });
+      }
+    }
+    return _form;
+  }
+
+  function getIssueOrStatusType(table, projectSysID, requestName, issueType) {
+    var type = new GlideRecord(table);
+    var query = 'nameSTARTSWITH' + requestName;
+
+    if (issueType && issueType !== '') {
+      query += '^issue_type=' + issueType;
+    } else {
+      query += '^project=' + projectSysID;
+    }
+    type.addEncodedQuery(query);
+    type.query();
+    while (type.next()) {
+      return type.getUniqueValue();
+    }
+  }
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-07 11:08:06</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>a78d900edbbe0810f2551329689619c3</sys_id>
+        <sys_mod_count>441</sys_mod_count>
+        <sys_name>Jira Create New Issue</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_a78d900edbbe0810f2551329689619c3</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-09-03 11:46:04</sys_updated_on>
+        <template><![CDATA[<div class="stepper">
+  <div class="step" ng-repeat="step in steps">
+    <div class="step-heading" ng-class="{'active': !step.expanded}" ng-click="toggleStep(step.sequence, true)">
+      <div class="circle">{{ step.sequence }}</div>
+      <div class="title">{{ step.title }}</div>
+      <div class="line" ng-hide="step.sequence >= steps.length"></div>
+    </div>
+    <div uib-collapse="!step.expanded">
+      <div class="body">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="row" ng-if="step.project">
+              <div class="col-md-12 m-b">
+                <sn-record-picker field="project" table="'x_momo_jira_integr_project'" display-field="'name'"
+                  search-fields="'name'" value-field="'sys_id'" default-query="'active=true'" multiple="false"
+                  placeholder="Select a team..."></sn-record-picker>
+              </div>
+            </div>
+            <div class="row" ng-if="step.attachments">
+              <div class="col-md-12">
+                <div class="sp-attachments" ng-click="attachmentHandler.openSelector($event)"
+                  ng-file-drop="attachmentHandler.onFileSelect($files)" ng-multiple="true">
+                  <em class="sp-drop-area">{{ step.attachments.title }}</em>
+                </div>
+                <input type="file" style="display: none;" ng-file-select="attachmentHandler.onFileSelect($files)"
+                  multiple="true" class="sp-attachments-input">
+              </div>
+              <sp-widget widget="data.attachmentWidget"></sp-widget>
+            </div>
+            <form ng-if="step.form">
+              <sp-model form_model="step.form" mandatory="mandatory" />
+            </form>
+          </div>
+          <div class="panel-footer">
+            <div class="m-t" ng-hide="!step.expanded">
+              <button type="button" ng-hide="currentStep == 1" class="btn btn-default"
+                ng-click="toggleStep('previous')"> Previous </button>
+              <button type="button" ng-show="currentStep != (steps.length + 1) && currentStep != steps.length"
+                ng-disabled="!projectIsSelected" ng-click="toggleStep('next')" class="btn btn-primary"> Next </button>
+              <button type="button" ng-show="currentStep == steps.length"
+                ng-disabled="!hasAllRequiredInputs() || is_sending" ng-click="createJiraIssue()"
+                class="btn btn-primary">
+                <span ng-if="!is_sending"> Create </span>
+                <i class="fa fa-spinner fa-spin" aria-hidden="true" ng-if="is_sending"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

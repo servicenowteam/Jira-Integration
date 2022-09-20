@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_momo_jira_integr.JiraRequest</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>JiraRequest</name>
+        <script><![CDATA[var JiraRequest = Class.create();
+
+JiraRequest.prototype = {
+
+  request: null,
+
+  prefix: null,
+
+  bodyRequired: false,
+
+  initialize: function (application, restMessageId, method) {
+    this.setRequest(restMessageId, method);
+    this.prefix = application || 'x_momo_jira_integr';
+  },
+  getIssues: function (jql, startAt, page, validateQuery, maxResults) {
+    var options = {};
+    if (!page) {
+      page = 1;
+    }
+    if (typeof maxResults !== 'number') {
+      options.maxResults = 50;
+    } else {
+      options.maxResults = maxResults;
+    }
+
+    if (typeof startAt !== 'number') {
+      options.startAt = 0;
+    } else {
+      options.startAt = startAt;
+    }
+
+    if (validateQuery === false) {
+      options.validateQuery = validateQuery;
+    } else if (['strict', 'warn', 'none'].indexOf(validateQuery) >= 0) {
+      options.validateQuery = validateQuery;
+    } else {
+      options.validateQuery = true;
+    }
+    this.setRequest();
+    this.setMethod('GET');
+    this.setEndpoint('search?fields=*all&jql=' + jql + '&maxResults=' + options.maxResults + '&validateQuery=' + options.validateQuery + '&startAt=' + options.startAt);
+    this.setAuthentication();
+
+    var response = this.send();
+    if (response.error) {
+      gs.addErrorMessage('There was an error retrieving issues from your jira instance.\nMessage: ' + JSON.stringify(response.error));
+      return;
+    }
+    if (response.status == 401) {
+      gs.addErrorMessage('You do not have permissions to view certain issues. Please contact your systems administrator.');
+      return;
+    }
+    var results = response.result;
+    if (results) {
+      if (results.total === page || results.total === 1) {
+        return {
+          isLast: true,
+          issues: results.issues,
+          total: results.total
+        };
+      } else {
+        return {
+          startAt: options.maxResults + 1,
+          issues: results.issues,
+          total: results.total
+        };
+      }
+    }
+    return [];
+  },
+  getIssueTypesByProjectId: function (projectId) {
+    this.setRequest();
+    this.setMethod('GET');
+    this.setEndpoint('issuetype');
+    this.setAuthentication();
+
+    var response = this.send();
+
+    if (response.error) {
+      gs.addErrorMessage('There was an error retrieving issue types from your jira instance.\nMessage: ' + response.error);
+      return;
+    }
+
+    var results = response.result;
+
+    if (!Array.isArray(results)) return [];
+    var host = this._getProperty('instance_name') + '/';
+    return results.map(function (item) {
+      return {
+        external_id: item.id,
+        description: item.description,
+        icon: item.iconUrl !== host ? item.iconUrl : '',
+        name: item.name
+      };
+    });
+  },
+  getWorkflowStatuses: function () {
+    this.setRequest();
+    this.setMethod('GET');
+    this.setEndpoint('status');
+    this.setAuthentication();
+
+    var response = this.send();
+
+    if (response.error) {
+      gs.addErrorMessage('There was an error retrieving status categories from your jira instance.\nMessage: ' + response.error);
+      return;
+    }
+
+    var results = response.result;
+
+    return results.map(function (item) {
+      return {
+        id: item.id,
+        category: item.statusCategory.id
+      };
+    });
+  },
+  getStatusCategories: function () {
+    this.setRequest();
+    this.setMethod('GET');
+    this.setEndpoint('statuscategory');
+    this.setAuthentication();
+
+    var response = this.send();
+
+    if (response.error) {
+      gs.addErrorMessage('There was an error retrieving status categories from your jira instance.\nMessage: ' + response.error);
+      return;
+    }
+
+    var results = response.result;
+
+    return results.map(function (item) {
+      return {
+        external_id: item.id,
+        external_key: item.key,
+        color: item.colorName,
+        name: item.name
+      };
+    });
+  },
+  getIssueLinkTypes: function () {
+    this.setRequest();
+    this.setMethod('GET');
+    this.setEndpoint('issueLinkType');
+    this.setAuthentication();
+
+    var response = this.send();
+
+    if (response.error) {
+      gs.addErrorMessage('There was an error retrieving issue link types.\nMessage: ' + response.error);
+      return;
+    }
+
+    var results = response.result;
+
+    return results.issueLinkTypes.map(function (linkType) {
+      return {
+        external_id: linkType.id,
+        name: linkType.name,
+        inward_type_name: linkType.inward,
+        outward_type_name: linkType.outward,
+        self: linkType.self
+      };
+    });
+  },
+  getStatusByIssueType: function (projectId, issueTypeId) {
+    this.setRequest();
+    this.setMethod('GET');
+    this.setEndpoint('project/' + projectId + '/statuses');
+    this.setAuthentication();
+
+    var response = this.send();
+
+    if (response.error) {
+      gs.addErrorMessage('There was an error retrieving issue types from your jira instance.\nMessage: ' + response.error);
+      return;
+    }
+
+    var results = response.result;
+    var host = this._getProperty('instance_name') + '/';
+    if (!Array.isArray(results)) return [];
+
+    var issueType = results.filter(function (item) {
+      return item.id === issueTypeId;
+    })[0];
+
+    return issueType.statuses.map(function (status) {
+      return {
+        external_id: status.id,
+        name: status.name,
+        description: status.description,
+        icon: status.iconUrl !== host ? status.iconUrl : ''
+      };
+    });
+  },
+  getPriorities: function () {
+    this.setRequest();
+    this.setMethod('GET');
+    this.setEndpoint('priority');
+    this.setAuthentication();
+
+    var response = this.send();
+
+    if (response.error) {
+      gs.addErrorMessage('There was an error retrieving priorities from your jira instance.\nMessage: ' + response.error);
+      return;
+    }
+
+    var results = response.result;
+
+    return results.map(function (item) {
+      return {
+        external_id: item.id,
+        color: item.statusColor,
+        name: item.name,
+        description: item.description,
+        icon: item.iconUrl
+      };
+    });
+  },
+  createCustomField: function (payload) {
+    this.setRequest();
+    this.setMethod('POST');
+    this.setEndpoint('field');
+    this.setBody(payload);
+    this.setAuthentication();
+
+    var response = this.send();
+
+    if (response.error) {
+      gs.addErrorMessage('There was an error retrieving jira fields from your instance.\nMessage:' + JSON.stringify(response.error, null, 1));
+      return;
+    }
+
+    return response;
+  },
+  createCustomFieldOptions: function (field, payload) {
+    this.setRequest();
+    this.setMethod('POST');
+    this.setEndpoint('customField/' + field + '/option');
+    this.setBody(payload);
+    this.setAuthentication();
+
+    var response = this.send();
+    if (response.error) {
+      gs.addErrorMessage('There was an error retrieving jira fields from your instance.\nMessage:\n\n' + JSON.stringify(response.error));
+      return;
+    }
+    return response.status == 201;
+  },
+  getCustomFieldOptions: function (field) {
+    this.setRequest();
+    this.setMethod('GET');
+    this.setEndpoint('customField/' + field + '/option');
+    this.setAuthentication();
+
+    var response = this.send();
+    if (response.error) {
+      gs.addErrorMessage('There was an error retrieving jira fields from your instance.\nMessage:\n\n' + JSON.stringify(response.error));
+      return;
+    }
+
+    var results = response.result;
+    return results;
+  },
+  getFields: function () {
+    this.setRequest();
+    this.setEndpoint('field');
+    this.setMethod('GET');
+    this.setAuthentication();
+
+    var response = this.send();
+
+    if (response.error) {
+      gs.addErrorMessage('There was an error retrieving jira fields from your instance.\nMessage:' + response.error);
+      return;
+    }
+
+    var results = response.result;
+
+    if (!results) return [];
+
+    return results;
+  },
+  getProjects: function () {
+    var includedProperty = this._getProperty('included_project_keys');
+    var included;
+    if (!gs.nil(includedProperty)) {
+      if (/,/gi.test(includedProperty)) {
+        included = includedProperty.split(',');
+      } else {
+        included = includedProperty;
+      }
+    }
+
+    this.setRequest();
+    this.setMethod('GET');
+    this.setEndpoint('project/search');
+    this.setAuthentication();
+
+    var response = this.send();
+
+    if (response.error) {
+      gs.addErrorMessage('There was an error retrieving projects from your jira instance.\nMessage: ' + response.error);
+      return;
+    }
+
+    var results = response.result;
+
+    return results.values.filter(function (item) {
+      if (included) {
+        if (Array.isArray(included)) {
+          return !item.isPrivate && included.indexOf(item.key) >= 0;
+        } else if (typeof included === 'string') {
+          return !item.isPrivate && item.key == included && included.trim() !== '';
+        }
+      }
+      return !item.isPrivate;
+    }).map(function (project) {
+      return {
+        external_id: project.id,
+        external_key: project.key,
+        name: project.name
+      };
+    });
+  },
+
+  createIssue: function (payload) {
+    this.setRequest();
+    this.setEndpoint('issue?expand=transitions');
+    this.setMethod('POST');
+    this.setAuthentication();
+    this.setBody(payload);
+
+    var response = this.send();
+    if (response.error) {
+      gs.addErrorMessage('There was an error creating your issue in Jira.\n\nMessage:' + response.error);
+      return;
+    }
+    return response.result;
+  },
+  setIssue: function (external_id, payload) {
+    this.setRequest();
+    this.setEndpoint('issue/' + external_id);
+    this.setMethod('PUT');
+    this.setAuthentication();
+    this.setBody(payload);
+    var response = this.send();
+    if (response.error) {
+      gs.addErrorMessage('There was an error creating your issue in Jira.\n\nMessage:' + response.error);
+      return;
+    }
+    return response.result;
+  },
+  setIssueAssignee: function (external_id, account_id) {
+    this.setRequest();
+    this.setEndpoint('issue/' + external_id + '/assignee');
+    this.setMethod('PUT');
+    this.setAuthentication();
+    this.setBody({
+      accountId: account_id
+    });
+    var response = this.send();
+
+    if (response.error) return;
+
+    return response.status == 204;
+  },
+  getLinkedIssues: function (external_id, type_external_id) {
+    this.setRequest();
+    this.setEndpoint('issue/' + external_id + '?fields=issuelinks');
+    this.setMethod('GET');
+    this.setAuthentication();
+
+    var response = this.send();
+
+    if (response.error) {
+      gs.addErrorMessage('There was an error retrieving your issue link in Jira.\n\nMessage:' + response.error);
+      return;
+    }
+    var results = response.result;
+    if (results) {
+      return results.fields.issuelinks.filter(function (link) {
+        return link.type.id === type_external_id;
+      }).map(function (item) {
+        return item.id;
+      })[0];
+    }
+  },
+  deleteLinkedIssue: function (jiraId) {
+    this.setRequest();
+    this.setEndpoint('issueLink/' + jiraId);
+    this.setMethod('DELETE');
+    this.setAuthentication();
+
+    var response = this.send();
+    if (response.error) {
+      gs.error(response.error);
+      return;
+    }
+
+    return response.status == 200 || response.status == 204;
+  },
+  setLinkedIssue: function (payload) {
+    this.setRequest();
+    this.setEndpoint('issueLink');
+    this.setMethod('POST');
+    this.setAuthentication();
+    this.setBody(payload);
+
+    var response = this.send();
+    if (response.error) {
+      gs.addErrorMessage('There was an error creating your issue link in Jira.\n\nMessage:' + response.error);
+      return;
+    }
+    return response.status == 201;
+  },
+  getAllUsers: function (startAt) {
+    this.setRequest();
+    this.setEndpoint('users/search?maxResults=100&startAt=' + startAt);
+    this.setMethod('GET');
+    this.setAuthentication();
+
+    var response = this.send();
+    if (response.error) return;
+
+    if (!response.result) return;
+
+    return response.result;
+  },
+  getUserByEmailAddress: function (email) {
+
+    this.setRequest();
+    this.setEndpoint('users/search?emailAddress=' + email);
+    this.setMethod('GET');
+    this.setAuthentication();
+
+    var response = this.send();
+
+    if (response.error) return [];
+
+    if (!response.result) return [];
+
+    return response.result;
+  },
+  addComment: function (external_id, payload) {
+    this.setRequest();
+    this.setEndpoint('issue/' + external_id + '/comment');
+    this.setMethod('POST');
+    this.setAuthentication();
+    this.setBody(payload);
+
+    var response = this.send();
+    if (response.error) {
+      gs.addErrorMessage('There was an error creating your issue in Jira.\n\nMessage:' + response.error);
+      return;
+    }
+    return response.result;
+  },
+  setIssueTransition: function (externalIdOrKey, external_id) {
+    this.setRequest();
+    var endpoint = 'issue/' + externalIdOrKey + '/transitions';
+    this.setEndpoint(endpoint);
+    this.setMethod('GET');
+    this.setAuthentication();
+
+    var response = this.send();
+    if (!response) return response;
+    if (response.result) {
+      var transitions = response.result.transitions.filter(function (transition) {
+        return transition.to.id == external_id;
+      });
+      if (transitions.length > 0) {
+        var transition = transitions[0];
+        this.setRequest();
+        this.setEndpoint(endpoint);
+        this.setMethod('POST');
+        this.setAuthentication();
+        this.setBody({
+          transition: {
+            id: transition.id
+          }
+        });
+
+        var sResponse = this.send();
+        if (sResponse.result) return response;
+      }
+    }
+  },
+  setRequest: function (restMessageId, method) {
+    if (restMessageId && method) {
+      this.request = new sn_ws.RESTMessageV2(restMessageId, method);
+    } else {
+      this.request = new sn_ws.RESTMessageV2();
+    }
+    this.request.setRequestHeader('Content-Type', 'application/json');
+    this.request.setRequestHeader('Accept', 'application/json');
+
+  },
+  setBody: function (payload) {
+    if (!payload || typeof payload !== 'object') return;
+    var keys = Object.keys(payload).length;
+    if (keys <= 0) return;
+    this.request.setRequestBody(this._serialize(payload));
+  },
+  setAuthentication: function () {
+    if (!this.request) return;
+    if (this._getProperty('use_basic_profile') && !gs.nil(this._getProperty('basic_profile_id'))) {
+      this.request.setAuthenticationProfile('basic', this._getProperty('basic_profile_id'));
+    } else if (!gs.nil(this._getProperty('username')) && !gs.nil(this._getProperty('password'))) {
+      this.request.setBasicAuth(this._getProperty('username'), this._getProperty('password'));
+    } else {
+      var errorMsg = 'You have either selected to use a basic profile and did not set a basic profile ID or ';
+      errorMsg = errorMsg + 'you have not entered a username or password in the properties page.';
+      gs.addErrorMessage(errorMsg);
+    }
+  },
+  setMethod: function (method) {
+    if (!this.request) return;
+    var _method = method.toUpperCase();
+    if (_method !== 'POST' && _method !== 'GET' && _method !== 'PATCH' && _method !== 'PUT' && _method !== 'DELETE') {
+      _method = 'GET';
+    }
+
+    if (_method === 'POST' || _method === 'PATCH' || _method === 'PUT') {
+      this.bodyRequired = true;
+    }
+
+    this.request.setHttpMethod(_method);
+  },
+  setEndpoint: function (path) {
+    if (!this.request) return;
+
+    var host = this._getProperty('instance_name');
+
+    if (!host) return;
+
+    var basePath = this._getProperty('base_path') || '';
+    var endpoint = host + '/' + basePath + '/' + path;
+    this.request.setEndpoint(endpoint);
+  },
+  setQueryParameters: function (qs) {
+    if (!this.request) return false;
+
+    if (typeof qs !== 'object') return false;
+    var keys = Object.keys(qs);
+    for (var i in keys) {
+      this.request.setQueryParameter(keys[i], qs[keys[i]]);
+    }
+    return true;
+  },
+  send: function () {
+    if (!this.request) return;
+    if (this.bodyRequired && gs.nil(this.request.getRequestBody())) return;
+    var response = this.request.execute();
+    var status = response.getStatusCode();
+    if (response.haveError() || status >= 202) {
+      return {
+        status: status,
+        error: this._deserialize(response.getBody())
+      };
+    }
+    return {
+      status: status,
+      result: this._deserialize(response.getBody())
+    };
+  },
+  _getProperty: function (propertyName) {
+    var prop = gs.getProperty(this.prefix + '.' + propertyName);
+    return prop;
+  },
+  _getHeader: function (headerKey) {
+    if (this.request) {
+      var headers = this.request.getRequestHeaders();
+      if (!headers) return;
+      return headers[headerKey];
+    }
+    return;
+  },
+  _serialize: function (obj) {
+    var request_type = this._getHeader('Accept');
+    if (request_type === 'application/json' && typeof obj === 'object') {
+      return JSON.stringify(obj);
+    }
+    return obj;
+  },
+  _deserialize: function (str) {
+    if (typeof str !== 'string') return str;
+    try {
+      return JSON.parse(str);
+    } catch (e) {
+      return str;
+    }
+  },
+  type: 'JiraRequest'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 08:54:31</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>65c8c67b1b16c81048a242e58d4bcb07</sys_id>
+        <sys_mod_count>281</sys_mod_count>
+        <sys_name>JiraRequest</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_include_65c8c67b1b16c81048a242e58d4bcb07</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-08-21 12:05:45</sys_updated_on>
+    </sys_script_include>
+</record_update>

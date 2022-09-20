@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function jiraIssuesListV2($scope, spUtil, jiraLiveProfile) {
+  /* widget controller */
+  var c = this;
+
+  $scope.liveProfiles = jiraLiveProfile;
+
+  $scope.isFinished = false;
+
+  var get = function (index, count, success) {
+    var results = [];
+    for (var i = index; i <= index + count - 1; i++) {
+      results.push($scope.data.issues[i]);
+    }
+    success(results);
+  };
+  $scope.datasource = {
+    get: get
+  };
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>::-webkit-scrollbar {&#13;
+  width: 0.2em;&#13;
+}&#13;
+&#13;
+::-webkit-scrollbar-track {&#13;
+  box-shadow: inset 0 0 0.5px rgba(0, 0, 0, 0.1);&#13;
+}&#13;
+&#13;
+::-webkit-scrollbar-thumb {&#13;
+  background-color: rgba(0, 0, 0, 0.2);&#13;
+  border-radius: 0.5em;&#13;
+  outline: 0.5px solid #eee;&#13;
+}&#13;
+&#13;
+@media screen and (max-width: 600px) {&#13;
+  ::-webkit-scrollbar {&#13;
+    width: 0em;&#13;
+  }&#13;
+&#13;
+  ::-webkit-scrollbar-track {&#13;
+    box-shadow: inset 0 0 0.5px rgba(0, 0, 0, 0.1);&#13;
+  }&#13;
+&#13;
+  ::-webkit-scrollbar-thumb {&#13;
+    background-color: rgba(0, 0, 0, 0.1);&#13;
+    border-radius: 0.1em;&#13;
+    outline: 0.5px solid #eee;&#13;
+  }&#13;
+}&#13;
+&#13;
+.col {&#13;
+&#13;
+  &amp;-md,&#13;
+  &amp;-xs,&#13;
+  &amp;-lg,&#13;
+  &amp;-xl {&#13;
+    &amp;-12 {&#13;
+      padding: 0px !important;&#13;
+    }&#13;
+  }&#13;
+&#13;
+  &amp;-md,&#13;
+  &amp;-lg,&#13;
+  &amp;-xl {&#13;
+    &amp;-12 {&#13;
+      margin-top: 15px;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+.table-responsive {&#13;
+&#13;
+  &amp; table thead {&#13;
+    background: #fff;&#13;
+&#13;
+    &amp; th {&#13;
+      background: #fff;&#13;
+      position: sticky;&#13;
+      top: 0;&#13;
+      z-index: 1001;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+.pager .next:not(.disabled)&gt;a,&#13;
+.pager .previous:not(.disabled)&gt;a {&#13;
+  color: $brand-primary;&#13;
+}&#13;
+&#13;
+.panel-header {&#13;
+  text-align: center;&#13;
+  padding-top: 15px;&#13;
+  padding-bottom: 15px;&#13;
+  border-bottom: 1px solid #ccc;&#13;
+  display: flex;&#13;
+  width: 100%;&#13;
+&#13;
+  &amp;.no-border {&#13;
+    border-bottom: 1px solid transparent;&#13;
+  }&#13;
+&#13;
+  &amp; .panel-title {&#13;
+    width: 95%;&#13;
+    padding-left: 5%;&#13;
+    line-height: 2;&#13;
+  }&#13;
+&#13;
+  &amp; .panel-search {&#13;
+    position: absolute;&#13;
+    left: 89%;&#13;
+    width: 10%;&#13;
+    padding-right: 15px;&#13;
+    transition: all 0.3s ease-in;&#13;
+&#13;
+    &amp;:focus-within {&#13;
+      width: 30%;&#13;
+      left: 69%;&#13;
+      transition: all 0.3s ease-out;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+.header-icon {&#13;
+  margin-right: 15px;&#13;
+}&#13;
+&#13;
+.img-status-responsive {&#13;
+  display: inline-flex;&#13;
+  max-width: 20px;&#13;
+  max-height: 20px;&#13;
+}&#13;
+&#13;
+.list-link {&#13;
+  display: inline-flex;&#13;
+  vertical-align: middle;&#13;
+}&#13;
+&#13;
+&amp;.table {&#13;
+  &amp;-header {&#13;
+    text-align: center;&#13;
+  }&#13;
+}&#13;
+&#13;
+th.active {&#13;
+  background-color: #fff !important;&#13;
+  color: #428bca;&#13;
+&#13;
+  &amp;:hover {&#13;
+    color: #2a6496;&#13;
+  }&#13;
+}&#13;
+&#13;
+&#13;
+.panel-body {&#13;
+  border-bottom: 1px solid transparent;&#13;
+&#13;
+  &amp;.no-records {&#13;
+    &amp;:hover {&#13;
+      background-color: rgba(0, 0, 0, 0.01);&#13;
+      border-radius: 4px;&#13;
+      color: rgba(0, 0, 0);&#13;
+      text-decoration: underline;&#13;
+      transition: all 0.1s ease-in;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+.single-view {&#13;
+  text-align: center;&#13;
+  padding: 15px;&#13;
+}&#13;
+&#13;
+.panel {&#13;
+  margin-bottom: 0px;&#13;
+}&#13;
+&#13;
+td.issue-data {&#13;
+  vertical-align: middle;&#13;
+}&#13;
+&#13;
+.short-description {&#13;
+  width: 40%;&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira_issue_list_v2</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Jira Issue List V2</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.table = options.table || $sp.getParameter('table');
+
+  data.limit = (input ? input.limit : undefined) || 100;
+  data.page = (input ? input.page : undefined) || 1;
+
+  data.filter = 'active=true^approval=approved^external_idISNOTEMPTY';
+  data.isLast = false;
+  if (!gs.hasRole('x_momo_jira_integr.issue_tech')) {
+    data.fitler += '^sys_created_by=' + gs.getUserName();
+    data.filter += '^ORrequested_for=' + gs.getUserID();
+  }
+
+  data.fields = options.fields ? options.fields.map(function (item) {
+    return {
+      display: item
+    };
+  }) : [];
+
+  data.total = getTotal(data.table, data.filter);
+
+  var end = data.page === 1 ? data.limit : (data.page * data.limit);
+
+  data.start = data.page === 1 ? 0 : ((data.end ? data.end : end) - data.limit);
+  data.end = data.page === 1 ? data.limit : (data.page * data.limit);
+  data.totalPages = Math.max(Math.ceil(data.total / data.limit) || 0, 1);
+
+  if (data.total <= data.end) {
+    // get the remainder from the total
+    data.isLast = true;
+    data.start = data.total - (data.total % data.limit);
+    // if the remainder is 0 then just subtract the limit
+    if (data.start === data.total) {
+      data.start = data.total - data.limit;
+    }
+    data.end = data.total;
+  }
+
+  var opts = {
+    query: data.filter,
+    limit: data.limit,
+    page: data.page,
+    total: data.total,
+    start: data.start,
+    end: data.end,
+    orderBy: (input ? input.orderBy : {
+      field: 'sys_created_on'
+    })
+  };
+
+  data.issues = getRecords(data.table, opts);
+
+  function getTotal(table, params) {
+    var ga = new GlideAggregate(table);
+    ga.addAggregate('COUNT');
+    ga.addEncodedQuery(params);
+    ga.query();
+    ga.next();
+    return parseInt(ga.getAggregate('COUNT'));
+  }
+
+  function getRecords(table, params) {
+    var records = [];
+    var gr = new GlideRecord(table);
+    if (params.query) {
+      gr.addEncodedQuery(params.query);
+    }
+
+    if (params.orderBy) {
+      if (params.orderBy.desc) {
+        gr.orderByDesc(params.orderBy.field);
+      } else {
+        gr.orderBy(params.orderBy.field);
+      }
+    } else {
+      gr.orderBy('sys_created_on');
+    }
+
+    gr.chooseWindow(params.start, params.end, true);
+    gr.query();
+
+    while (gr.next()) {
+      records.push({
+        sys_id: gr.getUniqueValue(),
+        link: '?id=jira_issues_form&action=2&table=' + gr.getTableName() + '&sys_id=' + gr.getUniqueValue(),
+        short_description: gr.getValue('short_description'),
+        description: gr.getValue('description'),
+        key: gr.getValue('external_key'),
+        assigned_to: gr.assigned_to.nil() ? null : gr.getValue('assigned_to'),
+        priority: {
+          name: gr.priority.name.toString(),
+          icon: gr.priority.icon.toString(),
+          sys_id: gr.priority.sys_id.toString(),
+          color: gr.priority.color.toString()
+        },
+        project: {
+          name: gr.project.name.toString(),
+          key: gr.project.external_key.toString(),
+          sys_id: gr.project.sys_id.toString()
+        },
+        requestType: {
+          name: gr.issue_type.name.toString(),
+          icon: gr.issue_type.icon.toString(),
+          sys_id: gr.issue_type.sys_id.toString()
+        },
+        status: {
+          name: gr.status.name.toString(),
+          icon: gr.status.icon.toString(),
+          sys_id: gr.status.sys_id.toString()
+        }
+      });
+    }
+
+    return records;
+  }
+
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-07-23 13:14:57</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>b51cb0b71bc65050f13655b61a4bcb03</sys_id>
+        <sys_mod_count>39</sys_mod_count>
+        <sys_name>Jira Issue List V2</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_b51cb0b71bc65050f13655b61a4bcb03</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-07-23 15:17:21</sys_updated_on>
+        <template><![CDATA[<div class="panel panel-default">
+  <div class="panel-header" ng-class="{'no-border': (data.issues.length > 0)}">
+    <h2 class="panel-title"><span>${Jira Issues}</span></h2>
+    <div class="panel-search hidden-xs">
+      <widget id="jira-search-input"></widget>
+    </div>
+  </div>
+  <div class="panel-body" ng-class="{'no-records': (data.issues.length === 0)}">
+    <div ng-if="data.issues.length === 0" class="single-view">
+      <span ng-if="data.issues.length === 0">No records found</span>
+    </div>
+    <div class="table-responsive viewport" ng-if="data.issues.length > 0" ui-scroll-viewport>
+      <table class="table table-hover">
+        <thead>
+          <th ng-repeat="field in data.fields" scope="col">
+            <span>{{ field.display }}</span>
+          </th>
+        </thead>
+        <tbody>
+          <tr ui-scroll="issue in datasource" is-loading="c.isLoading">
+            <th scope="row">
+              <a ng-href="{{ issue.link }}" href>
+                <img ng-if="issue.priority" ng-src="{{issue.priority.icon}}"
+                  class="img-responsive img-status-responsive" />
+                <span class="list-link">{{issue.key}}</span>
+              </a>
+            </th>
+            <td class="issue-data">{{issue.requestType.name}}</td>
+            <td class="issue-data">{{issue.status.name}}</td>
+            <td class="issue-data">{{issue.priority.name}}</td>
+            <td class="issue-data">{{issue.project.name}}</td>
+            <td class="issue-data">
+              <div class="padder" ng-if="liveProfiles.hasLiveProfile(issue.assigned_to)">
+                <sn-avatar-once class="avatar-xs" primary="liveProfiles.getLiveProfileById(issue.assigned_to)"
+                  enable-context-menu="false" show-presence="true" enable-tooltip="true"></sn-avatar-once>
+              </div>
+            </td>
+            <td class="issue-data short-description">{{issue.short_description}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

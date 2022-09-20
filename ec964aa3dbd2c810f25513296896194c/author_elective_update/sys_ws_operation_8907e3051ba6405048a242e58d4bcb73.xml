@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_operation">
+    <sys_ws_operation action="DELETE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <http_method>POST</http_method>
+        <name>Update Issue</name>
+        <operation_script><![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+  var userAgent = request.getHeader('user-agent');
+  if (!request.getHeader('x-atlassian-webhook-identifier') || !userAgent || !/Atlassian Webhook/gi.test(userAgent)) {
+    response.setError(new sn_ws_err.BadRequestError('Unauthorized'));
+  }
+
+
+  var body = request.body.data;
+  var keys = Object.keys(body);
+  if (!body || keys.length === 0) {
+    response.setError(new sn_ws_err.BadRequestError('Empty bodies are not allowed'));
+  }
+  var user = getChangeUser(body.user.accountId);
+  if (!user) {
+    user = body.user.displayName;
+  }
+  var issue = getIssue(body.issue.id);
+  var changes = getChangeLog(body);
+
+  if (!issue) {
+    response.setError(new sn_ws_err.NotFoundError('Issue ' + body.issue.key + ' could not be found'));
+  } else if (!issue.isValid()) {
+    response.setError(new sn_ws_err.NotFoundError('Issue ' + body.issue.key + ' could not be found'));
+  } else if (user !== 'Mulesoft Test') {
+    if (Array.isArray(changes)) {
+      if (changes.length > 0) {
+        changes.forEach(function (change) {
+          if (!/mulesoft/gi.test(user)) {
+            setRecordFromJira(change, issue, user);
+          }
+        });
+        response.setStatus(200);
+      }
+    }
+  }
+
+  function setRecordFromJira(field, record, userDisplayName) {
+    var gr = new GlideRecord('x_momo_jira_integr_jira_fields');
+    gr.addQuery('active', true);
+    gr.addQuery('field_id', field.fieldId);
+    gr.query();
+    var hasChanges = false;
+    while (gr.next()) {
+      var column = gr.getValue('issue_field');
+      var schemaType = gr.getValue('schema_type');
+      var webhookPropertyField = gr.getValue('webhook_change_property');
+      var element = record.getElement(column);
+      var ed = element.getED();
+      var ref_table;
+      try {
+        ref_table = element.getReferenceTable();
+      } catch (e) {}
+      if (ed.getInternalType() == 'glide_list') {
+        if (!ref_table) {
+          ref_table = 'x_momo_jira_integr_product';
+        }
+        var ref_list_rec = new GlideRecord(ref_table);
+        var cur = record.getValue(column);
+        if (/,/gi.test(cur)) {
+          cur = cur.split(',');
+        } else if (!gs.nil(cur)) {
+          cur = [cur];
+        } else {
+          cur = [];
+        }
+        if (!field[webhookPropertyField]) {
+          if (ref_list_rec.get("external_id", field['from'])) {
+            if (cur.indexOf(ref_list_rec.sys_id.toString()) >= 0) {
+              cur = cur.filter(function (id) {
+                return id != ref_list_rec.sys_id.toString();
+              });
+            }
+            hasChanges = true;
+
+            record.setValue(column, cur.join(','));
+          }
+        } else if (ref_list_rec.get("external_id", field[webhookPropertyField])) {
+          if (cur.indexOf(ref_list_rec.sys_id.toString()) < 0) {
+            cur.push(ref_list_rec.sys_id.toString());
+          }
+          hasChanges = true;
+          record.setValue(column, cur.join(','));
+        }
+      } else if (ed.getInternalType() == 'reference' && schemaType != 'user') {
+        var ref_rec = new GlideRecord(ref_table);
+        if (ref_rec.get("external_id", field[webhookPropertyField]) && field[webhookPropertyField]) {
+          hasChanges = true;
+          var ref_element = ref_rec.getDisplayName()
+
+          record.setValue(column, ref_rec.sys_id.toString(), ref_rec.getValue(ref_element));
+        } else if (!field[webhookPropertyField]) {
+          hasChanges = true;
+          record.setValue(column, "");
+        }
+      } else if (ed.getInternalType() == 'reference' && schemaType == 'user') {
+        var user_ref_record = new GlideRecord('sys_user');
+        if (!field[webhookPropertyField]) {
+          hasChanges = true;
+          record.setValue(column, "");
+        } else if (user_ref_record.get("x_momo_jira_integr_account_id", field[webhookPropertyField])) {
+          hasChanges = true;
+          record.setValue(column, user_ref_record.sys_id.toString(), user_ref_record.name.toString());
+        } else {
+          hasChanges = true;
+          record.setValue(column, "");
+        }
+      } else if (ed.getInternalType() != 'reference') {
+        hasChanges = true;
+        record.setValue(column, field[webhookPropertyField]);
+      }
+    }
+    if (hasChanges) {
+      var rec_display_value = record.getDisplayValue(column);
+      if (gs.nil(rec_display_value)) {
+        rec_display_value = 'empty';
+      }
+      record.work_notes = userDisplayName + ' changed ' + element.getLabel() + ':\n\n' + rec_display_value;
+      record.update();
+    }
+
+    return record;
+  }
+
+  function getChangeUser(accountId) {
+    var gUser = new GlideRecord('sys_user');
+    gUser.addQuery('active', true);
+    gUser.addQuery('x_momo_jira_integr_account_id', accountId);
+    gUser.query();
+    while (gUser.next()) {
+      return gUser.getValue('name');
+    }
+  }
+
+  function getIssue(external_id) {
+    var gIssue = new GlideRecord('x_momo_jira_integr_issue');
+    gIssue.addQuery('active', true);
+    gIssue.addQuery('external_id', external_id);
+    gIssue.query();
+    while (gIssue.next()) {
+      return gIssue;
+    }
+  }
+
+  function getChangeLog(body) {
+    if (body.hasOwnProperty('changelog')) {
+      return body.changelog.items;
+    }
+    return [];
+  }
+})(request, response);]]></operation_script>
+        <operation_uri>/api/x_momo_jira_integr/webhooks/issue/{issue_id}</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/issue/{issue_id}</relative_path>
+        <request_example/>
+        <requires_acl_authorization>true</requires_acl_authorization>
+        <requires_authentication>false</requires_authentication>
+        <requires_snc_internal_role>true</requires_snc_internal_role>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-23 12:59:16</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>8907e3051ba6405048a242e58d4bcb73</sys_id>
+        <sys_mod_count>133</sys_mod_count>
+        <sys_name>Update Issue</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ws_operation_8907e3051ba6405048a242e58d4bcb73</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-28 14:06:38</sys_updated_on>
+        <web_service_definition display_value="Webhooks">bd56d3811b66405048a242e58d4bcb33</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_ws_operation_8907e3051ba6405048a242e58d4bcb73</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ws_operation"&gt;&lt;sys_ws_operation action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;consumes&gt;application/json,application/xml,text/xml&lt;/consumes&gt;&lt;consumes_customized&gt;false&lt;/consumes_customized&gt;&lt;default_operation_uri/&gt;&lt;enforce_acl&gt;cf9d01d3e73003009d6247e603f6a990&lt;/enforce_acl&gt;&lt;http_method&gt;POST&lt;/http_method&gt;&lt;name&gt;Update Issue&lt;/name&gt;&lt;operation_script&gt;&lt;![CDATA[(function process( /*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+  var userAgent = request.getHeader('user-agent');
+  if (!request.getHeader('x-atlassian-webhook-identifier') || !userAgent || !/Atlassian Webhook/gi.test(userAgent)) {
+    response.setError(new sn_ws_err.BadRequestError('Unauthorized'));
+  }
+
+
+  var body = request.body.data;
+  var keys = Object.keys(body);
+  if (!body || keys.length === 0) {
+    response.setError(new sn_ws_err.BadRequestError('Empty bodies are not allowed'));
+  }
+  var user = getChangeUser(body.user.accountId);
+  if (!user) {
+    user = body.user.displayName;
+  }
+  var issue = getIssue(body.issue.id);
+  var changes = getChangeLog(body);
+
+  if (!issue) {
+    response.setError(new sn_ws_err.NotFoundError('Issue ' + body.issue.key + ' could not be found'));
+  } else if (!issue.isValid()) {
+    response.setError(new sn_ws_err.NotFoundError('Issue ' + body.issue.key + ' could not be found'));
+  } else if (user !== 'Mulesoft Test') {
+    if (Array.isArray(changes)) {
+      if (changes.length &gt; 0) {
+        changes.forEach(function (change) {
+          if (!/mulesoft/gi.test(user)) {
+            setRecordFromJira(change, issue, user);
+          }
+        });
+        response.setStatus(200);
+      }
+    }
+  }
+
+  function setRecordFromJira(field, record, userDisplayName) {
+    var gr = new GlideRecord('x_momo_jira_integr_jira_fields');
+    gr.addQuery('active', true);
+    gr.addQuery('field_id', field.fieldId);
+    gr.query();
+    var hasChanges = false;
+    while (gr.next()) {
+      var column = gr.getValue('issue_field');
+      var schemaType = gr.getValue('schema_type');
+      var webhookPropertyField = gr.getValue('webhook_change_property');
+      var element = record.getElement(column);
+      var ed = element.getED();
+      var ref_table;
+      try {
+        ref_table = element.getReferenceTable();
+      } catch (e) {}
+      if (ed.getInternalType() == 'glide_list') {
+        if (!ref_table) {
+          ref_table = 'x_momo_jira_integr_product';
+        }
+        var ref_list_rec = new GlideRecord(ref_table);
+        var cur = record.getValue(column);
+        if (/,/gi.test(cur)) {
+          cur = cur.split(',');
+        } else if (!gs.nil(cur)) {
+          cur = [cur];
+        } else {
+          cur = [];
+        }
+        if (!field[webhookPropertyField]) {
+          if (ref_list_rec.get("external_id", field['from'])) {
+            if (cur.indexOf(ref_list_rec.sys_id.toString()) &gt;= 0) {
+              cur = cur.filter(function (id) {
+                return id != ref_list_rec.sys_id.toString();
+              });
+            }
+            hasChanges = true;
+
+            record.setValue(column, cur.join(','));
+          }
+        } else if (ref_list_rec.get("external_id", field[webhookPropertyField])) {
+          if (cur.indexOf(ref_list_rec.sys_id.toString()) &lt; 0) {
+            cur.push(ref_list_rec.sys_id.toString());
+          }
+          hasChanges = true;
+          record.setValue(column, cur.join(','));
+        }
+      } else if (ed.getInternalType() == 'reference' &amp;&amp; schemaType != 'user') {
+        var ref_rec = new GlideRecord(ref_table);
+        if (ref_rec.get("external_id", field[webhookPropertyField]) &amp;&amp; field[webhookPropertyField]) {
+          hasChanges = true;
+          var ref_element = ref_rec.getDisplayName()
+
+          record.setValue(column, ref_rec.sys_id.toString(), ref_rec.getValue(ref_element));
+        } else if (!field[webhookPropertyField]) {
+          hasChanges = true;
+          record.setValue(column, "");
+        }
+      } else if (ed.getInternalType() == 'reference' &amp;&amp; schemaType == 'user') {
+        var user_ref_record = new GlideRecord('sys_user');
+        if (!field[webhookPropertyField]) {
+          hasChanges = true;
+          record.setValue(column, "");
+        } else if (user_ref_record.get("x_momo_jira_integr_account_id", field[webhookPropertyField])) {
+          hasChanges = true;
+          record.setValue(column, user_ref_record.sys_id.toString(), user_ref_record.name.toString());
+        } else {
+          hasChanges = true;
+          record.setValue(column, "");
+        }
+      } else if (ed.getInternalType() != 'reference') {
+        hasChanges = true;
+        record.setValue(column, field[webhookPropertyField]);
+      }
+    }
+    if (hasChanges) {
+      var rec_display_value = record.getDisplayValue(column);
+      if (gs.nil(rec_display_value)) {
+        rec_display_value = 'empty';
+      }
+      record.work_notes = userDisplayName + ' changed ' + element.getLabel() + ':\n\n' + rec_display_value;
+      record.update();
+    }
+
+    return record;
+  }
+
+  function getChangeUser(accountId) {
+    var gUser = new GlideRecord('sys_user');
+    gUser.addQuery('active', true);
+    gUser.addQuery('x_momo_jira_integr_account_id', accountId);
+    gUser.query();
+    while (gUser.next()) {
+      return gUser.getValue('name');
+    }
+  }
+
+  function getIssue(external_id) {
+    var gIssue = new GlideRecord('x_momo_jira_integr_issue');
+    gIssue.addQuery('active', true);
+    gIssue.addQuery('external_id', external_id);
+    gIssue.query();
+    while (gIssue.next()) {
+      return gIssue;
+    }
+  }
+
+  function getChangeLog(body) {
+    if (body.hasOwnProperty('changelog')) {
+      return body.changelog.items;
+    }
+    return [];
+  }
+})(request, response);]]&gt;&lt;/operation_script&gt;&lt;operation_uri&gt;/api/x_momo_jira_integr/webhooks/issue/{issue_id}&lt;/operation_uri&gt;&lt;produces&gt;application/json,application/xml,text/xml&lt;/produces&gt;&lt;produces_customized&gt;false&lt;/produces_customized&gt;&lt;relative_path&gt;/issue/{issue_id}&lt;/relative_path&gt;&lt;request_example/&gt;&lt;requires_acl_authorization&gt;true&lt;/requires_acl_authorization&gt;&lt;requires_authentication&gt;false&lt;/requires_authentication&gt;&lt;requires_snc_internal_role&gt;true&lt;/requires_snc_internal_role&gt;&lt;short_description/&gt;&lt;sys_class_name&gt;sys_ws_operation&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg@movement.com&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-01-23 12:59:16&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;8907e3051ba6405048a242e58d4bcb73&lt;/sys_id&gt;&lt;sys_mod_count&gt;133&lt;/sys_mod_count&gt;&lt;sys_name&gt;Update Issue&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ws_operation_8907e3051ba6405048a242e58d4bcb73&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg@movement.com&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-02-28 14:06:38&lt;/sys_updated_on&gt;&lt;web_service_definition display_value="Webhooks"&gt;bd56d3811b66405048a242e58d4bcb33&lt;/web_service_definition&gt;&lt;web_service_version/&gt;&lt;/sys_ws_operation&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>-1388185870</payload_hash>
+        <record_name>Update Issue</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-02-28 14:06:39</sys_created_on>
+        <sys_id>27cf05701b1b045048a242e58d4bcb3b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1708c1ee1a10000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-28 14:06:39</sys_updated_on>
+        <type>Scripted REST Resource</type>
+        <update_guid>ebcf0570681b0450b13afcc32658433a</update_guid>
+        <update_guid_history>ebcf0570681b0450b13afcc32658433a:-1388185870,0f488df437d7045030d0e648a74a29e7:569225132,39c381bca81f4450a4fbbdd40178749a:-1980558746,879341bc151f445030781deca0011ace:-838904710,ee938d3c8c1f445015c3d8d91abb7427:-345578694,5f51c1f8881f445041f2fae858107b3d:2142552555,fb1fb438a51f4450c96ae98205b9db67:-791317285,871f7438db1f4450bafd9e94034b237f:580496031,bbde7038661f4450c18be6db0e007047:-1644795647,14de30389f1f4450bb9e5db978c41453:-2098750884,6eae3cf4e11f4450c87f5d21f3b3b8f3:78601176,b8ae3cf4131f4450cd6ec85632bd236c:501346395,a38e78f4f81f445094d72f8a30ec25e3:25532243,31dccc78ec930450ae009f2c21296318:-1459119565,bbaba9e6504b48104e6af8b079b1b135:-513243664,44154cd2b28fc4104c584c0d46a322ad:-134780294,be9404d25e8fc4103a58a3334718023b:800120172,8b8408d2bc8fc41034640c209cab72b9:1223086904,f2448c92618fc41098b30c7275395b1e:-1771057537,a804cc528c8fc410adcf4ce60a463267:2061938885,c7630c52308fc410963d20c5bddfc831:-967304584,5633c4524d8fc410da7490c741004760:-1235213138,96038452758fc41007500febc1d7c7ee:-826865871,7ff2c452698fc410f6b68bebd2470c58:1825856510,99920812a78fc410f5a7bc18a1a6bd44:-826865871,5c02a7c263cbc410f1b69bbbe0da9bbb:-2119334967,43b167c2d8cbc4102b9582c32f78101a:1554307938,62b12f4277cbc410c8a3c429f3c1e948:810059838,4091678276cbc410c5f3f5e90133a110:1898637041,20316b8268cbc410037c21a54858c2f0:-634117559,2201678225cbc4100e560ef1523a1d0b:-1229477853,56bd1e2c8a4700108150f5a691519a8f:-634117559,9c9dda2c36470010d4835edacea869ae:265390774,773dd2e861470010cf79eab674b09543:-794258033,383d562cc6470010a086268951c05a69:231960526,130ddee8cd470010e167a14ece1b7674:188280124,71ccdee8c44700102064e3a4d19be76c:-1090587822,53ab5aa898470010b3fbffb237a07e05:-2128519412,6cfa5a680d4700100c91992cf104bb3b:1637835734,be4a9a286c470010a5b4ba062f0b7354:-553716704,313a5a28cc470010eec8444484db51e3:-2041748444,c61ad228864700104a70c75f23395830:-1390954792,695996e4c84700108775ae36a7b61fb6:1818601079,844996e4e3470010d3b0c1c9a1233eaf:-371943093,bb191ea4404700105a8901f63de2a2d8:94551597,3a7896a4d14700105397517b00b14bff:-1387775313,bef75e646b470010cd681e3a7efa1b84:-1956173685,efb75a64614700104540c93df93c2502:48752670,29571e244c4700105d7be16ad11fada0:360042222,26a65ee0cf470010f3c28b5613616c53:472204621,2dd59aa06147001036fb707f0bb5ae58:-1162034730,67a592a0e8470010cc4a0d41c18fe194:-933834308,3365de60fe4700105c419424bdf3a060:-489757179,0ff4de6019470010c0556b996852ef54:-2097468408,d6e45e602a470010f5c02a75a2b19088:776857459,1c01de2c1407001016f84df0d581b3dc:-977657523,819096e8e4070010b2f81c1b55dbbbea:-1482472608,eb4e4a6859070010e6d9e6a08d76590b:1961386560,b5fd0268af070010531c912f9d246e67:1943043928,c5fb86a4190700107815b1ae649d0527:-977657523,53eb46a419070010ed05f9dd93b0f3fd:973963196,733cf1a085c300109b0dfbbc5dacba30:1744629381,663cb1a0eac30010a70c4dcc2b125c24:390215218,e13cb1a0b5c30010b3945dcb452145b5:-663929627,8e2c396089c30010af4c20c0b4265fdf:-2110607214,149b3d209fc30010cca4a8da9077c14a:-1893230400,4d3b7d20c1c300106594a5b4df2c3b7a:1744629381,9a1bb5eccc830010fc0d9f45b4aa097a:212403673,8b7abdac908300103c7e83b523376578:1744629381,cc1a35ec7483001059afc82adc702afd:1943043928,fc583da85583001059d8e9c06fb4af88:1744629381,55e2f1a0f3830010701f4346cb54f4c7:-968767803,c6a139a0f9830010b409d3fd4acc2441:-1453345755,85fe95a8e64b845037e4227ab56169be:70362935,dcfe51e8484b845018faa4835cf38014:-1960232776,26ee51e8b74b84504d92a9419964c010:1513577472,d9ae91a8294b84500f328a20f53d998f:306649921,5f11fe1c3787c0500c6cc3b0f5f08c2c:321455780,218eae58b687c0501fdd25a1269af057:-1295701397,1b7e2a589187c0502459f3d4ba118926:1187347016,293e26582987c05039915338f19f16cc:343135834,930e26580d87c050b86962ae492337c6:-556291369,3cdde2181f87c050dc3cb68d454e99d7:1373482768,953da2186187c050f64ea345773bc88e:-556291369,9a2dead43287c0504aa817904c4e5ba2:889628236,7aecead40987c050f2223abe8401579c:343135834,45dce6d44087c050c01dfa8560c0260e:1282014740,8bcce6d47487c050d955eb4c9e1a5832:493029082,fb8cee94f487c050cf765424dbf7c190:-1104261043,c22ce6943987c050a5b369b7132322aa:114436821,7ecb2694db87c050da4a3ae14413856a:-1844812080,20cbe294ce87c05043faabe98e15aed1:952335542,be8b6a549d87c0506a700ef8af3000c5:-30685009,e25bae143087c050972cff66329df1bd:-1523176028,bd1b6a543a87c05010028ebbd0fc27bc:1145119574,91fae254f487c0505921a3c73b3a5f19:814929771,70caee145187c050acdbd0072473bfb1:1064027912,6f8aa6143887c050447f6fdf3e058edc:104646445,4d7aeed05d87c050b5abf0403b550094:-1304308338,672aaed0fd87c050b024b21169303938:1231397132,98d9aad0a187c050f1fae2e241a8118e:1846331179,5b99aad07587c050d108f91c4f28bf0d:1433987843,ce392e90e787c050bad55ac65fd2005e:1846331179,bb192e90e587c05043534672c67ee30e:-1110720405,33e82a507287c0506b76258507e8fa87:678534394,03e82e908a87c0509067d29ab377c307:-1359793469,65c862506187c050df20911ac63133a0:-290213384,de67a250ab87c050aeecf7815615760f:-1555430016,dd67ee101887c050fa57e02e210bae2b:-613309313,9927a610c287c0505f9bb42ccaa5b3c6:1828775697,902762105a87c050f1d0bee4b044ceeb:457894459,19d6a6103b87c050fc89b19e1ed47084:-1701020271,b456a2dc9647c050dd0ce8d6ce79ea2e:-2128043678,6946e2dcf847c05055bb3fa4012c3287:-1030511834,34c52e9cc947c050aba1b1049e38c0d8:-1956579997,08c5ae5cdf47c050ffa9c1c56829b6b2:1516643262,32b5ae5cbf47c050b55b766030f7e55e:1894541662,7553aad8b247c0503dd1294715e3a66f:38199003,55cb2d5889874450d5887ef83e134057:-1916015213,b432615c6e474450e16debb3d5c7b299:-1199829353,74d1291ce9474450932608a88260c405:219779555,e2a1251ce0474450d2781bbc064dce0b:-489112685,58fe1d1828474450c4be4bdc4ff33cf3:185053467,2dae59d492474450cc63f1b5aa67017c:1827019576,c13b9114a54744501c7f02db89b96e77:2139572470,68a35d98bd07445053fd54470092cabf:1972018054,27521918fa074450478416815b881e73:2034747014,61425d18ff07445081456b57b15e7dbd:1092366683,f2f1d9d4f4074450c47fa3f935f1dba3:1234693018,d54733593de60450e0f0eb45c869ef8b:-674915910,11714d999d2e40504c3c0592c8880b87:-87062620,c37cab894da640506e2d172f17324040:-1056511873,520ca3893aa64050b211543e6b754f76:-1629970185,b527eb0525a640506b5275c91ce03e07:-1334588461</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-05 09:23:37</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_ws_operation">sys_ws_operation</sys_db_object>
+        <sys_id>1678fe2500504b2b9596015f10daf531</sys_id>
+        <sys_metadata>8907e3051ba6405048a242e58d4bcb73</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Update Issue</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_ws_operation_8907e3051ba6405048a242e58d4bcb73</sys_update_name>
+        <sys_update_version display_value="sys_ws_operation_8907e3051ba6405048a242e58d4bcb73">27cf05701b1b045048a242e58d4bcb3b</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-05 09:23:37</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

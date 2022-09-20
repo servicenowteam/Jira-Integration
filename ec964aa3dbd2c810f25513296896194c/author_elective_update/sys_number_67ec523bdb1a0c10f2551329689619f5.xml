@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_number">
+    <sys_number action="DELETE">
+        <category display_value="" name="x_momo_jira_integr_issue">x_momo_jira_integr_issue</category>
+        <maximum_digits>7</maximum_digits>
+        <number>1000</number>
+        <prefix>JISS</prefix>
+        <sys_class_name>sys_number</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 10:22:35</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>67ec523bdb1a0c10f2551329689619f5</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>JISS</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_number_67ec523bdb1a0c10f2551329689619f5</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 10:22:35</sys_updated_on>
+    </sys_number>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_number_67ec523bdb1a0c10f2551329689619f5</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_number"><sys_number action="INSERT_OR_UPDATE"><category display_value="" name="x_momo_jira_integr_issue">x_momo_jira_integr_issue</category><maximum_digits>7</maximum_digits><number>1000</number><prefix>JISS</prefix><sys_class_name>sys_number</sys_class_name><sys_created_by>douglas.schamberg@movement.com</sys_created_by><sys_created_on>2020-01-19 10:22:35</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>67ec523bdb1a0c10f2551329689619f5</sys_id><sys_mod_count>0</sys_mod_count><sys_name>JISS</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sys_number_67ec523bdb1a0c10f2551329689619f5</sys_update_name><sys_updated_by>douglas.schamberg@movement.com</sys_updated_by><sys_updated_on>2020-01-19 10:22:35</sys_updated_on></sys_number></record_update>]]></payload>
+        <payload_hash>-1514028059</payload_hash>
+        <record_name>JISS</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 10:22:35</sys_created_on>
+        <sys_id>2bec523bdb1a0c10f2551329689619fd</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fbd5361000000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 10:22:35</sys_updated_on>
+        <type>Number</type>
+        <update_guid>23ec523bbe1a0c102774c4b4078e3bfd</update_guid>
+        <update_guid_history>23ec523bbe1a0c102774c4b4078e3bfd:-1514028059</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 10:23:26</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_number">sys_number</sys_db_object>
+        <sys_id>378a5caac1154c0e8fb9ac5c124d1c44</sys_id>
+        <sys_metadata>67ec523bdb1a0c10f2551329689619f5</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>JISS</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent display_value="">52ba5677db1a0c10f255132968961990</sys_parent>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_number_67ec523bdb1a0c10f2551329689619f5</sys_update_name>
+        <sys_update_version display_value="sys_number_67ec523bdb1a0c10f2551329689619f5">2bec523bdb1a0c10f2551329689619fd</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 10:23:26</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_script">
+    <sys_ui_script action="DELETE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_momo_jira_integr.jiraStepper</name>
+        <script><![CDATA['use strict';
+
+jiraStepper.$inject = ['$templateCache'];
+
+angular
+  .module('jira.stepper', ['ngAnimate', 'ui.bootstrap'])
+  .directive('jiraStepper', jiraStepper);
+
+function jiraStepper($templateCache) {
+  jiraStepperController.$inject = ['$scope'];
+  var directive = {
+    restrict: 'E',
+    replace: true,
+    scope: {
+      steps: '=',
+      includeStepNumber: '=',
+      includeStepTitle: '=',
+      cacheTemplates: "="
+    },
+    template: $templateCache.get('jira.stepper.html'),
+    controller: jiraStepperController,
+    controllerAs: 'c',
+    bindToController: true
+  };
+
+  /** @ngInject */
+  function jiraStepperController ($scope) {
+    $scope.toggleSteps = function(index) {
+      $scope.steps[index].expanded = !$scope.steps[index].expanded;
+
+      $scope.steps = c.steps.map(function(step, i) {
+        if (step.expanded && i != index) {
+          step.expanded = false;
+        }
+        return step;
+      });
+    };
+  }
+
+  return directive;
+
+  
+}
+
+angular
+  .module('jira.stepper')
+  .run(['$templateCache', function($templateCache) {
+    $templateCache.put('jira.stepper.html', '<div class=\"stepper\">\n\t<div class=\"step\" ng-repeat=\"step in c.steps track by $index\">\n\t\t<div class=\"step-heading\" \n\t\t\tng-class=\"{\"active\": !step.expanded}\"\n\t\t\tng-click=\"toggleSteps($index)\">\n\t\t\t<div class=\"circle\" ng-if=\"step.number\">{{ step.number }}</div>\n\t\t\t<div class=\"title\" ng-if=\"step.title\">{{ step.title }}</div>\n\t\t\t<div class=\"line\" ng-hide=\"step.number >= steps.length\"></div>\n\t\t\t<div uib-collapse=\"!step.expanded\">\n\t\t\t\t<div class=\"body\">\n\t\t\t\t\t<div ng-bind-html=\"step.template\">\n\t\t\t\t\t\t<button ng-hide=\"step.number >=steps.length\"\n\t\t\t\t\t\t\tng-click=\"toggleSteps($index + 1)\"\n\t\t\t\t\t\t\tclass=\"btn btn-sm btn-primary btn-bg ripple\"\n\t\t\t\t\t\t\tname=\"next\"\n\t\t\t\t\t\t\ttype=\"button\"> Next </button>\n\t\t\t\t\t\t<button ng-hide=\"step.number <= 1\"\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tng-click=\"toggleSteps($index - 1)\"\n\t\t\t\t\t\t\tname=\"previous\"\n\t\t\t\t\t\t\ttype=\"button\"\n\t\t\t\t\t\t\tclass=\"btn btn-sm btn-secondary ripple\"> Previous </button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n</div></div>');
+  }]);]]></script>
+        <script_name>jiraStepper</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-06 20:00:07</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>439dc57ddb3ec410f255132968961965</sys_id>
+        <sys_mod_count>66</sys_mod_count>
+        <sys_name>x_momo_jira_integr.jiraStepper</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ui_script_439dc57ddb3ec410f255132968961965</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-16 14:18:42</sys_updated_on>
+        <ui_type>0</ui_type>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_ui_script_439dc57ddb3ec410f255132968961965</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ui_script"&gt;&lt;sys_ui_script action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;description/&gt;&lt;global&gt;false&lt;/global&gt;&lt;name&gt;x_momo_jira_integr.jiraStepper&lt;/name&gt;&lt;script&gt;&lt;![CDATA['use strict';
+
+jiraStepper.$inject = ['$templateCache'];
+
+angular
+  .module('jira.stepper', ['ngAnimate', 'ui.bootstrap'])
+  .directive('jiraStepper', jiraStepper);
+
+function jiraStepper($templateCache) {
+  jiraStepperController.$inject = ['$scope'];
+  var directive = {
+    restrict: 'E',
+    replace: true,
+    scope: {
+      steps: '=',
+      includeStepNumber: '=',
+      includeStepTitle: '=',
+      cacheTemplates: "="
+    },
+    template: $templateCache.get('jira.stepper.html'),
+    controller: jiraStepperController,
+    controllerAs: 'c',
+    bindToController: true
+  };
+
+  /** @ngInject */
+  function jiraStepperController ($scope) {
+    $scope.toggleSteps = function(index) {
+      $scope.steps[index].expanded = !$scope.steps[index].expanded;
+
+      $scope.steps = c.steps.map(function(step, i) {
+        if (step.expanded &amp;&amp; i != index) {
+          step.expanded = false;
+        }
+        return step;
+      });
+    };
+  }
+
+  return directive;
+
+  
+}
+
+angular
+  .module('jira.stepper')
+  .run(['$templateCache', function($templateCache) {
+    $templateCache.put('jira.stepper.html', '&lt;div class=\"stepper\"&gt;\n\t&lt;div class=\"step\" ng-repeat=\"step in c.steps track by $index\"&gt;\n\t\t&lt;div class=\"step-heading\" \n\t\t\tng-class=\"{\"active\": !step.expanded}\"\n\t\t\tng-click=\"toggleSteps($index)\"&gt;\n\t\t\t&lt;div class=\"circle\" ng-if=\"step.number\"&gt;{{ step.number }}&lt;/div&gt;\n\t\t\t&lt;div class=\"title\" ng-if=\"step.title\"&gt;{{ step.title }}&lt;/div&gt;\n\t\t\t&lt;div class=\"line\" ng-hide=\"step.number &gt;= steps.length\"&gt;&lt;/div&gt;\n\t\t\t&lt;div uib-collapse=\"!step.expanded\"&gt;\n\t\t\t\t&lt;div class=\"body\"&gt;\n\t\t\t\t\t&lt;div ng-bind-html=\"step.template\"&gt;\n\t\t\t\t\t\t&lt;button ng-hide=\"step.number &gt;=steps.length\"\n\t\t\t\t\t\t\tng-click=\"toggleSteps($index + 1)\"\n\t\t\t\t\t\t\tclass=\"btn btn-sm btn-primary btn-bg ripple\"\n\t\t\t\t\t\t\tname=\"next\"\n\t\t\t\t\t\t\ttype=\"button\"&gt; Next &lt;/button&gt;\n\t\t\t\t\t\t&lt;button ng-hide=\"step.number &lt;= 1\"\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tng-click=\"toggleSteps($index - 1)\"\n\t\t\t\t\t\t\tname=\"previous\"\n\t\t\t\t\t\t\ttype=\"button\"\n\t\t\t\t\t\t\tclass=\"btn btn-sm btn-secondary ripple\"&gt; Previous &lt;/button&gt;\n\t\t\t\t\t&lt;/div&gt;\n\t\t\t\t&lt;/div&gt;\n\t\t\t&lt;/div&gt;\n\t\t&lt;/div&gt;\n\t&lt;/div&gt;\n&lt;/div&gt;\n&lt;/div&gt;&lt;/div&gt;');
+  }]);]]&gt;&lt;/script&gt;&lt;script_name&gt;jiraStepper&lt;/script_name&gt;&lt;sys_class_name&gt;sys_ui_script&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-02-06 20:00:07&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;439dc57ddb3ec410f255132968961965&lt;/sys_id&gt;&lt;sys_mod_count&gt;66&lt;/sys_mod_count&gt;&lt;sys_name&gt;x_momo_jira_integr.jiraStepper&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ui_script_439dc57ddb3ec410f255132968961965&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg@movement.com&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-02-16 14:18:42&lt;/sys_updated_on&gt;&lt;ui_type&gt;0&lt;/ui_type&gt;&lt;use_scoped_format&gt;false&lt;/use_scoped_format&gt;&lt;/sys_ui_script&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>1688669317</payload_hash>
+        <record_name>x_momo_jira_integr.jiraStepper</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-02-16 14:18:42</sys_created_on>
+        <sys_id>9f7f9bf01bcb401048a242e58d4bcb9c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1704e5d9c790000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-16 14:18:42</sys_updated_on>
+        <type>UI Script</type>
+        <update_guid>577f9bf0b5cb4010cdde206b18c5999c</update_guid>
+        <update_guid_history>577f9bf0b5cb4010cdde206b18c5999c:1688669317,66924a751972081017bb844c0bea91b3:1529485550,2262867598720810da1310cc52411245:952646958,5142867579720810bc88511fce6ad93f:-421278802,753206752d7208100c54522f2940c9b9:1543490670,2861cef1f2720810745c13a437da86da:-186550226,d641cef13472081004c87ad148c7cc58:1372138807,7e0142f149720810d00f0e93d2d8ae00:-466802774,c4e042f102720810758c43ca0b28ea63:1524692537,179002f11c7208108baf5c06217a36f9:1943588102,5f5042b1387208106b1e8c26b188b8d5:475559128,7110c67193720810dbe7c4de664b8c36:-1294602642,e9ffbd71557208108a1dedb41eb783e5:1878678790,d09ff57142720810cf638ab36bfa272c:-839875492,377f79315f7208108e08f9d6988bcb75:-675374728,b26ff1714a7208107cb1f16d798832eb:307090298,7a4f793126720810f09e17f7d387e5fb:-1097493254,741fb931ef72081049da4874cf30dd2a:-2120601224,91fe79315672081088ea2320198a2e6c:-839875492,f8ee3531e8720810e207c8d3be5ddea1:-577469338,b9be35314d720810155af86c326b8f6e:1832806118,d95e79fd43320810cfb559433a7e14e6:-2120601224,2d3eb5fdc132081039b465f6ae1a39fd:1413409654,3a2eb5fd64320810cf37a56c947b50bb:119598269,601eb5fd6d320810195ee0a371ac30df:2084387342,a30ef1fd6d320810aba5c3dbbb285ebd:1210062285,c3edb1fd3f3208105c4972f7df09c56b:-1825280070,f2dd3dbd06320810bc8e1f34448d1c72:-1154540923,77cdbdbd053208108f96bb03756a66d0:216525937,f85db5bda432081024cddc9664971332:1840666502,824df1bd0b320810b8ed48c5d6d0d38d:-1442810347,5e2db1bd18320810d3a3e6d9a456c504:2084673432,ee0dfd7de832081006b0337075bed4a2:-1442810347,bd0dfd7d8332081009d86f092f709168:2109781393,1bfc3d7d8c3208109822ecc5371cd63a:1208096019,7cfc797db83208105d0aa5323a885435:-219997245,c9ec797d933208106e5ddd5c8840a776:-304629392,27cc797dbc320810554d4745d5e3c16f:1208096019,4cbc757d27320810c05c0362bfa7035b:-304629392,cf8cb17d4b32081042caa9a500eb8e96:1208096019,4e7c717d41320810a68c28c92c5901f3:1747732976,b46c317dda32081030c46682db2beb49:-894615924,a14c793d623208107c69c6d57c5bc3a0:2092971470,702c793d62320810beeebcb978c8f599:-1737916801,8b0c793d2f3208102f0f2a4f47b08ee2:-159332099,dffbb53d0b320810f00b21b51dc7a1ed:984424314,5afbb13d4c320810fb9b02586639a00a:1321710895,61bbb13dd932081017412ec339e3a901:1969911858,829b3df98c32081092c8bd28f77f5f94:1321710895,238bbdf9f132081055006745d314bcf1:-36867279,617bf5f9a2320810b62d977a2efb5a99:-13537558,a65bf5f951320810a38e3384d53ef01c:1294734610,b43bf5f9a6320810da1429ba086ea016:180006010,6d5c5535f1bec410b3b846f5e9dabb41:-1711985731,8b2a15711dbec410cdf37f8d7d209612:-490103959,c1f9157154bec410f2b057d84591360c:1515869233,f0e9917135bec410fa744abf8b0c61bd:-1587694315,9b89d931d6bec410be001f055eaa8ed5:1457076011,71281dbd987ec41007e2ce3da514a531:-1500850537,cf08d5bdf67ec410937333d280423e13:-129535226,af0555b9af7ec410bcf828c9d954ea40:-1574369550,75055db1b67ec410f81d50999903f867:-1271040613,9df41d39c17ec41047965c86b68d2b7b:-555946450,fcf455b93d7ec41090e12d026c53363a:2051704095,6dd451796b7ec410d0ab9d188267fafa:-1747490063,a9001135b17ec410fd802aaf1bcfac9d:-900469887,03bdcd317f7ec410222e0a92f4c244f7:1444815043</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-16 15:36:50</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_ui_script">sys_ui_script</sys_db_object>
+        <sys_id>8ab041438b0949b0915ef3de2e7aa040</sys_id>
+        <sys_metadata>439dc57ddb3ec410f255132968961965</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_momo_jira_integr.jiraStepper</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_ui_script_439dc57ddb3ec410f255132968961965</sys_update_name>
+        <sys_update_version display_value="sys_ui_script_439dc57ddb3ec410f255132968961965">9f7f9bf01bcb401048a242e58d4bcb9c</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-16 15:36:50</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>false</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_momo_jira_integr_issue</collection>
+        <condition>gs.getProperty('x_momo_jira_integr.change_request')</condition>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="x_momo_jira_integr_issue">cab_typeISNOTEMPTY^ORcab_type!=none^statusVALCHANGES^sys_updated_by=guest^status.nameLIKEAwaiting CAB^EQ<item endquery="false" field="cab_type" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item endquery="false" field="cab_type" goto="false" newquery="false" operator="!=" or="true" value="none"/>
+            <item endquery="false" field="status" goto="false" newquery="false" operator="VALCHANGES" or="false" value=""/>
+            <item endquery="false" field="sys_updated_by" goto="false" newquery="false" operator="=" or="false" value="guest"/>
+            <item endquery="false" field="status.name" goto="false" newquery="false" operator="LIKE" or="false" value="Awaiting CAB"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Create Cab From WS</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/ ) {
+  gs.include('JiraStringUtils');
+  var cab = {};
+  var jiraStringUtils = new JiraStringUtils();
+
+  
+
+  if (!current.description.nil()) {
+    cab.description = jiraStringUtils.toPlainText(current.getValue('description')).getText();
+  }
+  if (!current.short_description.nil()) {
+    cab.short_description = current.getValue('short_description');
+  }
+
+  cab.number = current.getValue('number');
+  cab.link = gs.getProperty('glide.servlet.uri') + 'sp?id=jira_issues_form&action=2&table=x_momo_jira_integr_issue&sys_id=' + current.getUniqueValue();
+  cab.type = current.getValue('cab_type');
+  if (!current.change_template.nil() && cab.type == 'standard') {
+    var template = current.change_template.template.template.toString().replace(/\^EQ$/, '');
+    var tmpl = template.split(/(\^(?=([A-Za-z_]+\=)))/gmi);
+    if (tmpl.length > 0) {
+      for (var t in tmpl) {
+        var fieldName = tmpl[t].split('=')[0];
+        var fieldValue = tmpl[t].split('=')[1];
+        cab[fieldName] = fieldValue;
+      }
+    }
+  }
+  cab.number = current.getValue('number');
+  cab.external_id = current.getValue('external_id');
+  cab.external_key = current.getValue('external_key');
+  cab.requested_by = current.requested_for.nil() ?
+    current.getValue('sys_created_by') :
+    current.getValue('requested_for');
+
+  cab.assigned_to = current.assigned_to.nil() ? '' : current.assigned_to.toString();
+
+  var keys = [
+    'assignment_group',
+    'implementation_plan',
+    'test_plan',
+    'justification',
+    'assigned_to',
+    'risks_and_impact',
+    'communication_plan',
+    'backout_plan',
+    'priority',
+    'impact',
+    'description',
+    'short_description'
+  ];
+  for (var k in keys) {
+    var key = keys[k];
+    var val = cab[keys[k]];
+
+    if (gs.nil(val) && gs.nil(current.getValue(key))) {
+      if (key !== 'assigned_to' && key !== 'assignment_group' && key !== 'priority' && key !== 'impact') {
+        cab[key] = 'No ' + key.split('_').join(' ') + ' provided';
+      }
+    } else if (gs.nil(val)) {
+      if (key === 'priority') {
+        cab[key] = current.priority.external_id.toString();
+      } else {
+        cab[key] = current.getValue(key);
+      }
+    }
+  }
+  cab.start_date = current.getDisplayValue('request_implementation_date');
+
+  if (!cab.assignment_group) {
+    cab.assignment_group = getAssignmentGroupFromProject();
+  }
+  var end = new GlideDateTime();
+  end.setValue(current.request_implementation_date.dateNumericValue());
+  end.addDaysLocalTime(1);
+
+  cab.end_date = end.getDisplayValue();
+  if (!current.cab_type.nil() && current.getValue('cab_type') != 'none') {
+    var change_request = createCABRequest(cab);
+
+    if (!current.cab_request.nil()) {
+      var oldCab = current.cab_request.getRefRecord();
+      updateOldCab(oldCab.getUniqueValue(), change_request.link, change_request.number);
+    }
+
+    var sysAttachment = new GlideSysAttachment();
+    sysAttachment.copy(current.getTableName(), current.getUniqueValue(), change_request.table, change_request.id);
+    current.cab_request = change_request.id;
+
+    current.setValue('active', false);
+
+    current.update();
+  }
+  
+
+
+  function createCABRequest(payload) {
+    var gr = new GlideRecord('change_request');
+    gr.initialize();
+    gr.description = payload.description;
+    gr.short_description = payload.short_description;
+    gr.justification = payload.justification;
+    gr.assigned_to = payload.assigned_to;
+    gr.requested_by = payload.requested_by;
+    gr.assignment_group = payload.assignment_group;
+    if (payload.priority) {
+      gr.priority = payload.priority;
+    }
+    if (payload.impact) {
+      gr.impact = payload.impact;
+    }
+    gr.type = payload.type;
+    gr.implementation_plan = payload.implementation_plan;
+    gr.end_date = payload.end_date;
+    gr.start_date = payload.start_date;
+    gr.risk_impact_analysis = payload.risks_and_impact;
+    gr.backout_plan = payload.backout_plan;
+    gr.u_communication_plan = payload.communication_plan;
+    gr.test_plan = payload.test_plan;
+    gr.work_notes = 'Automatically generated from: ' +
+      '[code]<a target="_blank" href="' +
+      payload.link + '">' +
+      payload.number + '</a>[/code]' +
+      '\n\nLinked to jira record: ' + '[code]<a href="' +
+      gs.getProperty('x_momo_jira_integr.instance_name') +
+      '/browse/' + payload.external_key + '" target="_blank">' +
+      payload.external_key + '</a>[/code]';
+    gr.insert();
+
+    return {
+      id: gr.getUniqueValue(),
+      table: gr.getTableName(),
+      number: gr.getValue('number'),
+      link: gr.getLink()
+    };
+  }
+
+  function updateOldCab(requestId, newCabRequestLink, newCabRequestNumber) {
+    var gr = new GlideRecord('change_request');
+
+    gr.get(requestId);
+
+    if (gr.isValidRecord()) {
+      gr.setValue('state', 4);
+      gr.work_notes = 'Skipped by new change request: [code]<a href="' +
+        newCabRequestLink + '">' + newCabRequestNumber +
+        '</a>[/code]';
+      gr.update();
+    }
+  }
+
+  function getAssignmentGroupFromProject() {
+    var project = current.project.getRefRecord();
+    var assignment_group = project.assignment_group.getRefRecord();
+    return assignment_group.getUniqueValue();
+  }
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 11:57:49</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>7f877d721b4f881048a242e58d4bcb7b</sys_id>
+        <sys_mod_count>116</sys_mod_count>
+        <sys_name>Create Cab From WS</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_7f877d721b4f881048a242e58d4bcb7b</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2021-05-09 15:17:31</sys_updated_on>
+        <template/>
+        <when>after</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=7f877d721b4f881048a242e58d4bcb7b"/>
+</record_update>

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="DELETE">
+        <category>custom</category>
+        <client_script><![CDATA[function() {  /* widget controller */  var c = this;}]]></client_script>
+        <controller_as>c</controller_as>
+        <css/>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira-pie-chart</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>jira-pie-chart</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.table = (input ? input.table : undefined) || options.table || $sp.getParameter('table');
+  var config = {};
+  if (options.chart) {
+    config.chart = options.chart;
+  }
+  var validPlotOptions = hasValidChartOptions('plotOptions', options.plotOptions, config.chart);
+  if (options.plotOptions && validPlotOptions) {
+    config.plotOptions = options.plotOptions;
+  }
+
+  var series = setSeriesArray(data.table, options.seriesData, {
+    name: options.chartName,
+    colorByPoint: options.chartColorByPoint ? options.chartColorByPoint : false
+  });
+
+  config.series = series;
+
+  config.title = options.title ? options.title : 'Pie Chart';
+
+  function hasValidChartOptions(type, opts, chartOptions) {
+    if (typeof chartOptions !== 'object' && typeof opts !== 'object') return false;
+    if (type === 'plotOptions') {
+      var chartType = chartOptions.type;
+      if (!opts.hasOwnProperty(chartType)) return false;
+      if (typeof opts[chartType] !== 'object') return false;
+      return true;
+    }
+    return false;
+  }
+
+  function setSeriesArray(table, query, opts) {
+    var _data = [];
+    if (!Array.isArray(query)) return [];
+
+    for (var i in query) {
+      var collectionItem = Object.extend({}, query[i]);
+
+      collectionItem.y = getAggregateSeriesData(table, 'COUNT', collectionItem.encodedQuery);
+      collectionItem.name = collectionItem.name;
+      delete collectionItem.encodedQuery;
+      _data.push(collectionItem);
+    }
+    return [{
+      name: opts.name,
+      colorByPoint: opts.colorByPoint,
+      data: _data 
+    }];
+  }
+
+  function getAggregateSeriesData(table, aggregate, enconded_query) {
+    var ga = new GlideAggregate(table);
+    ga.addAggregate(aggregate);
+    ga.addEncodedQuery(enconded_query);
+    ga.query();
+    if (ga.next()) return ga.getAggregate(aggregate);
+    return 0;
+  }
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 13:21:05</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>fb8857d5db534850f2551329689619fc</sys_id>
+        <sys_mod_count>8</sys_mod_count>
+        <sys_name>jira-pie-chart</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_fb8857d5db534850f2551329689619fc</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-03-01 13:59:55</sys_updated_on>
+        <template><![CDATA[<div class="panel panel-default" ng-if="data.canRead">
+  <div class="panel-heading">
+    <div class="panel-title">{{ ::chart.title }}</div>
+  </div>
+  <div class="panel-body">
+    <div class="chart"></div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sp_widget_fb8857d5db534850f2551329689619fc</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sp_widget"&gt;&lt;sp_widget action="INSERT_OR_UPDATE"&gt;&lt;category&gt;custom&lt;/category&gt;&lt;client_script&gt;&lt;![CDATA[function() {  /* widget controller */  var c = this;}]]&gt;&lt;/client_script&gt;&lt;controller_as&gt;c&lt;/controller_as&gt;&lt;css/&gt;&lt;data_table&gt;sp_instance&lt;/data_table&gt;&lt;demo_data/&gt;&lt;description/&gt;&lt;docs/&gt;&lt;field_list/&gt;&lt;has_preview&gt;false&lt;/has_preview&gt;&lt;id&gt;jira-pie-chart&lt;/id&gt;&lt;internal&gt;false&lt;/internal&gt;&lt;link&gt;&lt;![CDATA[function link(scope, element, attrs, controller) {  }]]&gt;&lt;/link&gt;&lt;name&gt;jira-pie-chart&lt;/name&gt;&lt;option_schema/&gt;&lt;public&gt;false&lt;/public&gt;&lt;roles/&gt;&lt;script&gt;&lt;![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.table = (input ? input.table : undefined) || options.table || $sp.getParameter('table');
+  var config = {};
+  if (options.chart) {
+    config.chart = options.chart;
+  }
+  var validPlotOptions = hasValidChartOptions('plotOptions', options.plotOptions, config.chart);
+  if (options.plotOptions &amp;&amp; validPlotOptions) {
+    config.plotOptions = options.plotOptions;
+  }
+
+  var series = setSeriesArray(data.table, options.seriesData, {
+    name: options.chartName,
+    colorByPoint: options.chartColorByPoint ? options.chartColorByPoint : false
+  });
+
+  config.series = series;
+
+  config.title = options.title ? options.title : 'Pie Chart';
+
+  function hasValidChartOptions(type, opts, chartOptions) {
+    if (typeof chartOptions !== 'object' &amp;&amp; typeof opts !== 'object') return false;
+    if (type === 'plotOptions') {
+      var chartType = chartOptions.type;
+      if (!opts.hasOwnProperty(chartType)) return false;
+      if (typeof opts[chartType] !== 'object') return false;
+      return true;
+    }
+    return false;
+  }
+
+  function setSeriesArray(table, query, opts) {
+    var _data = [];
+    if (!Array.isArray(query)) return [];
+
+    for (var i in query) {
+      var collectionItem = Object.extend({}, query[i]);
+
+      collectionItem.y = getAggregateSeriesData(table, 'COUNT', collectionItem.encodedQuery);
+      collectionItem.name = collectionItem.name;
+      delete collectionItem.encodedQuery;
+      _data.push(collectionItem);
+    }
+    return [{
+      name: opts.name,
+      colorByPoint: opts.colorByPoint,
+      data: _data 
+    }];
+  }
+
+  function getAggregateSeriesData(table, aggregate, enconded_query) {
+    var ga = new GlideAggregate(table);
+    ga.addAggregate(aggregate);
+    ga.addEncodedQuery(enconded_query);
+    ga.query();
+    if (ga.next()) return ga.getAggregate(aggregate);
+    return 0;
+  }
+})();]]&gt;&lt;/script&gt;&lt;servicenow&gt;false&lt;/servicenow&gt;&lt;sys_class_name&gt;sp_widget&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-03-01 13:21:05&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;fb8857d5db534850f2551329689619fc&lt;/sys_id&gt;&lt;sys_mod_count&gt;8&lt;/sys_mod_count&gt;&lt;sys_name&gt;jira-pie-chart&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sp_widget_fb8857d5db534850f2551329689619fc&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg@movement.com&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-03-01 13:59:55&lt;/sys_updated_on&gt;&lt;template&gt;&lt;![CDATA[&lt;div class="panel panel-default" ng-if="data.canRead"&gt;
+  &lt;div class="panel-heading"&gt;
+    &lt;div class="panel-title"&gt;{{ ::chart.title }}&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="panel-body"&gt;
+    &lt;div class="chart"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;]]&gt;&lt;/template&gt;&lt;/sp_widget&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>1150775148</payload_hash>
+        <record_name>jira-pie-chart</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-03-01 13:59:55</sys_created_on>
+        <sys_id>a471eb9d1b5bc45048a242e58d4bcb9f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1709665715b0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-03-01 13:59:55</sys_updated_on>
+        <type>Widget</type>
+        <update_guid>6c71eb9dc55bc450a1f20a602bb8669e</update_guid>
+        <update_guid_history>6c71eb9dc55bc450a1f20a602bb8669e:1150775148,0471eb9d445bc4503eab37915751f47b:-1849180234,3ed0275dff5bc4506cfe60060c9c979e:-2021096090,90de1fd9dd5bc4506a97cb5c89841f04:-948803084,1f599355e65bc450a0d9210513edb1c0:-2123965148,f9491755f95bc450058a4c7719e0cb42:1222377406,62391f15f25bc450d7762c1bfa3d7b55:-294259474,fa2993555d5bc45006a66e1151907fba:-1536273193,049857d558534850ac6b83d71fdfb9ff:1196336870</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">687627d9db934850f2551329689619b2</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 14:21:45</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sp_widget">sp_widget</sys_db_object>
+        <sys_id>34420259b89643f69d5a83dfa349aac4</sys_id>
+        <sys_metadata>fb8857d5db534850f2551329689619fc</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>jira-pie-chart</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sp_widget_fb8857d5db534850f2551329689619fc</sys_update_name>
+        <sys_update_version display_value="sp_widget_fb8857d5db534850f2551329689619fc">a471eb9d1b5bc45048a242e58d4bcb9f</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-01 14:21:45</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

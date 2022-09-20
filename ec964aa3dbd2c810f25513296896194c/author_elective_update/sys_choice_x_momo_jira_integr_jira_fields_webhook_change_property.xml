@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="webhook_change_property" table="x_momo_jira_integr_jira_fields" version="3">
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>webhook_change_property</element>
+            <name>x_momo_jira_integr_jira_fields</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-02-15 11:41:18</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_id>c41205af1b4f1450b482dce8cc4bcb31</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>webhook_change_property</sys_name>
+            <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+            <sys_update_name>sys_choice_x_momo_jira_integr_jira_fields_webhook_change_property</sys_update_name>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-02-15 11:41:18</sys_updated_on>
+        </sys_choice_set>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>webhook_change_property</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>toString</label>
+            <language>en</language>
+            <name>x_momo_jira_integr_jira_fields</name>
+            <sequence>1</sequence>
+            <synonyms/>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-02-15 11:41:18</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>cce1f9a0db830010f255132968961909</sys_id>
+            <sys_mod_count>3</sys_mod_count>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-02-15 11:41:33</sys_updated_on>
+            <value>toString</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>webhook_change_property</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>to</label>
+            <language>en</language>
+            <name>x_momo_jira_integr_jira_fields</name>
+            <sequence>2</sequence>
+            <synonyms/>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-02-15 11:41:34</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>58e17da0db830010f2551329689619c4</sys_id>
+            <sys_mod_count>2</sys_mod_count>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-02-15 11:41:37</sys_updated_on>
+            <value>to</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>webhook_change_property</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>fromString</label>
+            <language>en</language>
+            <name>x_momo_jira_integr_jira_fields</name>
+            <sequence>3</sequence>
+            <synonyms/>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-02-15 11:41:42</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>f3e1f9a0db830010f25513296896190d</sys_id>
+            <sys_mod_count>2</sys_mod_count>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-02-15 11:41:47</sys_updated_on>
+            <value>fromString</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>webhook_change_property</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>from</label>
+            <language>en</language>
+            <name>x_momo_jira_integr_jira_fields</name>
+            <sequence>4</sequence>
+            <synonyms/>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-02-15 11:41:49</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>b9f17da0db830010f255132968961950</sys_id>
+            <sys_mod_count>2</sys_mod_count>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-02-15 11:41:53</sys_updated_on>
+            <value>from</value>
+        </sys_choice>
+    </sys_choice>
+</record_update>

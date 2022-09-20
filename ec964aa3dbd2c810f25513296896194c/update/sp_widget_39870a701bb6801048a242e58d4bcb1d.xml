@@ -1,0 +1,1050 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function ($scope, $rootScope, $timeout, $window, jiraMarkdown, jiraLiveProfile, $sce, spUtil) {
+  /* widget controller */
+  var c = this;
+  $scope.j2m = jiraMarkdown;
+  $scope.liveProfiles = jiraLiveProfile;
+  $scope.renderedEmailBody = '';
+  $scope.isMobile = spUtil.isMobile() || ($window.innerWidth < 700);
+  c.$onInit = function () {
+    $scope.records = $scope.data.records;
+    $scope.activityTypes = $scope.data.activityTypes;
+    $scope.activityType = $scope.data.defaultActivity;
+
+    $scope.activityPicker = $scope.activityType.optionValue;
+  };
+
+  $scope.$watch('activityPicker', function (value, previous) {
+    $scope.activityType = $scope.activityTypes.filter(function (activity) {
+      return activity.optionValue == value;
+    })[0];
+    if (value != previous) {
+      $scope.data.feed = $scope.activityType;
+      $scope.isLoadingList = true;
+      $scope.server.update().then(function (response) {
+        if (response.records.length === 0) {
+          $scope.records = [];
+        } else if (response.records[0].type === 'email' && $scope.isMobile) {
+          $scope.records = [];
+        } else {
+          $scope.records = response.records;
+        }
+        $timeout(function () {
+          $scope.isLoadingList = false;
+          $rootScope.$broadcast('jira.activity.changed', $scope.activityType);
+        }, 300);
+      });
+    }
+  });
+
+  $rootScope.$on('jira.journal-field.inserted', function (e) {
+    $scope.server.update().then(function (response) {
+      $scope.records = response.records;
+    });
+  });
+
+  $scope.toggleOpenEmailDetails = function (id, body) {
+    if (id) {
+      if ($scope.emailLinkOpen && $scope.emailLinkOpen === id) {
+        $scope.emailLinkOpen = undefined;
+        $timeout(function () {
+          $scope.renderedEmailBody = '';
+        }, 100);
+
+      } else {
+        $scope.renderedEmailBody = $scope.createEmailDetails(body);
+        $timeout(function () {
+          $scope.emailLinkOpen = id;
+        }, 200);
+
+      }
+    }
+  };
+
+  $scope.createEmailDetails = function (body) {
+    // quick replacements for anything that should not be rendered to html
+    var html = body.replace(/href=\"(.*?)\"/gmi, '')
+      .replace(/\<meta(.*?)\>/gmi, '')
+      .replace(/\<style.*\>.*?\<\/style\>/gmis, '')
+      .replace(/\<script.*\>.*?\<\/script\>/gmis, '')
+      .replace(/\<iframe.*\>.*?\<\/iframe\>/gmis, '')
+      .replace(/\<html.*\>/gmi, '')
+      .replace(/\<head.*\>.*?\<\/head\>/gmis, '')
+      .replace(/src\=\"(http(.*?))\"/gmi, 'src="about:blank"')
+      .replace(/\<(.*?)onclick\=(.*?)\>/gmi, '');
+    // since this is an email we still need the style attribute
+    // we take out anything that could potentially be dangerous beforehand.
+    return $sce.trustAsHtml('<div class="email-details-inner">' + html + '</div>');
+  };
+
+  $scope.getEmailLinkHeadingText = function (id) {
+    var msg = 'Show email details';
+    if (!id || !$scope.emailLinkOpen) return msg;
+    if ($scope.emailLinkOpen === id) {
+      return 'Hide email details';
+    }
+    return msg;
+  };
+
+  $scope.isOpen = function (id) {
+    if (!id || !$scope.emailLinkOpen) return false;
+    return $scope.emailLinkOpen === id;
+  };
+
+  $scope.trustAsHtml = function (html) {
+    return $sce.trustAsHtml(html);
+  }
+
+
+  $scope.getCreatedByDisplayName = function (created_by) {
+    if (!created_by) return 'Guest';
+
+    var sys_id = created_by.value;
+
+    if ($scope.liveProfiles.hasLiveProfile(sys_id)) {
+      var liveProfile = $scope.liveProfiles.getLiveProfileById(sys_id);
+      return liveProfile.name;
+    }
+
+    var displayName = created_by.display_value;
+
+    if (/\./gi.test(displayName)) {
+      var name = displayName.split('.');
+      return name.map(function (item) {
+        return item.charAt(0).toUpperCase() + item.slice(1, item.length - 1);
+      }).join(" ");
+    }
+    return displayName;
+  };
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>$table-border-width: 1px;&#13;
+$spacer: 1px;&#13;
+&#13;
+.jira-journal-body {&#13;
+  width: 100%;&#13;
+&#13;
+  p {&#13;
+    margin: 0 0 5px;&#13;
+  }&#13;
+&#13;
+  ol,&#13;
+  ul,&#13;
+  dl {&#13;
+    padding-left: 24px;&#13;
+    margin-bottom: 0px;&#13;
+    line-height: 1.2;&#13;
+&#13;
+    li {&#13;
+&#13;
+      ul:first-child,&#13;
+      dl:first-child,&#13;
+      ol:first-child {&#13;
+        margin-bottom: 0px;&#13;
+        padding-bottom: 0px;&#13;
+      }&#13;
+    }&#13;
+  }&#13;
+&#13;
+  table {&#13;
+    width: 100%;&#13;
+    max-width: 100%;&#13;
+    margin-bottom: $spacer;&#13;
+    background-color: $table-bg; // Reset for nesting within parents with `background-color`.&#13;
+    border: $table-border-width solid $table-border-color;&#13;
+&#13;
+    thead {&#13;
+      background-color: $body-bg;&#13;
+    }&#13;
+&#13;
+    tbody tr:first-child td {&#13;
+      border-top: none;&#13;
+    }&#13;
+&#13;
+&#13;
+&#13;
+    td:nth-child(odd) {&#13;
+      border-right: $table-border-width solid $table-border-color;&#13;
+      border-left: $table-border-width solid $table-border-color;&#13;
+    }&#13;
+&#13;
+    th:nth-child(odd) {&#13;
+      border-right: $table-border-width solid $table-border-color;&#13;
+      border-left: $table-border-width solid $table-border-color;&#13;
+    }&#13;
+&#13;
+    thead,&#13;
+    th,&#13;
+    td {&#13;
+      padding: $table-cell-padding;&#13;
+      vertical-align: top;&#13;
+      border-top: $table-border-width solid $table-border-color;&#13;
+    }&#13;
+&#13;
+    .panel {&#13;
+      margin-bottom: 0px;&#13;
+      box-shadow: none;&#13;
+      padding: 3px;&#13;
+    }&#13;
+&#13;
+    thead th {&#13;
+      vertical-align: bottom;&#13;
+      border-bottom: $table-border-width solid $table-border-color;&#13;
+    }&#13;
+&#13;
+    tbody+tbody {&#13;
+      border-top: (2 * $table-border-width) solid $table-border-color;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+label.activity-panel-footer {&#13;
+  margin-bottom: 0px;&#13;
+  display: inline-flex;&#13;
+  font-weight: 700;&#13;
+  vertical-align: middle;&#13;
+}&#13;
+&#13;
+select.custom-select {&#13;
+  border: none;&#13;
+  box-shadow: none;&#13;
+  color: #000;&#13;
+  border-radius: 2px;&#13;
+  outline: none;&#13;
+  font-weight: 350;&#13;
+&#13;
+  &amp;:hover {&#13;
+    background-color: rgba(9, 30, 66, .04);&#13;
+    outline: none;&#13;
+    transition: all 0.2s;&#13;
+  }&#13;
+&#13;
+  &amp;:active,&#13;
+  &amp;:focus {&#13;
+    color: #000;&#13;
+    background-color: #fff;&#13;
+    transition: all 0.2s&#13;
+  }&#13;
+&#13;
+  &amp; option {&#13;
+    font-size: 14px;&#13;
+    background-color: initial;&#13;
+&#13;
+    &amp;:hover {&#13;
+      background-color: rgba(9, 30, 66, .03);&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+.list-group-container.ng-hide {&#13;
+  opacity: 0;&#13;
+&#13;
+  &amp; .list-group {&#13;
+    opacity: 0;&#13;
+  }&#13;
+&#13;
+  &amp; .list-group .list-group-item {&#13;
+    opacity: 0;&#13;
+  }&#13;
+}&#13;
+&#13;
+.list-group-container {&#13;
+  opacity: 1;&#13;
+  transition: opacity 0.3s ease-in;&#13;
+  -webkit-transition: opacity 0.3s ease-in;&#13;
+&#13;
+  &amp; .list-group {&#13;
+    opacity: 1;&#13;
+    transition: opacity 0.3s ease-out;&#13;
+    -webkit-transition: opacity 0.3s ease-out;&#13;
+  }&#13;
+&#13;
+  &amp; .list-group .list-group-item {&#13;
+    opacity: 1;&#13;
+    transition: opacity 0.3s ease-out;&#13;
+    -webkit-transition: opacity 0.3s ease-out;&#13;
+  }&#13;
+}&#13;
+&#13;
+.list-group-item {&#13;
+  padding-bottom: 10px;&#13;
+&#13;
+  &amp;.list-group-clear {&#13;
+    border: 1px solid transparent;&#13;
+    border-radius: 0px;&#13;
+  }&#13;
+}&#13;
+&#13;
+.jira-journal-body {&#13;
+  color: rgb(23, 43, 77);&#13;
+  padding-top: 5px;&#13;
+  white-space: pre-wrap;&#13;
+  word-break: break-all;&#13;
+}&#13;
+&#13;
+div.block {&#13;
+  width: 100%;&#13;
+  display: block;&#13;
+}&#13;
+&#13;
+.jira-inner-list-group {&#13;
+  width: 100%;&#13;
+  padding: 12px 0px;&#13;
+  display: inline-flex;&#13;
+  border-left: 3px solid transparent;&#13;
+&#13;
+  &amp;.work_notes:hover {&#13;
+    border-left: 3px solid gold;&#13;
+    transition: border 0.2s;&#13;
+  }&#13;
+&#13;
+  &amp;.comments:hover {&#13;
+    border-left: 3px solid #1a8cff;&#13;
+    transition: border 0.2s;&#13;
+  }&#13;
+&#13;
+  &amp; .avatar-centered {&#13;
+    display: flex;&#13;
+    flex: 1;&#13;
+    padding: 10px;&#13;
+    vertical-align: middle;&#13;
+    align-items: center;&#13;
+    justify-content: center;&#13;
+  }&#13;
+&#13;
+  &amp; .jira-group-row {&#13;
+    &amp;:not(.jira-full) {&#13;
+      display: flex;&#13;
+      width: 80%;&#13;
+    }&#13;
+&#13;
+    &amp;.jira-full {&#13;
+      display: inline-flex;&#13;
+      width: 100%;&#13;
+&#13;
+      &amp; .jira-created-at {&#13;
+        color: rgb(66, 82, 110);&#13;
+      }&#13;
+&#13;
+      &amp; .jira-created-by {&#13;
+        margin-right: 5px;&#13;
+&#13;
+        &amp; span {&#13;
+          font-weight: 800;&#13;
+        }&#13;
+      }&#13;
+&#13;
+      &amp; .jira-created-at {&#13;
+        padding-left: 5px;&#13;
+&#13;
+        &amp; span {&#13;
+          font-weight: 600;&#13;
+          cursor: default;&#13;
+        }&#13;
+      }&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+&amp;.loader {&#13;
+  width: 100%;&#13;
+  height: 100%;&#13;
+  background: rgba(255, 255, 255, 0.98);&#13;
+  transition: all 0.4s ease;&#13;
+  display: inline-flex;&#13;
+  position: absolute;&#13;
+  top: 0;&#13;
+  left: 0;&#13;
+  z-index: 1002;&#13;
+&#13;
+  &amp;&gt;.sp-loading-indicator {&#13;
+    display: flex;&#13;
+    width: 54px;&#13;
+    height: 18px;&#13;
+    margin-left: 20px;&#13;
+    justify-content: center;&#13;
+    color: $brand-primary;&#13;
+  }&#13;
+}&#13;
+&#13;
+.activity-feed-list {&#13;
+  transition: all 0.4s ease;&#13;
+  min-height: 100px;&#13;
+}&#13;
+&#13;
+.jira-no-records-found {&#13;
+  min-height: 100px;&#13;
+}&#13;
+&#13;
+.email-panel-body {&#13;
+  padding-bottom: 5px;&#13;
+}&#13;
+&#13;
+.email-title,&#13;
+.email-details {&#13;
+  color: rgb(69, 84, 100);&#13;
+  font-size: 12px;&#13;
+}&#13;
+&#13;
+.email-title {&#13;
+  padding: 0px 0px 15px 0px;&#13;
+}&#13;
+&#13;
+.email-display-name {&#13;
+  margin-left: 5px;&#13;
+}&#13;
+&#13;
+.message-created {&#13;
+  display: inline-flex;&#13;
+}&#13;
+&#13;
+.email-dot {&#13;
+  background: rgba(69, 84, 100, 0.85);&#13;
+  display: inline-block;&#13;
+  height: 5px;&#13;
+  width: 5px;&#13;
+  border-radius: 50%;&#13;
+  vertical-align: middle;&#13;
+  margin: 6px 4px;&#13;
+}&#13;
+&#13;
+.text-align-right {&#13;
+  text-align: right;&#13;
+}&#13;
+&#13;
+.email-details {&#13;
+  display: -webkit-box;&#13;
+  display: -moz-box;&#13;
+  display: -ms-flexbox;&#13;
+  display: -webkit-flex;&#13;
+  align-items: center;&#13;
+  vertical-align: middle;&#13;
+  justify-content: center;&#13;
+  padding-bottom: 5px;&#13;
+&#13;
+  &amp; .email-details-container {&#13;
+    display: flex;&#13;
+    align-items: center;&#13;
+    justify-content: center;&#13;
+    vertical-align: middle;&#13;
+  }&#13;
+}&#13;
+&#13;
+.emails-details-list-group {&#13;
+  margin-bottom: 0px;&#13;
+  max-width: 500px;&#13;
+  min-width: 400px;&#13;
+&#13;
+  &amp; .emails-details-list-group-item {&#13;
+    padding: 5px;&#13;
+&#13;
+    &amp; .email-details-link {&#13;
+      color: $brand-primary;&#13;
+&#13;
+      &amp;:hover {&#13;
+        text-decoration: underline;&#13;
+      }&#13;
+    }&#13;
+&#13;
+    &amp; .email-details-col:nth-child(1) {&#13;
+      font-weight: 700;&#13;
+    }&#13;
+&#13;
+    &amp; .email-details-col:nth-child(2) {&#13;
+      margin-left: 10px;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+.panel-clear {&#13;
+  &amp; .email-details-inner {&#13;
+    justify-content: center;&#13;
+    display: flex;&#13;
+&#13;
+    &amp; div:nth-child(1),&#13;
+    div:nth-child(2),&#13;
+    div:nth-child(3) {&#13;
+      display: none !important;&#13;
+    }&#13;
+&#13;
+    &amp;:first-child {&#13;
+      border: 1px solid #ccc;&#13;
+    }&#13;
+&#13;
+    img {&#13;
+      max-width: 600px;&#13;
+      outline: none;&#13;
+      text-decoration: none;&#13;
+      -ms-interpolation-mode: bicubic;&#13;
+    }&#13;
+&#13;
+    a img {&#13;
+      border: none;&#13;
+    }&#13;
+&#13;
+    table {&#13;
+      border-collapse: collapse !important;&#13;
+    }&#13;
+&#13;
+    #outlook a {&#13;
+      padding: 0;&#13;
+    }&#13;
+&#13;
+    .ReadMsgBody {&#13;
+      width: 100%;&#13;
+    }&#13;
+&#13;
+    .ExternalClass {&#13;
+      width: 100%;&#13;
+    }&#13;
+&#13;
+    .backgroundTable {&#13;
+      margin: 0 auto;&#13;
+      padding: 0;&#13;
+      width: 100% !important;&#13;
+    }&#13;
+&#13;
+    table td {&#13;
+      border-collapse: collapse;&#13;
+    }&#13;
+&#13;
+    .ExternalClass * {&#13;
+      line-height: 115%;&#13;
+    }&#13;
+&#13;
+    .container-for-gmail-android {&#13;
+      min-width: 600px !important;&#13;
+    }&#13;
+&#13;
+&#13;
+    td {&#13;
+      font-family: Helvetica, Arial, sans-serif;&#13;
+      font-size: 14px;&#13;
+      color: #777777;&#13;
+      text-align: center;&#13;
+      line-height: 21px;&#13;
+    }&#13;
+&#13;
+    a {&#13;
+      color: #676767;&#13;
+      text-decoration: none !important;&#13;
+    }&#13;
+&#13;
+    .pull-left {&#13;
+      text-align: left;&#13;
+    }&#13;
+&#13;
+    .pull-right {&#13;
+      text-align: right;&#13;
+    }&#13;
+&#13;
+    .header-lg,&#13;
+    .header-md,&#13;
+    .header-sm {&#13;
+      font-size: 32px !important;&#13;
+      font-weight: 700;&#13;
+      line-height: normal;&#13;
+      padding: 35px 0 0;&#13;
+      color: #4d4d4d;&#13;
+    }&#13;
+&#13;
+    .header-md {&#13;
+      font-size: 24px !important;&#13;
+    }&#13;
+&#13;
+    .header-sm {&#13;
+      padding: 5px 0;&#13;
+      font-size: 18px !important;&#13;
+      line-height: 1.3;&#13;
+    }&#13;
+&#13;
+    .content-padding {&#13;
+      padding: 20px 0 10px !important;&#13;
+    }&#13;
+&#13;
+    .mobile-header-padding-right {&#13;
+      width: 290px;&#13;
+      text-align: right;&#13;
+      padding-left: 10px;&#13;
+    }&#13;
+&#13;
+    .mobile-header-padding-left {&#13;
+      width: 290px;&#13;
+      text-align: left;&#13;
+      padding-left: 10px;&#13;
+    }&#13;
+&#13;
+    .free-text {&#13;
+      width: 100% !important;&#13;
+      padding: 10px 5px 0px;&#13;
+    }&#13;
+&#13;
+    .block-rounded {&#13;
+      border-radius: 5px;&#13;
+      border: 1px solid #e5e5e5;&#13;
+      vertical-align: top;&#13;
+    }&#13;
+&#13;
+    .button {&#13;
+      padding: 5px 0px 0px 0px !important;&#13;
+    }&#13;
+&#13;
+    .info-block {&#13;
+      padding: 0 20px;&#13;
+      width: 260px;&#13;
+    }&#13;
+&#13;
+    .mini-block-container {&#13;
+      padding: 30px 50px !important;&#13;
+      width: 500px !important;&#13;
+    }&#13;
+&#13;
+    .mini-block {&#13;
+      background-color: #ffffff;&#13;
+      width: 498px !important;&#13;
+      border: 1px solid #cccccc;&#13;
+      border-radius: 5px;&#13;
+      padding: 60px 75px !important;&#13;
+    }&#13;
+&#13;
+    .comment-body {&#13;
+      padding-left: 0px !important;&#13;
+    }&#13;
+&#13;
+    .block-rounded {&#13;
+      width: 260px;&#13;
+    }&#13;
+&#13;
+    .info-img {&#13;
+      width: 258px;&#13;
+      border-radius: 5px 5px 0 0;&#13;
+    }&#13;
+&#13;
+    .force-width-img {&#13;
+      width: 480px;&#13;
+      height: 1px !important;&#13;
+    }&#13;
+&#13;
+    .force-width-full {&#13;
+      width: 600px;&#13;
+      height: 1px !important;&#13;
+    }&#13;
+&#13;
+    .user-img img {&#13;
+      width: 82px;&#13;
+      border-radius: 5px;&#13;
+      border: 1px solid #cccccc;&#13;
+    }&#13;
+&#13;
+    .user-img {&#13;
+      width: 92px;&#13;
+      text-align: left;&#13;
+    }&#13;
+&#13;
+    .user-msg {&#13;
+      width: 236px;&#13;
+      font-size: 14px;&#13;
+      text-align: left;&#13;
+      font-style: italic;&#13;
+    }&#13;
+&#13;
+    .code-block {&#13;
+      padding: 10px 0;&#13;
+      border: 1px solid #cccccc;&#13;
+      width: 20px;&#13;
+      color: #4d4d4d;&#13;
+      font-weight: bold;&#13;
+      font-size: 18px;&#13;
+    }&#13;
+&#13;
+    .mini-img {&#13;
+      padding: 5px;&#13;
+      width: 140px;&#13;
+    }&#13;
+&#13;
+    .mini-img img {&#13;
+      border-radius: 5px;&#13;
+      width: 140px;&#13;
+    }&#13;
+&#13;
+    .mini-imgs {&#13;
+      padding: 25px 0 30px;&#13;
+    }&#13;
+&#13;
+    .progress-bar {&#13;
+      padding: 0 15px 0 !important;&#13;
+      background: inherit;&#13;
+      box-shadow: none;&#13;
+      -webkit-box-shadow: none;&#13;
+      -moz-box-shadow: none;&#13;
+    }&#13;
+&#13;
+    .step img {&#13;
+      vertical-align: top;&#13;
+      width: 109px !important;&#13;
+      height: 78px !important;&#13;
+    }&#13;
+&#13;
+    .active {&#13;
+      font-weight: bold !important;&#13;
+    }&#13;
+&#13;
+    .footer {&#13;
+      margin-top: 20px;&#13;
+      margin-bottom: 20px;&#13;
+    }&#13;
+&#13;
+    .w320 {&#13;
+      width: 600px !important;&#13;
+    }&#13;
+&#13;
+    .comment {&#13;
+      width: 100% !important;&#13;
+      padding: 10px 60px 0px;&#13;
+      text-align: left;&#13;
+      background-color: #ffffff;&#13;
+      white-space: pre;&#13;
+      color: #000000;&#13;
+      border-left: 5px solid #ff6f6f;&#13;
+    }&#13;
+  }&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira-issue-activity-feed</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Jira Form Activity Feed</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+
+  var defaultActivities = [{
+    selected: true,
+    showInputField: true,
+    optionValue: "1",
+    name: 'Comments',
+    placeholder: 'Add a comment...',
+    htmlClass: 'comments',
+    columnName: 'comments'
+  }, {
+    showInputField: true,
+    optionValue: "2",
+    name: 'Work Log',
+    placeholder: 'Add a note...',
+    htmlClass: 'work-notes',
+    columnName: 'work_notes'
+  }, {
+    showInputField: false,
+    optionValue: "3",
+    name: 'Emails',
+    htmlClass: 'emails',
+    columnName: 'emails'
+  }];
+
+  var activityTypes = gs.hasRole('x_momo_jira_integr.issue_tech') ? defaultActivities : defaultActivities.filter(function (item) {
+    return item.optionValue != 2
+  });
+  data.activityTypes = activityTypes;
+  for (var i in activityTypes) {
+    if (activityTypes[i].selected) {
+      data.defaultActivity = activityTypes[i];
+    }
+  }
+  data.table = (input ? input.table : undefined) || options.table || $sp.getParameter('table');
+  data.sys_id = (input ? input.sys_id : undefined) || options.sys_id || $sp.getParameter('sys_id');
+  data.feed_type = (input ? input.feed : undefined) || options.feed || {
+    optionValue: "1",
+    name: 'Comments',
+    placeholder: 'Add a comment...',
+    htmlClass: 'comments',
+    columnName: 'comments'
+  };
+
+  data.records = [];
+  var gr = new GlideRecord(data.table);
+  if (!gr.isValid()) return;
+
+  gr.get(data.sys_id);
+
+  if (!gr) return;
+
+  if (!gr.canRead()) return;
+
+  data.records = getRecordsByActivityType(data.feed_type);
+
+
+  function getRecordsByActivityType(type) {
+    var records = [];
+    if (!type || typeof type !== 'object') return records;
+
+    if (type.optionValue && typeof type.optionValue === 'string') {
+      if (type.optionValue == 1) {
+        records = getJournalRecords(type.columnName, data.sys_id, data.table);
+      }
+
+      if (type.optionValue == 2 && gs.hasRole('x_momo_jira_integr.issue_tech')) {
+        var work_notes = getJournalRecords(type.columnName, data.sys_id, data.table);
+        if (work_notes.length > 0) {
+          records = work_notes;
+        }
+      }
+
+      if (type.optionValue == 3) {
+        records = getRecordEmails(data.table, data.sys_id);
+        return records;
+      }
+    }
+
+    return records.filter(function (rec) {
+      if (!rec) return false;
+      if (!rec.hasOwnProperty('sys_created_on')) return false;
+      if (!rec.sys_created_on.hasOwnProperty('value')) return false;
+
+      return true;
+    }).sort(function (current, previous) {
+      var cur = new Date(current.sys_created_on.value);
+      var prev = new Date(previous.sys_created_on.value);
+
+      if (cur < prev) return 1;
+
+      if (prev < cur) return -1;
+
+      return 0;
+    });
+  }
+
+  function getRecordEmails(table, sys_id) {
+    var emails = [];
+    var gr = new GlideRecord('sys_email');
+    gr.addQuery('instance', sys_id);
+    gr.addQuery('target_table', table);
+    gr.orderByDesc('sys_created_on');
+    gr.query();
+    var user = gs.getUser();
+    var userEmail = user.getEmail();
+    var reg;
+    if (!gs.nil(userEmail)) {
+      reg = new RegExp('(' + userEmail + ')', 'gi');
+    }
+
+    while (gr.next()) {
+      var canRead = gs.hasRole('x_momo_jira_integr.issue_tech') || (gs.getUserName() == gr.getValue('sys_created_by') || (reg instanceof RegExp ? reg.test(gr.getValue('recipients')) : false));
+      if (canRead) {
+        emails.push({
+          type: 'email',
+          id: gr.getUniqueValue(),
+          user: gs.nil(gr.getValue('user')) ? null : gr.getDisplayValue('user_id'),
+          subject: gr.getValue('subject'),
+          emailType: getEmailType(gr.getValue('type')),
+          createdAt: gr.getValue('sys_created_on'),
+          from: gr.getValue('sys_created_by'),
+          recipients: gr.getValue('recipients'),
+          body: gr.getValue('body'),
+          importance: gr.getValue('importance')
+        });
+      }
+    }
+    return emails;
+  }
+
+  function getEmailType(type) {
+    switch (type) {
+      case 'sent':
+        return 'Email Sent';
+      case 'send-ready':
+        return 'Processing';
+      default:
+        return 'Email';
+    }
+  }
+
+  function getJournalRecords(element, element_id, table, orderBy) {
+    var entries = [];
+    var gr = new GlideRecord('sys_journal_field');
+    gr.addQuery('element', element);
+    gr.addQuery('element_id', element_id);
+    gr.addQuery('name', table);
+    gr.orderByDesc(orderBy || 'sys_created_on');
+    gr.query();
+
+    while (gr.next()) {
+      var value = gr.getValue('value');
+      entries.push({
+        sys_created_on: {
+          value: gr.getValue('sys_created_on'),
+          display_value: gr.getDisplayValue('sys_created_on')
+        },
+        sys_created_by: getUserFromBody(value, gr.getValue('sys_created_by')),
+        value: value,
+        sys_id: gr.getValue('sys_id'),
+        type: element
+      });
+    }
+
+    return entries;
+  }
+
+  function getUserFromBody(body, createdBy) {
+    var match = /<div(.*?)id="commenting-user"(.*?)>(.*?)<\/div>/gmi.exec(body);
+    if (match) {
+      try {
+        var sysId = match[3];
+        if (sysId) {
+          var gr = new GlideRecord('sys_user');
+          gr.get(sysId);
+          if (gr.isValidRecord()) {
+            return {
+              display_value: gr.getDisplayValue(),
+              value: gr.getUniqueValue()
+            };
+          }
+        }
+      } catch (e) {}
+    }
+    return {
+      display_value: createdBy,
+      value: createdBy
+    };
+  }
+
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-03 21:38:42</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>39870a701bb6801048a242e58d4bcb1d</sys_id>
+        <sys_mod_count>365</sys_mod_count>
+        <sys_name>Jira Form Activity Feed</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_39870a701bb6801048a242e58d4bcb1d</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-08-21 14:50:55</sys_updated_on>
+        <template><![CDATA[<div class="row">
+  <div class="col-md-3">
+    <form class="form-inline">
+      <label for="option-picker" class="form-label hidden-xs activity-panel-footer">Activity</label>
+      <select class="custom-select form-control" id="option-picker" ng-model="activityPicker">
+        <option ng-repeat="activity in activityTypes" value="{{ activity.optionValue }}">{{ activity.name }}
+        </option>
+      </select>
+    </form>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 padder-l-none padder-r-none list-group-container" ng-if="records.length > 0 || isLoadingList">
+    <div class="loader" ng-show="isLoadingList">
+      <div class="sp-loading-indicator la-md">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    <ul class="list-group activity-feed-list">
+      <li class="list-group-item list-group-clear" ng-class="{'padder-b-none': (record.type === 'email')}"
+        ng-repeat="record in records">
+        <div class="jira-inner-list-group" ng-class="record.type" ng-if="record.type !== 'email'">
+          <div class="avatar-centered" ng-if="liveProfiles.hasLiveProfile(record.sys_created_by.value)">
+            <sn-avatar-once primary="liveProfiles.getLiveProfileById(record.sys_created_by.value)"
+              class="avatar-md hidden-xs" show-presence="false" enable-tooltip="true" enable-context-menu="false">
+            </sn-avatar-once>
+          </div>
+          <div class="block" ng-if="record.type == 'comments' || record.type == 'work_notes'">
+            <div class="jira-group-row jira-full">
+              <div class="jira-created-by">
+                <span ng-bind="getCreatedByDisplayName(record.sys_created_by)"></span>
+              </div>
+              <div class="jira-created-at">
+                <time>
+                  <sn-time-ago timestamp="record.sys_created_on.value"></sn-time-ago>
+                </time>
+              </div>
+            </div>
+            <div class="jira-group-row" role="presentation"
+              ng-if="record.type == 'comments' || record.type == 'work_notes'">
+              <span class="jira-journal-body" ng-bind-html="trustAsHtml(record.value)"></span>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default m-b-none" ng-if="record.type === 'email'">
+          <div class="panel-body email-panel-body">
+            <div class="row email-title">
+              <div class="col-md-6">
+                <div class="email-title-avatar">
+                  <span ng-if="liveProfiles.hasLiveProfile(record.from)">
+                    <sn-avatar-once primary="liveProfiles.getLiveProfileById(record.from)" class="avatar-xs hidden-xs"
+                      show-presence="false" enable-tooltip="true" enable-context-menu="false"></sn-avatar-once>
+                  </span>
+                  <span class="email-display-name">{{ record.from }}</span>
+                </div>
+              </div>
+              <div class="col-md-6 text-align-right">
+                <span class="text-muted message-created">
+                  <span class="hidden-xs">{{ record.emailType }}</span>
+                  <span class="email-dot hidden-xs"></span>
+                  <time>
+                    <sn-time-ago timestamp="record.createdAt"></sn-time-ago>
+                  </time>
+                </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="email-details">
+                  <div class="email-details-container">
+                    <ul class="list-group emails-details-list-group m-b-none">
+                      <li class="list-group-item list-group-clear emails-details-list-group-item">
+                        <span class="email-details-col"><i class="icon-mail"></i> </span>
+                        <span class="email-details-col">{{ record.emailType }}</span>
+                      </li>
+                      <li class="list-group-item list-group-clear emails-details-list-group-item">
+                        <span class="email-details-col">Subject: </span>
+                        <span class="email-details-col">{{ record.subject }}</span>
+                      </li>
+                      <li class="list-group-item list-group-clear emails-details-list-group-item">
+                        <span class="email-details-col">From: </span>
+                        <span class="email-details-col" ng-if="record.user">{{ record.user }}</span>
+                        <span class="email-details-col" ng-if="!record.user">{{ record.from }}</span>
+                      </li>
+                      <li class="list-group-item list-group-clear emails-details-list-group-item">
+                        <span class="email-details-col">To: </span>
+                        <span class="email-details-col">{{ record.recipients }}</span>
+                      </li>
+                      <li class="list-group-item list-group-clear emails-details-list-group-item">
+                        <a href class="email-details-link accordion-toggle"
+                          ng-click="toggleOpenEmailDetails(record.id, record.body)">
+                          <span class="email-details-link-text" ng-bind="getEmailLinkHeadingText(record.id)"></span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel-collapse collapse panel-clear" uib-collapse="!isOpen(record.id)">
+              <div class="panel-body" ng-bind-html="renderedEmailBody"></div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-12 list-group-container" ng-if="records.length === 0 && !isLoadingList">
+    <div class="jira-no-records-found">No records found</div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

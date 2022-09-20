@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_section caption="" section_id="a61c4958dbaa8c10f25513296896193c" sys_domain="global" table="x_momo_jira_integr_issue_type" version="3" view="">
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>number</element>
+            <position>0</position>
+            <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+            <sys_created_on>2020-01-20 17:46:24</sys_created_on>
+            <sys_id>e61c4958dbaa8c10f2551329689619f1</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_issue_type" sys_domain="global" view="Default view">a61c4958dbaa8c10f25513296896193c</sys_ui_section>
+            <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+            <sys_updated_on>2020-01-20 17:46:24</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>description</element>
+            <position>1</position>
+            <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+            <sys_created_on>2020-01-20 17:46:24</sys_created_on>
+            <sys_id>e21c4958dbaa8c10f2551329689619f2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_issue_type" sys_domain="global" view="Default view">a61c4958dbaa8c10f25513296896193c</sys_ui_section>
+            <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+            <sys_updated_on>2020-01-20 17:46:24</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>external_id</element>
+            <position>2</position>
+            <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+            <sys_created_on>2020-01-20 17:46:24</sys_created_on>
+            <sys_id>6a1c4958dbaa8c10f2551329689619f2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_issue_type" sys_domain="global" view="Default view">a61c4958dbaa8c10f25513296896193c</sys_ui_section>
+            <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+            <sys_updated_on>2020-01-20 17:46:24</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>icon</element>
+            <position>3</position>
+            <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+            <sys_created_on>2020-01-20 17:46:24</sys_created_on>
+            <sys_id>ee1c4958dbaa8c10f2551329689619f2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_issue_type" sys_domain="global" view="Default view">a61c4958dbaa8c10f25513296896193c</sys_ui_section>
+            <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+            <sys_updated_on>2020-01-20 17:46:24</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>name</element>
+            <position>4</position>
+            <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+            <sys_created_on>2020-01-20 17:46:24</sys_created_on>
+            <sys_id>661c4958dbaa8c10f2551329689619f3</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_issue_type" sys_domain="global" view="Default view">a61c4958dbaa8c10f25513296896193c</sys_ui_section>
+            <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+            <sys_updated_on>2020-01-20 17:46:24</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>project</element>
+            <position>5</position>
+            <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+            <sys_created_on>2020-01-20 17:46:24</sys_created_on>
+            <sys_id>ea1c4958dbaa8c10f2551329689619f3</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_issue_type" sys_domain="global" view="Default view">a61c4958dbaa8c10f25513296896193c</sys_ui_section>
+            <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+            <sys_updated_on>2020-01-20 17:46:24</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>statuses</element>
+            <position>6</position>
+            <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+            <sys_created_on>2020-01-21 01:56:21</sys_created_on>
+            <sys_id>eb3c7ed4dbe2cc10f2551329689619ac</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_momo_jira_integr_issue_type" sys_domain="global" view="Default view">a61c4958dbaa8c10f25513296896193c</sys_ui_section>
+            <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+            <sys_updated_on>2020-01-21 01:56:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_section action="INSERT_OR_UPDATE">
+            <caption/>
+            <header>false</header>
+            <name>x_momo_jira_integr_issue_type</name>
+            <roles/>
+            <sys_class_name>sys_ui_section</sys_class_name>
+            <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+            <sys_created_on>2020-01-20 17:46:24</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>a61c4958dbaa8c10f25513296896193c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_momo_jira_integr_issue_type</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+            <sys_update_name>sys_ui_section_a61c4958dbaa8c10f25513296896193c</sys_update_name>
+            <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+            <sys_updated_on>2020-01-20 17:46:24</sys_updated_on>
+            <sys_user/>
+            <title>true</title>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_section>
+    </sys_ui_section>
+</record_update>

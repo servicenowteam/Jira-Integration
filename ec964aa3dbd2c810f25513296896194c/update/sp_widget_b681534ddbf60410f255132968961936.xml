@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope, $rootScope) {
+  /* widget controller */
+  var c = this;
+  $scope.watch_list = $scope.data.watch_list;
+  
+  $scope.$on("field.change", function(evt, args) {
+    $scope.data.watch_list.value = args.field.value;
+    $scope.server.update().then(function(response) {
+      $rootScope.$broadcast('jira.watch-list.updated');
+    });
+  })
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css/>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira-watch-list-form</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Jira Watch List Form</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  var table = (input ? input.table : undefined) || $sp.getParameter('table');
+  var sys_id = (input ? input.sys_id : undefined) || $sp.getParameter('sys_id');
+  data.watch_list = (input ? input.watch_list : undefined);
+  var gr = new GlideRecord(table);
+  gr.get(sys_id);
+  if (gr.isValid() && !gr.isNewRecord()) {
+    if (gr.getValue('watch_list') != data.watch_list.value) {
+      gr.setValue('watch_list', data.watch_list.value);
+      gr.update();
+    }
+  }
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-04 21:40:33</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>b681534ddbf60410f255132968961936</sys_id>
+        <sys_mod_count>31</sys_mod_count>
+        <sys_name>Jira Watch List Form</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_b681534ddbf60410f255132968961936</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-04 22:57:36</sys_updated_on>
+        <template><![CDATA[<div>
+  <jira-record-picker
+    field="watch_list"
+    sn-disabled="data.canWrite" 
+    table="'sys_user'"
+    display-field="'name'" 
+    search-fields="'email'" 
+    value-field="'sys_id'" 
+    default-query="'active=true'" 
+    multiple="true"
+    placeholder="Select a User..."
+  ></jira-record-picker>
+</div>]]></template>
+    </sp_widget>
+</record_update>

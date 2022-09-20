@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="DELETE">
+        <category>custom</category>
+        <client_script><![CDATA[function($timeout) {
+
+  var c = this;
+	var reportId = c.options.report_id || '';
+  c.rectangleId = c.widget.rectangle_id || c.data.rectangleId;
+
+	c.showTitle = (c.options.show_title === true || c.options.show_title === 'true');
+	c.title = '';
+
+	if (c.options.widget_parameters){
+		var widgetOpts = JSON.parse(c.options.widget_parameters);
+		c.title = widgetOpts.report_id.displayValue;
+		c.initialMessage = c.data.ch.i18n.building;
+		window.chartHelpers = window.chartHelpers || {};
+		$.extend(window.chartHelpers, c.data.ch);
+
+		$timeout(function(){
+			var targetEl = $("#report-widget-"+c.rectangleId);
+			embedReportById(targetEl, reportId);
+		});
+	}
+	else {
+		c.initialMessage = c.data.ch.i18n.selectReport;
+	}
+
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.report-widget-wrap {&#13;
+	background:#fff;&#13;
+  padding:15px;&#13;
+  margin: 0 0 15px 0;&#13;
+}&#13;
+&#13;
+.report-widget-title {&#13;
+	padding:0 0 15px;&#13;
+  font-weight:bold;&#13;
+  font-size: 14px;&#13;
+  margin-top: 0;&#13;
+  text-align: center;&#13;
+  margin-bottom: 0;&#13;
+}&#13;
+&#13;
+.highcharts-container g.highcharts-button *,&#13;
+.highcharts-container image.hc-image {&#13;
+  transition: fill-opacity 0.3s linear, stroke-opacity 0.3s linear, opacity 0.3s linear;&#13;
+  fill-opacity: 0;&#13;
+  stroke-opacity: 0;&#13;
+  opacity:0;&#13;
+}&#13;
+&#13;
+.highcharts-container:hover g.highcharts-button *,&#13;
+.highcharts-container:hover image.hc-image {&#13;
+  fill-opacity: 1;&#13;
+  stroke-opacity: 1;&#13;
+  opacity:1;&#13;
+}&#13;
+&#13;
+.highcharts-legend-item span::after,&#13;
+.highcharts-legend-item::after {&#13;
+  content: "\200E";&#13;
+}&#13;
+&#13;
+table.wide .pivot_cell,&#13;
+table.wide .pivot_caption,&#13;
+table.wide .pivot_caption_dark {&#13;
+	padding: 3px 5px;&#13;
+}&#13;
+&#13;
+.report-widget-rect {&#13;
+  max-width: 300px;&#13;
+  max-height: 300px;&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description>Widget for embedding reports on the Service Portal.</description>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>jira-reports</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) { 
+}]]></link>
+        <name>Jira Report</name>
+        <option_schema>[{&#13;
+  "displayValue": "Report",&#13;
+  "name": "report_id",&#13;
+  "label": "Report",&#13;
+  "type": "reference",&#13;
+  "value": "sys_report",&#13;
+  "ed": {&#13;
+    "reference": "sys_report"&#13;
+  }&#13;
+}, {&#13;
+  "hint": "",&#13;
+  "name": "show_title",&#13;
+  "default_value": "true",&#13;
+  "label": "Show title",&#13;
+  "type": "boolean"&#13;
+}, {&#13;
+  "hint": "",&#13;
+  "name": "size",&#13;
+  "value": 1,&#13;
+  "displayValue": "Small",&#13;
+  "type": "choice",&#13;
+  "choices": [{&#13;
+    "value": 1,&#13;
+    "displayValue": "Small"&#13;
+  }, {&#13;
+    "value": 2,&#13;
+    "displayValue": "Medium"&#13;
+  }, {&#13;
+    "value": 3,&#13;
+    "displayValue": "Large" &#13;
+  }]&#13;
+}]</option_schema>
+        <public>true</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	options.report_id = options.report_id || '';
+
+	var chartHelpers = chartHelpers || {};
+	chartHelpers.i18n = chartHelpers.i18n || {};
+
+	chartHelpers.i18n.selectReport = gs.getMessage('Select a report in widget options!');
+	chartHelpers.i18n.building = gs.getMessage('Building chart, please wait...');
+	chartHelpers.i18n.total = gs.getMessage('Total');
+	chartHelpers.i18n.maxCells = gs.getMessage('The size of the pivot table is too big. Use filters to reduce it or switch to a modern browser.');
+	chartHelpers.i18n.chartGenerationError = gs.getMessage('An error occurred while generating chart. Please try again later.');
+
+	chartHelpers.i18n.showAsHeatmap = gs.getMessage('Show data as a heatmap visualization');
+	chartHelpers.i18n.showAsMarkers = gs.getMessage('Show data using latitude and longitude');
+
+	chartHelpers.i18n.highlightBasedOn = gs.getMessage('Highlight based on:');
+	chartHelpers.i18n.isRTL = false;
+	chartHelpers.i18n.weekNumberTitle = gs.getMessage('Week');
+	chartHelpers.i18n.weekNumberTitleShort = gs.getMessage('W');
+	chartHelpers.i18n.seeMoreEvents = gs.getMessage('See {0} more events');
+	chartHelpers.i18n.viewEventsInList = gs.getMessage('View {0} events in a list');
+	chartHelpers.i18n.viewAllEventsInList = gs.getMessage('View all events in a list');
+	chartHelpers.i18n.viewAllRecords = gs.getMessage('View all records');
+	chartHelpers.i18n.none = gs.getMessage('None');
+	chartHelpers.i18n.plusMany = gs.getMessage('+ many');
+	chartHelpers.i18n.plusMore = gs.getMessage('+ {0} more');
+	chartHelpers.i18n.buttonText = {
+		prevYear: "",
+		nextYear: "",
+		today: gs.getMessage('today'),
+		year:	gs.getMessage('year'),
+		month:gs.getMessage('month'),
+		week:gs.getMessage('week'),
+		day:gs.getMessage('day')
+	};
+	chartHelpers.i18n.allDayHtml = gs.getMessage('all-day');
+	chartHelpers.i18n.daysNames = [
+		gs.getMessage('Sunday'),
+		gs.getMessage('Monday'),
+		gs.getMessage('Tuesday'),
+		gs.getMessage('Wednesday'),
+		gs.getMessage('Thursday'),
+		gs.getMessage('Friday'),
+		gs.getMessage('Saturday')
+	];
+	chartHelpers.i18n.dayNamesShort = [
+		gs.getMessage('Sun'),
+		gs.getMessage('Mon'),
+		gs.getMessage('Tue'),
+		gs.getMessage('Wed'),
+		gs.getMessage('Thu'),
+		gs.getMessage('Fri'),
+		gs.getMessage('Sat')
+	];
+	chartHelpers.i18n.monthNames = [
+		gs.getMessage('January'),
+		gs.getMessage('February'),
+		gs.getMessage('March'),
+		gs.getMessage('April'),
+		gs.getMessage('May'),
+		gs.getMessage('June'),
+		gs.getMessage('July'),
+		gs.getMessage('August'),
+		gs.getMessage('September'),
+		gs.getMessage('October'),
+		gs.getMessage('November'),
+		gs.getMessage('December')
+	];
+	chartHelpers.i18n.monthNamesShort = [
+		gs.getMessage('Jan'),
+		gs.getMessage('Feb'),
+		gs.getMessage('Mar'),
+		gs.getMessage('Apr'),
+		gs.getMessage('May'),
+		gs.getMessage('Jun'),
+		gs.getMessage('Jul'),
+		gs.getMessage('Aug'),
+		gs.getMessage('Sep'),
+		gs.getMessage('Oct'),
+		gs.getMessage('Nov'),
+		gs.getMessage('Dec')
+	];
+	chartHelpers.i18n.none = gs.getMessage('-- None --');
+	chartHelpers.i18n.groupBy = gs.getMessage('Group by');
+	chartHelpers.i18n.groupByTitle = gs.getMessage('Select a different group by field');
+	chartHelpers.i18n.stackBy = gs.getMessage('Stacked by');
+	chartHelpers.i18n.stackByTitle = gs.getMessage('Select a different stacked by field');
+	chartHelpers.device = {};
+	chartHelpers.device.type = 'doctype';
+
+	chartHelpers.systemParams = {
+		firstDay: (gs.getProperty("glide.ui.date_format.first_day_of_week", 2) - 1) % 7,
+		defaultDate: 'mm/dd/yyyy',
+		maxEventsDisplayedPerCell: gs.getProperty("glide.report.calendar.max_events_displayed_per_cell", 3),
+		maxMoreEventsPerDay: gs.getProperty("glide.report.calendar.max_more_events_per_day", 30),
+		defaultEventDuration: gs.getProperty("glide.report.calendar.default_event_duration", "01:00:00"),
+		maxDaysBack: gs.getProperty("glide.report.calendar.max_days_back", 30),
+		enablePreviewOnHover: gs.getProperty("glide.report.calendar.enable_preview_on_hover", false),
+	};
+
+		data.rectangleId = gs.generateGUID();
+		data.ch = chartHelpers;
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 14:20:10</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>69166b99db934850f25513296896194a</sys_id>
+        <sys_mod_count>26</sys_mod_count>
+        <sys_name>Jira Report</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_69166b99db934850f25513296896194a</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-03-01 16:08:21</sys_updated_on>
+        <template><![CDATA[<div class="report-widget-wrap">
+
+	<h2 ng-if="c.showTitle" tabindex="0" id="{{'title-' + c.widget.rectangle_id }}" class="report-widget-title">{{c.title}}</h2>
+
+	<div id="report-widget-{{c.rectangleId}}">
+     {{::c.initialMessage}}
+  </div>
+</div>
+]]></template>
+    </sp_widget>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sp_widget_69166b99db934850f25513296896194a</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sp_widget"&gt;&lt;sp_widget action="INSERT_OR_UPDATE"&gt;&lt;category&gt;custom&lt;/category&gt;&lt;client_script&gt;&lt;![CDATA[function($timeout) {
+
+  var c = this;
+	var reportId = c.options.report_id || '';
+  c.rectangleId = c.widget.rectangle_id || c.data.rectangleId;
+
+	c.showTitle = (c.options.show_title === true || c.options.show_title === 'true');
+	c.title = '';
+
+	if (c.options.widget_parameters){
+		var widgetOpts = JSON.parse(c.options.widget_parameters);
+		c.title = widgetOpts.report_id.displayValue;
+		c.initialMessage = c.data.ch.i18n.building;
+		window.chartHelpers = window.chartHelpers || {};
+		$.extend(window.chartHelpers, c.data.ch);
+
+		$timeout(function(){
+			var targetEl = $("#report-widget-"+c.rectangleId);
+			embedReportById(targetEl, reportId);
+		});
+	}
+	else {
+		c.initialMessage = c.data.ch.i18n.selectReport;
+	}
+
+}]]&gt;&lt;/client_script&gt;&lt;controller_as&gt;c&lt;/controller_as&gt;&lt;css&gt;.report-widget-wrap {&amp;#13;
+	background:#fff;&amp;#13;
+  padding:15px;&amp;#13;
+  margin: 0 0 15px 0;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.report-widget-title {&amp;#13;
+	padding:0 0 15px;&amp;#13;
+  font-weight:bold;&amp;#13;
+  font-size: 14px;&amp;#13;
+  margin-top: 0;&amp;#13;
+  text-align: center;&amp;#13;
+  margin-bottom: 0;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.highcharts-container g.highcharts-button *,&amp;#13;
+.highcharts-container image.hc-image {&amp;#13;
+  transition: fill-opacity 0.3s linear, stroke-opacity 0.3s linear, opacity 0.3s linear;&amp;#13;
+  fill-opacity: 0;&amp;#13;
+  stroke-opacity: 0;&amp;#13;
+  opacity:0;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.highcharts-container:hover g.highcharts-button *,&amp;#13;
+.highcharts-container:hover image.hc-image {&amp;#13;
+  fill-opacity: 1;&amp;#13;
+  stroke-opacity: 1;&amp;#13;
+  opacity:1;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.highcharts-legend-item span::after,&amp;#13;
+.highcharts-legend-item::after {&amp;#13;
+  content: "\200E";&amp;#13;
+}&amp;#13;
+&amp;#13;
+table.wide .pivot_cell,&amp;#13;
+table.wide .pivot_caption,&amp;#13;
+table.wide .pivot_caption_dark {&amp;#13;
+	padding: 3px 5px;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.report-widget-rect {&amp;#13;
+  max-width: 300px;&amp;#13;
+  max-height: 300px;&amp;#13;
+}&lt;/css&gt;&lt;data_table&gt;sp_instance&lt;/data_table&gt;&lt;demo_data/&gt;&lt;description&gt;Widget for embedding reports on the Service Portal.&lt;/description&gt;&lt;docs/&gt;&lt;field_list/&gt;&lt;has_preview&gt;true&lt;/has_preview&gt;&lt;id&gt;jira-reports&lt;/id&gt;&lt;internal&gt;false&lt;/internal&gt;&lt;link&gt;&lt;![CDATA[function link(scope, element, attrs, controller) { 
+}]]&gt;&lt;/link&gt;&lt;name&gt;Jira Report&lt;/name&gt;&lt;option_schema&gt;[{&amp;#13;
+  "displayValue": "Report",&amp;#13;
+  "name": "report_id",&amp;#13;
+  "label": "Report",&amp;#13;
+  "type": "reference",&amp;#13;
+  "value": "sys_report",&amp;#13;
+  "ed": {&amp;#13;
+    "reference": "sys_report"&amp;#13;
+  }&amp;#13;
+}, {&amp;#13;
+  "hint": "",&amp;#13;
+  "name": "show_title",&amp;#13;
+  "default_value": "true",&amp;#13;
+  "label": "Show title",&amp;#13;
+  "type": "boolean"&amp;#13;
+}, {&amp;#13;
+  "hint": "",&amp;#13;
+  "name": "size",&amp;#13;
+  "value": 1,&amp;#13;
+  "displayValue": "Small",&amp;#13;
+  "type": "choice",&amp;#13;
+  "choices": [{&amp;#13;
+    "value": 1,&amp;#13;
+    "displayValue": "Small"&amp;#13;
+  }, {&amp;#13;
+    "value": 2,&amp;#13;
+    "displayValue": "Medium"&amp;#13;
+  }, {&amp;#13;
+    "value": 3,&amp;#13;
+    "displayValue": "Large" &amp;#13;
+  }]&amp;#13;
+}]&lt;/option_schema&gt;&lt;public&gt;true&lt;/public&gt;&lt;roles/&gt;&lt;script&gt;&lt;![CDATA[(function() {
+	options.report_id = options.report_id || '';
+
+	var chartHelpers = chartHelpers || {};
+	chartHelpers.i18n = chartHelpers.i18n || {};
+
+	chartHelpers.i18n.selectReport = gs.getMessage('Select a report in widget options!');
+	chartHelpers.i18n.building = gs.getMessage('Building chart, please wait...');
+	chartHelpers.i18n.total = gs.getMessage('Total');
+	chartHelpers.i18n.maxCells = gs.getMessage('The size of the pivot table is too big. Use filters to reduce it or switch to a modern browser.');
+	chartHelpers.i18n.chartGenerationError = gs.getMessage('An error occurred while generating chart. Please try again later.');
+
+	chartHelpers.i18n.showAsHeatmap = gs.getMessage('Show data as a heatmap visualization');
+	chartHelpers.i18n.showAsMarkers = gs.getMessage('Show data using latitude and longitude');
+
+	chartHelpers.i18n.highlightBasedOn = gs.getMessage('Highlight based on:');
+	chartHelpers.i18n.isRTL = false;
+	chartHelpers.i18n.weekNumberTitle = gs.getMessage('Week');
+	chartHelpers.i18n.weekNumberTitleShort = gs.getMessage('W');
+	chartHelpers.i18n.seeMoreEvents = gs.getMessage('See {0} more events');
+	chartHelpers.i18n.viewEventsInList = gs.getMessage('View {0} events in a list');
+	chartHelpers.i18n.viewAllEventsInList = gs.getMessage('View all events in a list');
+	chartHelpers.i18n.viewAllRecords = gs.getMessage('View all records');
+	chartHelpers.i18n.none = gs.getMessage('None');
+	chartHelpers.i18n.plusMany = gs.getMessage('+ many');
+	chartHelpers.i18n.plusMore = gs.getMessage('+ {0} more');
+	chartHelpers.i18n.buttonText = {
+		prevYear: "",
+		nextYear: "",
+		today: gs.getMessage('today'),
+		year:	gs.getMessage('year'),
+		month:gs.getMessage('month'),
+		week:gs.getMessage('week'),
+		day:gs.getMessage('day')
+	};
+	chartHelpers.i18n.allDayHtml = gs.getMessage('all-day');
+	chartHelpers.i18n.daysNames = [
+		gs.getMessage('Sunday'),
+		gs.getMessage('Monday'),
+		gs.getMessage('Tuesday'),
+		gs.getMessage('Wednesday'),
+		gs.getMessage('Thursday'),
+		gs.getMessage('Friday'),
+		gs.getMessage('Saturday')
+	];
+	chartHelpers.i18n.dayNamesShort = [
+		gs.getMessage('Sun'),
+		gs.getMessage('Mon'),
+		gs.getMessage('Tue'),
+		gs.getMessage('Wed'),
+		gs.getMessage('Thu'),
+		gs.getMessage('Fri'),
+		gs.getMessage('Sat')
+	];
+	chartHelpers.i18n.monthNames = [
+		gs.getMessage('January'),
+		gs.getMessage('February'),
+		gs.getMessage('March'),
+		gs.getMessage('April'),
+		gs.getMessage('May'),
+		gs.getMessage('June'),
+		gs.getMessage('July'),
+		gs.getMessage('August'),
+		gs.getMessage('September'),
+		gs.getMessage('October'),
+		gs.getMessage('November'),
+		gs.getMessage('December')
+	];
+	chartHelpers.i18n.monthNamesShort = [
+		gs.getMessage('Jan'),
+		gs.getMessage('Feb'),
+		gs.getMessage('Mar'),
+		gs.getMessage('Apr'),
+		gs.getMessage('May'),
+		gs.getMessage('Jun'),
+		gs.getMessage('Jul'),
+		gs.getMessage('Aug'),
+		gs.getMessage('Sep'),
+		gs.getMessage('Oct'),
+		gs.getMessage('Nov'),
+		gs.getMessage('Dec')
+	];
+	chartHelpers.i18n.none = gs.getMessage('-- None --');
+	chartHelpers.i18n.groupBy = gs.getMessage('Group by');
+	chartHelpers.i18n.groupByTitle = gs.getMessage('Select a different group by field');
+	chartHelpers.i18n.stackBy = gs.getMessage('Stacked by');
+	chartHelpers.i18n.stackByTitle = gs.getMessage('Select a different stacked by field');
+	chartHelpers.device = {};
+	chartHelpers.device.type = 'doctype';
+
+	chartHelpers.systemParams = {
+		firstDay: (gs.getProperty("glide.ui.date_format.first_day_of_week", 2) - 1) % 7,
+		defaultDate: 'mm/dd/yyyy',
+		maxEventsDisplayedPerCell: gs.getProperty("glide.report.calendar.max_events_displayed_per_cell", 3),
+		maxMoreEventsPerDay: gs.getProperty("glide.report.calendar.max_more_events_per_day", 30),
+		defaultEventDuration: gs.getProperty("glide.report.calendar.default_event_duration", "01:00:00"),
+		maxDaysBack: gs.getProperty("glide.report.calendar.max_days_back", 30),
+		enablePreviewOnHover: gs.getProperty("glide.report.calendar.enable_preview_on_hover", false),
+	};
+
+		data.rectangleId = gs.generateGUID();
+		data.ch = chartHelpers;
+})();]]&gt;&lt;/script&gt;&lt;servicenow&gt;false&lt;/servicenow&gt;&lt;sys_class_name&gt;sp_widget&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-03-01 14:20:10&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;69166b99db934850f25513296896194a&lt;/sys_id&gt;&lt;sys_mod_count&gt;26&lt;/sys_mod_count&gt;&lt;sys_name&gt;Jira Report&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sp_widget_69166b99db934850f25513296896194a&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg@movement.com&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-03-01 16:08:21&lt;/sys_updated_on&gt;&lt;template&gt;&lt;![CDATA[&lt;div class="report-widget-wrap"&gt;
+
+	&lt;h2 ng-if="c.showTitle" tabindex="0" id="{{'title-' + c.widget.rectangle_id }}" class="report-widget-title"&gt;{{c.title}}&lt;/h2&gt;
+
+	&lt;div id="report-widget-{{c.rectangleId}}"&gt;
+     {{::c.initialMessage}}
+  &lt;/div&gt;
+&lt;/div&gt;
+]]&gt;&lt;/template&gt;&lt;/sp_widget&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>-2037066690</payload_hash>
+        <record_name>Jira Report</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-03-01 16:08:21</sys_created_on>
+        <sys_id>4ede33511b1fc45048a242e58d4bcbe5</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>17096db06f80000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-03-01 16:08:21</sys_updated_on>
+        <type>Widget</type>
+        <update_guid>06de3351591fc450168b5a08e35e40e5</update_guid>
+        <update_guid_history>06de3351591fc450168b5a08e35e40e5:-2037066690,19de7351971fc450871f6aca8396b813:-113514074,7cde3351391fc45031086f5a5b09772c:620995496,b8ce3351431fc450daaed8b567480424:-1114372275,e6aefbdda6dbc4500886c2e1b1967f9f:-1266830695,02ae7711901fc45052e7d684a22876f8:-537266663,519e3b11da1fc45051568b6f0200297e:-859332668,9e5e3b11e91fc4500d91f8127e54c478:620995496,0e3e7bddc0dbc450a22690cf9dac9af6:1965875066,d59d7bdd4fdbc450066a5516f29c4eef:-1242688940,5b5c7f5dd9dbc45041632fe5bc218ccb:620995496,1f1c7f5dbedbc45068825027f409283b:-1624856130,3edbff1df7dbc4509a298472d34b8d5c:1279398195,f17b735dbadbc450ee40f0f96c29d78f:1227872439,b5aab3d9c9dbc4509a50b1ace8d1fb5d:-1853487669,7c9833591ddbc450e69f5180fc7e6f33:-1270031427,7068f3154917485007469ca2d87d4595:1975263788,a4e73359f8dbc4503c3abd74727d7d2c:1266084939,1ad73f191ddbc45015f823320d812569:236157003,75b73f19e7dbc45071e36233b156b264:801835109,ee97f7d53cdbc450bdbb739f2ae39123:-1369202971,e9e8a7d53e9bc450a86eaf32dffa940c:-1812782241,3bc863d5b59bc45089a9e7765a036fbb:-387285424,74b863d5ba9bc45009e364965d78f1b6:-151203985,aea8ab95369bc45037e20948626d211c:-1952218878,4626ab998293485005c20149874f2677:-475854132,61166b997f934850c169ba9253a24f4c:-1835790049</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">19c44865db574850f255132968961901</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 16:34:14</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sp_widget">sp_widget</sys_db_object>
+        <sys_id>12ddd7a6a49448009b8306839a7eae10</sys_id>
+        <sys_metadata>69166b99db934850f25513296896194a</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Jira Report</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sp_widget_69166b99db934850f25513296896194a</sys_update_name>
+        <sys_update_version display_value="sp_widget_69166b99db934850f25513296896194a">4ede33511b1fc45048a242e58d4bcbe5</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-01 16:34:14</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

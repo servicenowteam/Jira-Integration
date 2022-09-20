@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Standard Change Map" max_length="40" name="x_momo_jira_integr_standard_change_map" sizeclass="5" type="collection">
+        <element label="Belongs To" max_length="32" name="belongs_to" reference="x_momo_jira_integr_jira_fields" reference_qual="active=true^EQ" reference_qual_condition="active=true^EQ" type="reference"/>
+        <element label="External ID" max_length="40" name="external_id" type="string"/>
+        <element label="Standard Change Template" max_length="32" name="standard_change_template" reference="std_change_record_producer" reference_qual="active=true^EQ" reference_qual_condition="active=true^EQ" type="reference"/>
+        <index name="index">
+            <element name="standard_change_template"/>
+        </index>
+        <index name="index2">
+            <element name="belongs_to"/>
+        </index>
+    </element>
+</database>

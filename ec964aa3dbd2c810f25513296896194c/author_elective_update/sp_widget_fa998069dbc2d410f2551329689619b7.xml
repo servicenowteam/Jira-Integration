@@ -1,0 +1,861 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="DELETE">
+        <category>custom</category>
+        <client_script><![CDATA[function createNewJiraIssueCtrl($scope, $timeout) {
+  /* widget controller */
+  var c = this;
+
+  $scope.steps = $scope.data.steps;
+  $scope.currentStep = 1;
+
+  $scope.project = $scope.data.project;
+
+  c.$onInit = function () {};
+
+  c.toggleStep = function (stepId) {
+    var steps = $scope.steps.map(function (step) {
+      return step.id;
+    });
+    $scope.currentStep = steps.indexOf(stepId) + 1;
+  };
+
+  c.toggleNextStep = function () {
+    $scope.currentStep++;
+  };
+
+  c.togglePreviousStep = function () {
+    $scope.currentStep--;
+  };
+
+  c.createButtonDisabled = function () {
+    var allFields = Object.keys(c.data.form).filter(function (key) {
+      var field = c.data.form[key];
+      return !field.value;
+    });
+    return allFields.length === 0;
+  };
+
+  c.createIssue = function () {
+    c.isSubmitting = true;
+    //$scope.server.update();
+    $timeout(function () {
+      c.isSubmitting = false;
+    }, 3000);
+  };
+
+  $scope.$on("field.change", function (evt, args) {
+    $scope.data.project.value = args.field.value;
+    $scope.server.update();
+  });
+
+  $scope.$watch('currentStep', function (value) {
+    $scope.steps = $scope.steps.map(function (step, index) {
+      if ((index + 1) === value) {
+        step.expanded = true;
+      } else if (step.expanded) {
+        step.expanded = false;
+      }
+      return step;
+    });
+  });
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.stepper {&#13;
+  background: rgba(255, 255, 255, 0.7);&#13;
+  padding: 30px;&#13;
+&#13;
+  .step {&#13;
+    position: relative;&#13;
+    min-height: 32px;&#13;
+&#13;
+    &amp;&gt;div:last-child {&#13;
+      margin-left: 32px;&#13;
+      padding-left: 16px;&#13;
+    }&#13;
+&#13;
+    .step-heading {&#13;
+      position: static;&#13;
+      height: 33px;&#13;
+      font-weight: 700;&#13;
+      color: rgba(0, 0, 0);&#13;
+      padding-bottom: 50px;&#13;
+&#13;
+      &amp;.active .circle {&#13;
+        background: rgba(0, 0, 0, 0.3);&#13;
+        ;&#13;
+        color: #fff;&#13;
+      }&#13;
+&#13;
+      .circle {&#13;
+        background: $brand-primary;&#13;
+        width: 32px;&#13;
+        height: 32px;&#13;
+        line-height: 32px;&#13;
+        border-radius: 16px;&#13;
+        position: relative;&#13;
+        color: #fff;&#13;
+        text-align: center;&#13;
+        float: left;&#13;
+      }&#13;
+&#13;
+      .title {&#13;
+        line-height: 32px;&#13;
+        padding-left: 15px;&#13;
+        float: left;&#13;
+      }&#13;
+    }&#13;
+&#13;
+    .body {&#13;
+      padding-bottom: 30px;&#13;
+    }&#13;
+&#13;
+    .line {&#13;
+      position: absolute;&#13;
+      border-left: 1px solid #ccc;&#13;
+      left: 16px;&#13;
+      bottom: 0px;&#13;
+      top: 32px;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+.row.padder {&#13;
+  .button.btn-default {&#13;
+    color: #000;&#13;
+    background: rbga(0, 0, 0, 0.6);&#13;
+  }&#13;
+}&#13;
+&#13;
+div legend {&#13;
+  display: none;&#13;
+}&#13;
+&#13;
+.sp-attachments {&#13;
+  padding-bottom: 15px;&#13;
+  text-align: center;&#13;
+}&#13;
+&#13;
+.sp-drop-area {&#13;
+  display: block;&#13;
+  text-align: center;&#13;
+  white-space: pre-wrap;&#13;
+  padding: 30px;&#13;
+  width: 100%;&#13;
+  border: 1px dashed $panel-default-border;&#13;
+}&#13;
+&#13;
+.panel.panel-default {&#13;
+  margin-top: 10px;&#13;
+}&#13;
+&#13;
+.attachment-label {&#13;
+  &amp; .col-md-12 {&#13;
+    padding-left: 15px;&#13;
+  }&#13;
+}&#13;
+&#13;
+.sp-drop-area {&#13;
+&#13;
+  &amp;:hover,&#13;
+  &amp;:focus {&#13;
+    text-decoration: underline;&#13;
+  }&#13;
+}&#13;
+&#13;
+.panel-footer {&#13;
+  position: static;&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>create_new_jira_issue</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Create New Jira Issue</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.issueType = $sp.getParameter('sysparm_request_type') || 'Bug';
+
+  data.project = (input ? input.project : undefined) || {
+    displayValue: '',
+    value: null,
+    name: 'project'
+  };
+
+  data.steps = [{
+    id: 'projects',
+    sequence: 1,
+    title: 'What team does this problem involve?',
+    expanded: true
+  }, {
+    id: 'summary',
+    sequence: 2,
+    title: 'Give a detailed description of the problem',
+    expanded: false
+  }, {
+    id: 'details',
+    sequence: 3,
+    title: 'Let\'s finish up!',
+    expanded: false
+  }];
+
+  data.form = {
+    short_description: {
+      type: 'text',
+      label: 'Short Description',
+      readOnly: false,
+      value: null
+    },
+    description: {
+      type: 'markdown',
+      label: 'Detailed Summary',
+      readOnly: false,
+      value: ''
+    },
+    requestImplementationDate: {
+      type: 'date',
+      label: 'Implementation Date',
+      readOnly: false,
+      value: getRequestedImplementationDate()
+    },
+    processChange: {
+      type: 'checkbox',
+      label: 'Process Change?',
+      readOnly: false,
+      value: false
+    },
+    priority: {
+      type: 'select',
+      label: 'Priority',
+      readOnly: false,
+      options: getDependantTableOptions('x_momo_jira_integr_priority')
+    }
+  };
+
+  if (data.issueType === 'Epic') {
+    data.form.projectName = {
+      type: 'text',
+      value: null
+    };
+  }
+
+  if (input) {
+    if (data.project.value) {
+      var issueType = getIssueType(data.project.value, data.issueType);
+      data.issueType = issueType;
+
+      data.form.status = {
+        type: 'select',
+        readOnly: !gs.hasRole('x_momo_jira_integr.issue_tech'),
+        options: getDependantTableOptions('x_momo_jira_integr_status', 'issue_type=' + issueType.value, undefined, 'Backlog')
+      };
+
+      data.form.requestType = {
+        type: 'select',
+        readOnly: !gs.hasRole('x_momo_jira_integr.issue_tech'),
+        options: getDependantTableOptions('x_momo_jira_integr_issue_type', 'project=' + data.project.value, undefined, issueType.value)
+      };
+
+      if (data.issueType === 'Story') {
+        data.form.products = {
+          type: 'select',
+          options: getDependantTableOptions('x_momo_jira_integr_product', 'project=' + data.project.value)
+        };
+      }
+    }
+
+    if (input.form && input.submit) {
+      var issue = createIssueFromForm(input.form);
+      if (issue) {
+        data.redirectUri = '?id=jira_issues_form&table=' + issue.getTableName() + '&sys_id=' + issue.getUniqueValue();
+      }
+    }
+  }
+
+  function createIssueFromForm(form) {}
+
+  function getRequestedImplementationDate() {
+    var gdt = new GlideDateTime();
+    gdt.addMonthsLocalTime(2);
+
+    var date = gdt.getDate();
+
+    return date.getDisplayValue();
+  }
+
+  function getIssueType(projectSysId, issueTypeName) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue_type');
+    gr.addQuery('project', projectSysId);
+    gr.addQuery('name', issueTypeName);
+    gr.query();
+    while (gr.next()) {
+      return {
+        value: gr.getUniqueValue(),
+        display: gr.getValue('name')
+      };
+    }
+    return {
+      value: null,
+      display: ''
+    };
+  }
+
+  function getDependantTableOptions(table, encodedQuery, displayValueField, defaultValue) {
+    var options = [];
+    var gr = new GlideRecord(table);
+    if (encodedQuery) {
+      gr.addEncodedQuery(encodedQuery);
+    }
+    gr.query();
+
+
+    while (gr.next()) {
+      var option = {
+        value: gr.getUniqueValue(),
+        display: gr.getValue('name'),
+        selected: false
+      };
+
+      if (displayValueField) {
+        option.display = gr.getValue(displayValueField);
+      }
+
+      if (defaultValue) {
+        option.selected = (option.display == defaultValue);
+      }
+
+      options.push(option);
+    }
+    return options;
+  }
+
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-07-16 09:48:02</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>fa998069dbc2d410f2551329689619b7</sys_id>
+        <sys_mod_count>38</sys_mod_count>
+        <sys_name>Create New Jira Issue</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_fa998069dbc2d410f2551329689619b7</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-07-16 13:22:48</sys_updated_on>
+        <template><![CDATA[<div class="stepper">
+  <div class="step" ng-repeat="step in steps">
+    <div class="step-heading" ng-class="{'active': !step.expanded}" ng-click="c.toggleStep(step.id)">
+      <div class="circle">{{ ::step.sequence }}</div>
+      <div class="title">{{ ::step.title }}</div>
+      <div class="line" ng-hide="step.sequence >= steps.length"></div>
+    </div>
+    <div uib-collapse="!step.expanded">
+      <div class="body">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="row" ng-if="step.id === 'projects'">
+              <div class="col-md-12 m-b">
+                <sn-record-picker field="project" sn-disabled="false" table="'x_momo_jira_integr_project'"
+                  display-field="'name'" search-fields="'name'" value-field="'sys_id'" default-query="'active=true'"
+                  multiple="false" placeholder="Select a Team...">
+                </sn-record-picker>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <form>
+                  <div class="form-group" ng-if="step.id === 'summary'">
+                    <label for="short-description">{{ data.form.short_description.label }}</label>
+                    <input type="data.form.short_description.type" id="short-description"
+                      ng-model="fields.short_description.value" class="form-control" />
+                  </div>
+                  <div class="form-group" ng-if="step.id === 'summary'">
+                    <label for="description">{{ data.form.description.label }}</label>
+                    <textarea ng-model="data.form.description.value" markdown-editor show-toolbar-on-focus="true"
+                      class="form-control" rows="4" placeholder="Write a detailed summary here"></textarea>
+                  </div>
+                  <div class="row" ng-if="step.id === 'details'">
+                    <div class="col-md-6" ng-repeat="(name, field) in data.form">
+                      <label for="{{ name }}">{{ field.label }}</label>
+                      <div class="input-container" ng-switch="field.type">
+                        <input type="text" ng-disabled="field.readOnly" ng-model="field.value" class="form-control"
+                          ng-switch-when="text" />
+                        <input type="checkbox" class="custom-select" ng-switch-when="checkbox" ng-model="field.value" />
+                        <select class="sc-basic-select" ng-switch-when="select" ng-model="field.value">
+                          <option ng-repeat="option in field.options" value="option.value" selected="option.selected">
+                            {{ option.display }}</option>
+                        </select>
+                        <sp-date-picker ng-switch-when="date" field="field" ng-model="field.value" sn-disabled="false"
+                          ng-model-options="{'getterSetter': true}"></sp-date-picker>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <div class="m-t" ng-hide="!step.expanded">
+              <button ng-hide="currentStep == 1" class="btn btn-default" ng-click="c.togglePreviousStep()"> Previous
+              </button>
+              <button ng-show="currentStep != (steps.length + 1) && currentStep != steps.length"
+                ng-disabled="!data.project.value" class="btn btn-primary" ng-click="c.toggleNextStep()"> Next </button>
+              <button ng-show="currentStep == steps.length" ng-disabled="c.createButtonDisabled()"
+                ng-click="c.createIssue()" class="btn btn-primary">
+                <span ng-if="!c.isSubmitting"> Create </span>
+                <i class="fa fa-spinner fa-spin" aria-hidden="true" ng-if="c.isSubmitting"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sp_widget_fa998069dbc2d410f2551329689619b7</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sp_widget"&gt;&lt;sp_widget action="INSERT_OR_UPDATE"&gt;&lt;category&gt;custom&lt;/category&gt;&lt;client_script&gt;&lt;![CDATA[function createNewJiraIssueCtrl($scope, $timeout) {
+  /* widget controller */
+  var c = this;
+
+  $scope.steps = $scope.data.steps;
+  $scope.currentStep = 1;
+
+  $scope.project = $scope.data.project;
+
+  c.$onInit = function () {};
+
+  c.toggleStep = function (stepId) {
+    var steps = $scope.steps.map(function (step) {
+      return step.id;
+    });
+    $scope.currentStep = steps.indexOf(stepId) + 1;
+  };
+
+  c.toggleNextStep = function () {
+    $scope.currentStep++;
+  };
+
+  c.togglePreviousStep = function () {
+    $scope.currentStep--;
+  };
+
+  c.createButtonDisabled = function () {
+    var allFields = Object.keys(c.data.form).filter(function (key) {
+      var field = c.data.form[key];
+      return !field.value;
+    });
+    return allFields.length === 0;
+  };
+
+  c.createIssue = function () {
+    c.isSubmitting = true;
+    //$scope.server.update();
+    $timeout(function () {
+      c.isSubmitting = false;
+    }, 3000);
+  };
+
+  $scope.$on("field.change", function (evt, args) {
+    $scope.data.project.value = args.field.value;
+    $scope.server.update();
+  });
+
+  $scope.$watch('currentStep', function (value) {
+    $scope.steps = $scope.steps.map(function (step, index) {
+      if ((index + 1) === value) {
+        step.expanded = true;
+      } else if (step.expanded) {
+        step.expanded = false;
+      }
+      return step;
+    });
+  });
+}]]&gt;&lt;/client_script&gt;&lt;controller_as&gt;c&lt;/controller_as&gt;&lt;css&gt;.stepper {&amp;#13;
+  background: rgba(255, 255, 255, 0.7);&amp;#13;
+  padding: 30px;&amp;#13;
+&amp;#13;
+  .step {&amp;#13;
+    position: relative;&amp;#13;
+    min-height: 32px;&amp;#13;
+&amp;#13;
+    &amp;amp;&amp;gt;div:last-child {&amp;#13;
+      margin-left: 32px;&amp;#13;
+      padding-left: 16px;&amp;#13;
+    }&amp;#13;
+&amp;#13;
+    .step-heading {&amp;#13;
+      position: static;&amp;#13;
+      height: 33px;&amp;#13;
+      font-weight: 700;&amp;#13;
+      color: rgba(0, 0, 0);&amp;#13;
+      padding-bottom: 50px;&amp;#13;
+&amp;#13;
+      &amp;amp;.active .circle {&amp;#13;
+        background: rgba(0, 0, 0, 0.3);&amp;#13;
+        ;&amp;#13;
+        color: #fff;&amp;#13;
+      }&amp;#13;
+&amp;#13;
+      .circle {&amp;#13;
+        background: $brand-primary;&amp;#13;
+        width: 32px;&amp;#13;
+        height: 32px;&amp;#13;
+        line-height: 32px;&amp;#13;
+        border-radius: 16px;&amp;#13;
+        position: relative;&amp;#13;
+        color: #fff;&amp;#13;
+        text-align: center;&amp;#13;
+        float: left;&amp;#13;
+      }&amp;#13;
+&amp;#13;
+      .title {&amp;#13;
+        line-height: 32px;&amp;#13;
+        padding-left: 15px;&amp;#13;
+        float: left;&amp;#13;
+      }&amp;#13;
+    }&amp;#13;
+&amp;#13;
+    .body {&amp;#13;
+      padding-bottom: 30px;&amp;#13;
+    }&amp;#13;
+&amp;#13;
+    .line {&amp;#13;
+      position: absolute;&amp;#13;
+      border-left: 1px solid #ccc;&amp;#13;
+      left: 16px;&amp;#13;
+      bottom: 0px;&amp;#13;
+      top: 32px;&amp;#13;
+    }&amp;#13;
+  }&amp;#13;
+}&amp;#13;
+&amp;#13;
+.row.padder {&amp;#13;
+  .button.btn-default {&amp;#13;
+    color: #000;&amp;#13;
+    background: rbga(0, 0, 0, 0.6);&amp;#13;
+  }&amp;#13;
+}&amp;#13;
+&amp;#13;
+div legend {&amp;#13;
+  display: none;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.sp-attachments {&amp;#13;
+  padding-bottom: 15px;&amp;#13;
+  text-align: center;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.sp-drop-area {&amp;#13;
+  display: block;&amp;#13;
+  text-align: center;&amp;#13;
+  white-space: pre-wrap;&amp;#13;
+  padding: 30px;&amp;#13;
+  width: 100%;&amp;#13;
+  border: 1px dashed $panel-default-border;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.panel.panel-default {&amp;#13;
+  margin-top: 10px;&amp;#13;
+}&amp;#13;
+&amp;#13;
+.attachment-label {&amp;#13;
+  &amp;amp; .col-md-12 {&amp;#13;
+    padding-left: 15px;&amp;#13;
+  }&amp;#13;
+}&amp;#13;
+&amp;#13;
+.sp-drop-area {&amp;#13;
+&amp;#13;
+  &amp;amp;:hover,&amp;#13;
+  &amp;amp;:focus {&amp;#13;
+    text-decoration: underline;&amp;#13;
+  }&amp;#13;
+}&amp;#13;
+&amp;#13;
+.panel-footer {&amp;#13;
+  position: static;&amp;#13;
+}&lt;/css&gt;&lt;data_table&gt;sp_instance&lt;/data_table&gt;&lt;demo_data/&gt;&lt;description/&gt;&lt;docs/&gt;&lt;field_list/&gt;&lt;has_preview&gt;false&lt;/has_preview&gt;&lt;id&gt;create_new_jira_issue&lt;/id&gt;&lt;internal&gt;false&lt;/internal&gt;&lt;link&gt;&lt;![CDATA[function link(scope, element, attrs, controller) {  }]]&gt;&lt;/link&gt;&lt;name&gt;Create New Jira Issue&lt;/name&gt;&lt;option_schema/&gt;&lt;public&gt;false&lt;/public&gt;&lt;roles/&gt;&lt;script&gt;&lt;![CDATA[(function () {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.issueType = $sp.getParameter('sysparm_request_type') || 'Bug';
+
+  data.project = (input ? input.project : undefined) || {
+    displayValue: '',
+    value: null,
+    name: 'project'
+  };
+
+  data.steps = [{
+    id: 'projects',
+    sequence: 1,
+    title: 'What team does this problem involve?',
+    expanded: true
+  }, {
+    id: 'summary',
+    sequence: 2,
+    title: 'Give a detailed description of the problem',
+    expanded: false
+  }, {
+    id: 'details',
+    sequence: 3,
+    title: 'Let\'s finish up!',
+    expanded: false
+  }];
+
+  data.form = {
+    short_description: {
+      type: 'text',
+      label: 'Short Description',
+      readOnly: false,
+      value: null
+    },
+    description: {
+      type: 'markdown',
+      label: 'Detailed Summary',
+      readOnly: false,
+      value: ''
+    },
+    requestImplementationDate: {
+      type: 'date',
+      label: 'Implementation Date',
+      readOnly: false,
+      value: getRequestedImplementationDate()
+    },
+    processChange: {
+      type: 'checkbox',
+      label: 'Process Change?',
+      readOnly: false,
+      value: false
+    },
+    priority: {
+      type: 'select',
+      label: 'Priority',
+      readOnly: false,
+      options: getDependantTableOptions('x_momo_jira_integr_priority')
+    }
+  };
+
+  if (data.issueType === 'Epic') {
+    data.form.projectName = {
+      type: 'text',
+      value: null
+    };
+  }
+
+  if (input) {
+    if (data.project.value) {
+      var issueType = getIssueType(data.project.value, data.issueType);
+      data.issueType = issueType;
+
+      data.form.status = {
+        type: 'select',
+        readOnly: !gs.hasRole('x_momo_jira_integr.issue_tech'),
+        options: getDependantTableOptions('x_momo_jira_integr_status', 'issue_type=' + issueType.value, undefined, 'Backlog')
+      };
+
+      data.form.requestType = {
+        type: 'select',
+        readOnly: !gs.hasRole('x_momo_jira_integr.issue_tech'),
+        options: getDependantTableOptions('x_momo_jira_integr_issue_type', 'project=' + data.project.value, undefined, issueType.value)
+      };
+
+      if (data.issueType === 'Story') {
+        data.form.products = {
+          type: 'select',
+          options: getDependantTableOptions('x_momo_jira_integr_product', 'project=' + data.project.value)
+        };
+      }
+    }
+
+    if (input.form &amp;&amp; input.submit) {
+      var issue = createIssueFromForm(input.form);
+      if (issue) {
+        data.redirectUri = '?id=jira_issues_form&amp;table=' + issue.getTableName() + '&amp;sys_id=' + issue.getUniqueValue();
+      }
+    }
+  }
+
+  function createIssueFromForm(form) {}
+
+  function getRequestedImplementationDate() {
+    var gdt = new GlideDateTime();
+    gdt.addMonthsLocalTime(2);
+
+    var date = gdt.getDate();
+
+    return date.getDisplayValue();
+  }
+
+  function getIssueType(projectSysId, issueTypeName) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue_type');
+    gr.addQuery('project', projectSysId);
+    gr.addQuery('name', issueTypeName);
+    gr.query();
+    while (gr.next()) {
+      return {
+        value: gr.getUniqueValue(),
+        display: gr.getValue('name')
+      };
+    }
+    return {
+      value: null,
+      display: ''
+    };
+  }
+
+  function getDependantTableOptions(table, encodedQuery, displayValueField, defaultValue) {
+    var options = [];
+    var gr = new GlideRecord(table);
+    if (encodedQuery) {
+      gr.addEncodedQuery(encodedQuery);
+    }
+    gr.query();
+
+
+    while (gr.next()) {
+      var option = {
+        value: gr.getUniqueValue(),
+        display: gr.getValue('name'),
+        selected: false
+      };
+
+      if (displayValueField) {
+        option.display = gr.getValue(displayValueField);
+      }
+
+      if (defaultValue) {
+        option.selected = (option.display == defaultValue);
+      }
+
+      options.push(option);
+    }
+    return options;
+  }
+
+})();]]&gt;&lt;/script&gt;&lt;servicenow&gt;false&lt;/servicenow&gt;&lt;sys_class_name&gt;sp_widget&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-07-16 09:48:02&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;fa998069dbc2d410f2551329689619b7&lt;/sys_id&gt;&lt;sys_mod_count&gt;38&lt;/sys_mod_count&gt;&lt;sys_name&gt;Create New Jira Issue&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sp_widget_fa998069dbc2d410f2551329689619b7&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg@movement.com&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-07-16 13:22:48&lt;/sys_updated_on&gt;&lt;template&gt;&lt;![CDATA[&lt;div class="stepper"&gt;
+  &lt;div class="step" ng-repeat="step in steps"&gt;
+    &lt;div class="step-heading" ng-class="{'active': !step.expanded}" ng-click="c.toggleStep(step.id)"&gt;
+      &lt;div class="circle"&gt;{{ ::step.sequence }}&lt;/div&gt;
+      &lt;div class="title"&gt;{{ ::step.title }}&lt;/div&gt;
+      &lt;div class="line" ng-hide="step.sequence &gt;= steps.length"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div uib-collapse="!step.expanded"&gt;
+      &lt;div class="body"&gt;
+        &lt;div class="panel panel-default"&gt;
+          &lt;div class="panel-body"&gt;
+            &lt;div class="row" ng-if="step.id === 'projects'"&gt;
+              &lt;div class="col-md-12 m-b"&gt;
+                &lt;sn-record-picker field="project" sn-disabled="false" table="'x_momo_jira_integr_project'"
+                  display-field="'name'" search-fields="'name'" value-field="'sys_id'" default-query="'active=true'"
+                  multiple="false" placeholder="Select a Team..."&gt;
+                &lt;/sn-record-picker&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="row"&gt;
+              &lt;div class="col-md-12"&gt;
+                &lt;form&gt;
+                  &lt;div class="form-group" ng-if="step.id === 'summary'"&gt;
+                    &lt;label for="short-description"&gt;{{ data.form.short_description.label }}&lt;/label&gt;
+                    &lt;input type="data.form.short_description.type" id="short-description"
+                      ng-model="fields.short_description.value" class="form-control" /&gt;
+                  &lt;/div&gt;
+                  &lt;div class="form-group" ng-if="step.id === 'summary'"&gt;
+                    &lt;label for="description"&gt;{{ data.form.description.label }}&lt;/label&gt;
+                    &lt;textarea ng-model="data.form.description.value" markdown-editor show-toolbar-on-focus="true"
+                      class="form-control" rows="4" placeholder="Write a detailed summary here"&gt;&lt;/textarea&gt;
+                  &lt;/div&gt;
+                  &lt;div class="row" ng-if="step.id === 'details'"&gt;
+                    &lt;div class="col-md-6" ng-repeat="(name, field) in data.form"&gt;
+                      &lt;label for="{{ name }}"&gt;{{ field.label }}&lt;/label&gt;
+                      &lt;div class="input-container" ng-switch="field.type"&gt;
+                        &lt;input type="text" ng-disabled="field.readOnly" ng-model="field.value" class="form-control"
+                          ng-switch-when="text" /&gt;
+                        &lt;input type="checkbox" class="custom-select" ng-switch-when="checkbox" ng-model="field.value" /&gt;
+                        &lt;select class="sc-basic-select" ng-switch-when="select" ng-model="field.value"&gt;
+                          &lt;option ng-repeat="option in field.options" value="option.value" selected="option.selected"&gt;
+                            {{ option.display }}&lt;/option&gt;
+                        &lt;/select&gt;
+                        &lt;sp-date-picker ng-switch-when="date" field="field" ng-model="field.value" sn-disabled="false"
+                          ng-model-options="{'getterSetter': true}"&gt;&lt;/sp-date-picker&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/form&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class="panel-footer"&gt;
+            &lt;div class="m-t" ng-hide="!step.expanded"&gt;
+              &lt;button ng-hide="currentStep == 1" class="btn btn-default" ng-click="c.togglePreviousStep()"&gt; Previous
+              &lt;/button&gt;
+              &lt;button ng-show="currentStep != (steps.length + 1) &amp;&amp; currentStep != steps.length"
+                ng-disabled="!data.project.value" class="btn btn-primary" ng-click="c.toggleNextStep()"&gt; Next &lt;/button&gt;
+              &lt;button ng-show="currentStep == steps.length" ng-disabled="c.createButtonDisabled()"
+                ng-click="c.createIssue()" class="btn btn-primary"&gt;
+                &lt;span ng-if="!c.isSubmitting"&gt; Create &lt;/span&gt;
+                &lt;i class="fa fa-spinner fa-spin" aria-hidden="true" ng-if="c.isSubmitting"&gt;&lt;/i&gt;
+              &lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;]]&gt;&lt;/template&gt;&lt;/sp_widget&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>1232532668</payload_hash>
+        <record_name>Create New Jira Issue</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-07-16 13:22:48</sys_created_on>
+        <sys_id>64cab02d1b8e9410f13655b61a4bcb11</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>17357cab34d0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-07-16 13:22:48</sys_updated_on>
+        <type>Widget</type>
+        <update_guid>2ccab02d238e9410e4687ad408d2bb10</update_guid>
+        <update_guid_history>2ccab02d238e9410e4687ad408d2bb10:1232532668,e30ab0e9818e9410f630317db4e06cb8:-245722658,4d79b4a93a8e941017d921dee868c4c3:-1258336406,014970a9af8e94105416e063fef2a103:-230098031,eca8b869738e94106b9d6acf2f61475e:-904503277,03f7fc29168e9410ba67af9ae820990c:-983940736,9b777029d78e941058dbacd31d4d562b:-1791602751,c2377029c38e9410d1ca663a5d9bad25:2140717560,4ff638e57a8e9410043c99aeab2c06e8:745822527,36e63ce5678e94103d132e7a1983bc41:-941000978,79b634e56f8e941026b7894a36b18335:2062961374,3766b4a5328e9410d67c6ec1b956c7b5:1994922573,39263ca5ee8e9410e9e14670a957fe85:-54491369,99e534a5378e9410cd87114db757f005:2139863692,11c5f4a5e98e94100a473da58a03d85a:1137984816,1ea5f865188e9410a8015d89b62a8e54:1812517041,4255fc65c28e94106fc513913fb9de95:1258157274,1f253c65508e94107d08742b9c907554:451042208,bbe434658a8e9410e1a56e56d7747fcf:183810404,b1c43465638e94102688f18f276d688b:1416546101,f1a4b065a68e94101276282e4c8d5822:1543584725,76647825658e94102903e260bd06667d:1733063258,c5113061258e9410caf1f18db1282203:-339501279,c6f0f821b68e941088bf5926bec00471:-662803352,66c070ed7d4e9410a941e905aa17d155:-1140592556,1ba07821558e94109cb90420aad3ab5b:453580674,b090b8eda14e941052b6236be6f0d475:1781831064,e8307ced4e4e941027a8aa2c383e0aa8:-630842660,20efa8ed534e9410cde0953cd86fce6c:1667610444,1d2fa86d034e941049f56128065baddd:-1241214533,213ea86da54e941079292e5601647ed7:-907492091,7aadac2dc54e9410db27de7807bccb08:1507139610,6dec602d7b4e94102ba5319fd1e484ba:1910932538,067c68e9204e941007682c0c699ac25b:-343428815,b41ca0e98b4e941020e3c0d04159117c:-688799731,68ebeca9024e9410fff38af0b8f7e82b:-1816938725,b97b2069654e9410eb2e8d3c165d164f:463899690,b3baa8695c4e94100694f7d20d37273a:213157423,b299806978c2d4107b77efda1bbfbfb9:518917944</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">2dea1de51b42d410f13655b61a4bcbee</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-07-16 15:43:13</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sp_widget">sp_widget</sys_db_object>
+        <sys_id>0f6b4fa8b24e408c9479fd9a0708b8e4</sys_id>
+        <sys_metadata>fa998069dbc2d410f2551329689619b7</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Create New Jira Issue</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sp_widget_fa998069dbc2d410f2551329689619b7</sys_update_name>
+        <sys_update_version display_value="sp_widget_fa998069dbc2d410f2551329689619b7">64cab02d1b8e9410f13655b61a4bcb11</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-07-16 15:43:13</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

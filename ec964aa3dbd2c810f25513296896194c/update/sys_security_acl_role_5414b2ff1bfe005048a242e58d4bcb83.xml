@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl_role">
+    <sys_security_acl_role action="INSERT_OR_UPDATE">
+        <sys_class_name>sys_security_acl_role</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-13 08:35:04</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>5414b2ff1bfe005048a242e58d4bcb83</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>x_momo_jira_integr_issue_link.x_momo_jira_integr.issue_tech</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_security_acl display_value="x_momo_jira_integr_issue_link">5014b2ff1bfe005048a242e58d4bcb7f</sys_security_acl>
+        <sys_update_name>sys_security_acl_role_5414b2ff1bfe005048a242e58d4bcb83</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-14 13:26:38</sys_updated_on>
+        <sys_user_role display_value="x_momo_jira_integr.issue_tech" name="x_momo_jira_integr.issue_tech">22db0c3ddbf6c410f255132968961926</sys_user_role>
+        <transaction_id/>
+    </sys_security_acl_role>
+</record_update>

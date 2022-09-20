@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_report_users_groups">
+    <sys_report_users_groups action="DELETE">
+        <group_id/>
+        <report_id display_value="">f49c6315dbd34850f255132968961902</report_id>
+        <sys_class_name>sys_report_users_groups</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 14:48:32</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>7c9c6315dbd34850f255132968961902</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>f49c6315dbd34850f255132968961902</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_report_users_groups_7c9c6315dbd34850f255132968961902</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-01 14:48:32</sys_updated_on>
+        <user_id display_value="Douglas Schamberg">41c0da35db017e0093373c8f9d96198b</user_id>
+    </sys_report_users_groups>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_report_users_groups_7c9c6315dbd34850f255132968961902</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_report_users_groups"><sys_report_users_groups action="INSERT_OR_UPDATE"><group_id/><report_id display_value="">f49c6315dbd34850f255132968961902</report_id><sys_class_name>sys_report_users_groups</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-03-01 14:48:32</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>7c9c6315dbd34850f255132968961902</sys_id><sys_mod_count>0</sys_mod_count><sys_name>f49c6315dbd34850f255132968961902</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sys_report_users_groups_7c9c6315dbd34850f255132968961902</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-03-01 14:48:32</sys_updated_on><user_id display_value="Douglas Schamberg">41c0da35db017e0093373c8f9d96198b</user_id></sys_report_users_groups></record_update>]]></payload>
+        <payload_hash>752667423</payload_hash>
+        <record_name>f49c6315dbd34850f255132968961902</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 14:48:32</sys_created_on>
+        <sys_id>349c6315dbd34850f255132968961905</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1709691f2910000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-01 14:48:32</sys_updated_on>
+        <type>Report Users and Groups</type>
+        <update_guid>3c9c6315f6d348504642f7b580720704</update_guid>
+        <update_guid_history>3c9c6315f6d348504642f7b580720704:752667423</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 14:50:31</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_report_users_groups">sys_report_users_groups</sys_db_object>
+        <sys_id>392cb662f540417ba96f489136ffb749</sys_id>
+        <sys_metadata>7c9c6315dbd34850f255132968961902</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>f49c6315dbd34850f255132968961902</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_report_users_groups_7c9c6315dbd34850f255132968961902</sys_update_name>
+        <sys_update_version display_value="sys_report_users_groups_7c9c6315dbd34850f255132968961902">349c6315dbd34850f255132968961905</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-01 14:50:31</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_number">
+    <sys_number action="DELETE">
+        <category display_value="" name="x_momo_jira_integr_status">x_momo_jira_integr_status</category>
+        <maximum_digits>7</maximum_digits>
+        <number>1000</number>
+        <prefix>JIRASTA</prefix>
+        <sys_class_name>sys_number</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 19:48:49</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>ce8e5044dbe24c10f25513296896196b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>JIRASTA</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_number_ce8e5044dbe24c10f25513296896196b</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 19:48:49</sys_updated_on>
+    </sys_number>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_number_ce8e5044dbe24c10f25513296896196b</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_number"><sys_number action="INSERT_OR_UPDATE"><category display_value="" name="x_momo_jira_integr_status">x_momo_jira_integr_status</category><maximum_digits>7</maximum_digits><number>1000</number><prefix>JIRASTA</prefix><sys_class_name>sys_number</sys_class_name><sys_created_by>douglas.schamberg@movement.com</sys_created_by><sys_created_on>2020-01-19 19:48:49</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>ce8e5044dbe24c10f25513296896196b</sys_id><sys_mod_count>0</sys_mod_count><sys_name>JIRASTA</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sys_number_ce8e5044dbe24c10f25513296896196b</sys_update_name><sys_updated_by>douglas.schamberg@movement.com</sys_updated_by><sys_updated_on>2020-01-19 19:48:49</sys_updated_on></sys_number></record_update>]]></payload>
+        <payload_hash>1349014367</payload_hash>
+        <record_name>JIRASTA</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 19:48:50</sys_created_on>
+        <sys_id>0a8e5044dbe24c10f255132968961998</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fbf59c99a0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 19:48:50</sys_updated_on>
+        <type>Number</type>
+        <update_guid>028e5044d6e24c10203adcb58cb51298</update_guid>
+        <update_guid_history>028e5044d6e24c10203adcb58cb51298:1349014367</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-20 17:24:10</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_number">sys_number</sys_db_object>
+        <sys_id>4c519bf60161422288852638aa5ad941</sys_id>
+        <sys_metadata>ce8e5044dbe24c10f25513296896196b</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>JIRASTA</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent display_value="">53ed1c80dbe24c10f2551329689619fd</sys_parent>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_number_ce8e5044dbe24c10f25513296896196b</sys_update_name>
+        <sys_update_version display_value="sys_number_ce8e5044dbe24c10f25513296896196b">0a8e5044dbe24c10f255132968961998</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-20 17:24:10</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

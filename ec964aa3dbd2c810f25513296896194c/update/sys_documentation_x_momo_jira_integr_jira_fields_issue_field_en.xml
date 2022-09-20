@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="issue_field" label="Issue Field" language="en" table="x_momo_jira_integr_jira_fields">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>issue_field</element>
+            <help/>
+            <hint/>
+            <label>Issue Field</label>
+            <language>en</language>
+            <name>x_momo_jira_integr_jira_fields</name>
+            <plural>Issue Fields</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2020-02-15 10:31:42</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_id>bcbb7f771b12dc50b482dce8cc4bcb56</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Issue Field</sys_name>
+            <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+            <sys_update_name>sys_documentation_x_momo_jira_integr_jira_fields_issue_field_en</sys_update_name>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2020-02-15 10:31:42</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

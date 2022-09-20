@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties">
+    <sys_properties action="INSERT_OR_UPDATE">
+        <choices/>
+        <description>Whether or not to use an auth profile, rather than the username and password</description>
+        <ignore_cache>false</ignore_cache>
+        <is_private>false</is_private>
+        <name>x_momo_jira_integr.use_basic_auth_profile</name>
+        <read_roles>x_momo_jira_integr.jira_admin</read_roles>
+        <suffix>use_basic_auth_profile</suffix>
+        <sys_class_name>sys_properties</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-18 16:15:24</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>58f3e6231b56881048a242e58d4bcb94</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>x_momo_jira_integr.use_basic_auth_profile</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_properties_58f3e6231b56881048a242e58d4bcb94</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-18 16:16:17</sys_updated_on>
+        <type>boolean</type>
+        <value>false</value>
+        <write_roles>x_momo_jira_integr.jira_admin</write_roles>
+    </sys_properties>
+    <sys_translated_text action="delete_multiple" query="documentkey=58f3e6231b56881048a242e58d4bcb94"/>
+</record_update>

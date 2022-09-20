@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_page">
+    <sp_page action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <css>section.page {
+	background-color: $sp-homepage-bg;
+}
+section.page, main.body {
+    padding-top: 0px !important;
+}
+/* Home Page Search Opacity Background */ 
+#homepage-search &gt; div {
+    background-color: rgba(191, 191, 191, 0.77);
+    border-radius: 8px;
+}
+
+.reports-container {
+  min-height: 370px;
+}</css>
+        <draft>false</draft>
+        <dynamic_title_structure/>
+        <id>application_development_requests</id>
+        <internal>false</internal>
+        <omit_watcher>false</omit_watcher>
+        <public>false</public>
+        <roles>x_momo_jira_integr.issue_user</roles>
+        <seo_script/>
+        <short_description/>
+        <sys_class_name>sp_page</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 11:10:46</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>19f7ea7bdb5a0c10f255132968961944</sys_id>
+        <sys_mod_count>5</sys_mod_count>
+        <sys_name>application_development_requests</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_page_19f7ea7bdb5a0c10f255132968961944</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-13 16:36:31</sys_updated_on>
+        <title>Application Development Requests</title>
+        <use_seo_script>false</use_seo_script>
+    </sp_page>
+    <sys_translated_text action="delete_multiple" query="documentkey=19f7ea7bdb5a0c10f255132968961944"/>
+</record_update>

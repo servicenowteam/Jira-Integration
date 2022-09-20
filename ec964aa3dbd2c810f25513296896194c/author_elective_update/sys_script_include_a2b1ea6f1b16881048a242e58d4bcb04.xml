@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="DELETE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_momo_jira_integr.JiraRequest</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>JiraRequest</name>
+        <script><![CDATA[var JiraRequest = Class.create();
+JiraRequest.prototype = {
+  request: null,
+  prefix: null,
+  bodyRequired: false,
+  attachments: [],
+  initialize: function (application, restMessageId, method) {
+    this.setRequest(restMessageId, method);
+    this.prefix = application || 'x_momo_jira_integr';
+  },
+  setRequest: function(restMessageId, method) {
+    if (restMessageId && method) {
+      this.request = new sn_ws.RESTMessageV2(restMessageId, method);
+    } else {
+      this.request = new sn_ws.RESTMessageV2();
+    }
+
+    this.request.setRequestHeader('Content-Type', 'application/json');
+    this.request.setRequestHeader('Accept', 'application/json');
+  },
+  setBody: function(payload) {
+    if (!payload || typeof payload !== 'object') return;
+    var keys = Object.keys(payload).length;
+    if (keys <= 0) return;
+    this.request.setRequestBody(JSON.stringify(payload));
+  },
+  
+  setAuthentication: function() {
+    if (!this.request) return;
+    if (this._getProperty('use_basic_profile')) {
+      this.request.setAuthenticationProfile('basic', this._getProperty('basic_profile_id'));
+    } else {
+      this.request.setBasicAuth(this._getProperty('username'), this._getProperty('password'));
+    }
+  },
+  setMethod: function(method) {
+    if (!this.request) return;
+    var _method = method.toUpperCase();
+    if (_method !== 'POST' && _method !== 'GET' && _method !== 'PATCH' && _method !== 'PUT') {
+      _method = 'GET';
+    }
+
+    if (_method === 'POST' || _method === 'PATCH' || _method === 'PUT') {
+      this.bodyRequired = true;
+    }
+
+    this.request.setHttpMethod(_method);
+  },
+  setEndpoint: function(path) {
+    if (!this.request) return;
+
+    var host = this._getProperty('instance_name');
+
+    if (!host) return;
+
+    var basePath = this._getProperty('base_path') || '';
+    var endpoint = host + '/' + basePath + '/' + path;
+    endpoint = endpoint.replace(/\/{2}/gi, '/');
+    this.request.setEndpoint(endpoint);
+  },
+  setQueryParameters: function(qs) {
+    if (!this.request) return;
+
+    if (!qs || typeof qs !== 'object') return;
+    var keys = Object.keys(qs);
+    for (var i in keys) {
+      this.request.setQueryParameter(keys[i], qs[keys[i]]);
+    }
+  },
+  send: function() {
+    if (!this.request) return;
+    if (this.bodyRequired && gs.nil(this.request.getRequestBody())) return;
+    var response = this.request.execute();
+    var status = response.getStatusCode();
+    if (response.haveError()) {
+      return {
+        status: status,
+        error: response.getBody()
+      };
+    }
+    return {
+      status: status,
+      result: response.getBody()
+    };
+  },
+  sendAttachments: function(path, method, query, table, sys_id, cb) {
+    this._setAttachments(table, sys_id);
+    var callback = function(errors, responses) {
+      if (!errors) return responses;
+      if (errors.length === 0) return responses;
+      for (var i in errors) {
+        gs.error('Error while creating attachments on ' + sys_id + '.\nError: ' + JSON.stringify(errors[i].error));
+      }
+    }
+    if (this.attachments.length === 0) return callback([], []);
+    var responses = [];
+    for (var i in this.attachments) {
+      this.setRequest();
+      this.setEndpoint(path);
+      this.setMethod(method);
+      this.setQueryParameters(query);
+      this.request.setRequestBodyFromAttachment(this.attachments[i]);
+      var response = this.send();
+      responses.push(response);
+    }
+    
+    var errors = responses.map(function(res) {
+      if (res.error) {
+        return res;
+      }
+    });
+
+    var _responses = responses.map(function(resp) {
+      if (res.result) {
+        return res;
+      }
+    });
+    if (cb) {
+      return cb(errors, _responses);
+    }
+    return callback(errors, _responses);
+  },
+  _getProperty: function(propertyName) {
+    return gs.getProperty(this.prefix + '.' + propertyName);
+  },
+  _setAttachments: function(table, sys_id) {
+    var gr = new GlideRecord('sys_attachment');
+    gr.addQuery('table_name', table);
+    gr.addQuery('table_sys_id', sys_id);
+    gr.query();
+
+    if (gr.next()) {
+      while (gr.next()) {
+        this.attachments.push(gr.getUniqueValue());
+      }
+    }
+  },
+  type: 'JiraRequest'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-18 16:05:44</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>a2b1ea6f1b16881048a242e58d4bcb04</sys_id>
+        <sys_mod_count>31</sys_mod_count>
+        <sys_name>JiraRequest</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_include_a2b1ea6f1b16881048a242e58d4bcb04</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-19 08:53:31</sys_updated_on>
+    </sys_script_include>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_script_include_a2b1ea6f1b16881048a242e58d4bcb04</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_script_include"&gt;&lt;sys_script_include action="INSERT_OR_UPDATE"&gt;&lt;access&gt;package_private&lt;/access&gt;&lt;active&gt;true&lt;/active&gt;&lt;api_name&gt;x_momo_jira_integr.JiraRequest&lt;/api_name&gt;&lt;caller_access/&gt;&lt;client_callable&gt;false&lt;/client_callable&gt;&lt;description/&gt;&lt;name&gt;JiraRequest&lt;/name&gt;&lt;script&gt;&lt;![CDATA[var JiraRequest = Class.create();
+JiraRequest.prototype = {
+  request: null,
+  prefix: null,
+  bodyRequired: false,
+  attachments: [],
+  initialize: function (application, restMessageId, method) {
+    this.setRequest(restMessageId, method);
+    this.prefix = application || 'x_momo_jira_integr';
+  },
+  setRequest: function(restMessageId, method) {
+    if (restMessageId &amp;&amp; method) {
+      this.request = new sn_ws.RESTMessageV2(restMessageId, method);
+    } else {
+      this.request = new sn_ws.RESTMessageV2();
+    }
+
+    this.request.setRequestHeader('Content-Type', 'application/json');
+    this.request.setRequestHeader('Accept', 'application/json');
+  },
+  setBody: function(payload) {
+    if (!payload || typeof payload !== 'object') return;
+    var keys = Object.keys(payload).length;
+    if (keys &lt;= 0) return;
+    this.request.setRequestBody(JSON.stringify(payload));
+  },
+  
+  setAuthentication: function() {
+    if (!this.request) return;
+    if (this._getProperty('use_basic_profile')) {
+      this.request.setAuthenticationProfile('basic', this._getProperty('basic_profile_id'));
+    } else {
+      this.request.setBasicAuth(this._getProperty('username'), this._getProperty('password'));
+    }
+  },
+  setMethod: function(method) {
+    if (!this.request) return;
+    var _method = method.toUpperCase();
+    if (_method !== 'POST' &amp;&amp; _method !== 'GET' &amp;&amp; _method !== 'PATCH' &amp;&amp; _method !== 'PUT') {
+      _method = 'GET';
+    }
+
+    if (_method === 'POST' || _method === 'PATCH' || _method === 'PUT') {
+      this.bodyRequired = true;
+    }
+
+    this.request.setHttpMethod(_method);
+  },
+  setEndpoint: function(path) {
+    if (!this.request) return;
+
+    var host = this._getProperty('instance_name');
+
+    if (!host) return;
+
+    var basePath = this._getProperty('base_path') || '';
+    var endpoint = host + '/' + basePath + '/' + path;
+    endpoint = endpoint.replace(/\/{2}/gi, '/');
+    this.request.setEndpoint(endpoint);
+  },
+  setQueryParameters: function(qs) {
+    if (!this.request) return;
+
+    if (!qs || typeof qs !== 'object') return;
+    var keys = Object.keys(qs);
+    for (var i in keys) {
+      this.request.setQueryParameter(keys[i], qs[keys[i]]);
+    }
+  },
+  send: function() {
+    if (!this.request) return;
+    if (this.bodyRequired &amp;&amp; gs.nil(this.request.getRequestBody())) return;
+    var response = this.request.execute();
+    var status = response.getStatusCode();
+    if (response.haveError()) {
+      return {
+        status: status,
+        error: response.getBody()
+      };
+    }
+    return {
+      status: status,
+      result: response.getBody()
+    };
+  },
+  sendAttachments: function(path, method, query, table, sys_id, cb) {
+    this._setAttachments(table, sys_id);
+    var callback = function(errors, responses) {
+      if (!errors) return responses;
+      if (errors.length === 0) return responses;
+      for (var i in errors) {
+        gs.error('Error while creating attachments on ' + sys_id + '.\nError: ' + JSON.stringify(errors[i].error));
+      }
+    }
+    if (this.attachments.length === 0) return callback([], []);
+    var responses = [];
+    for (var i in this.attachments) {
+      this.setRequest();
+      this.setEndpoint(path);
+      this.setMethod(method);
+      this.setQueryParameters(query);
+      this.request.setRequestBodyFromAttachment(this.attachments[i]);
+      var response = this.send();
+      responses.push(response);
+    }
+    
+    var errors = responses.map(function(res) {
+      if (res.error) {
+        return res;
+      }
+    });
+
+    var _responses = responses.map(function(resp) {
+      if (res.result) {
+        return res;
+      }
+    });
+    if (cb) {
+      return cb(errors, _responses);
+    }
+    return callback(errors, _responses);
+  },
+  _getProperty: function(propertyName) {
+    return gs.getProperty(this.prefix + '.' + propertyName);
+  },
+  _setAttachments: function(table, sys_id) {
+    var gr = new GlideRecord('sys_attachment');
+    gr.addQuery('table_name', table);
+    gr.addQuery('table_sys_id', sys_id);
+    gr.query();
+
+    if (gr.next()) {
+      while (gr.next()) {
+        this.attachments.push(gr.getUniqueValue());
+      }
+    }
+  },
+  type: 'JiraRequest'
+};]]&gt;&lt;/script&gt;&lt;sys_class_name&gt;sys_script_include&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-01-18 16:05:44&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;a2b1ea6f1b16881048a242e58d4bcb04&lt;/sys_id&gt;&lt;sys_mod_count&gt;31&lt;/sys_mod_count&gt;&lt;sys_name&gt;JiraRequest&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy&gt;read&lt;/sys_policy&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_script_include_a2b1ea6f1b16881048a242e58d4bcb04&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-01-19 08:53:31&lt;/sys_updated_on&gt;&lt;/sys_script_include&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>1006016902</payload_hash>
+        <record_name>JiraRequest</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-19 08:53:31</sys_created_on>
+        <sys_id>328846fbdb960c10f255132968961937</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fbd01d49a0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-19 08:53:31</sys_updated_on>
+        <type>Script Include</type>
+        <update_guid>f68846fb32960c10586f1accf1ec5536</update_guid>
+        <update_guid_history>f68846fb32960c10586f1accf1ec5536:1006016902,d7780afbe7960c101179dc9849c348d1:-1545196473,46680afb62960c10d3bd33e070c965c9:-1055266473,ed38c2fba7960c1086dd93824771531f:795602668,c38746bb44960c104603ebab823a74b6:2115016874,8e870abb06960c10ccb2d730390edd9b:-1592742600,fc27ca7bba960c1051aeee0534c0298f:1357742068,67e64e7b18960c10d55436004ff8e927:851466965,2da6c67b46960c10aa3e80662afc0651:843676569,b9968e3b62960c101ba7c353fa310801:1638160751,5a264e3bc3960c10973d67d7b5d89bf9:1384873663,83160e3bdd960c109a9245f9cfee54ae:16611869,c0068a3bd5960c100e400958becc4059:-729276552,5482c63734960c1063319bf7ff0f634d:1666545632,801fee2f51568810f4f0b80a5e04a5ff:528865759,d2be22a7a196c810e6b8e7c522bdecfd:-1873171912,d93e66678696c81009c87bbd04f2f5f4:1887766373,b23de2273696c8100a9a1bc3cb6373bd:2067099073,1eac2ae3fc96c810778319f7630b475b:523720035,bccbe6a30196c8106f7ebb413b3bc9a5:833127887,2cba6eef6156c810353f26df72bc575c:-1171879558,afaaeeef9556c810ba38481abca01f34:737904410,ee1aa623a396c81011d58222e0df29d9:487052549,b0b9eeafc856c81048ffdd5098215ec3:-161816433,1fa9aeeffe56c8107234d13c2871ec8d:380948555,9b996eefed56c810135063b46d55e553:-1946690590,ddb8eaaf7a56c810b10793854609a378:-1653659021,a6a8aaaf6a56c810f49dd71a16cf20bf:2081441114,5198aaaf1756c8103809686dbf57c5b7:-893161283,ddb3e623cb5688100d0727bc00b6dd49:-1111443842,c032626fae168810cb0b25f267cede4a:-2147075998,d4e1e66f0d168810139fe2d0747dbf59:-268759830</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 08:55:15</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_script_include">sys_script_include</sys_db_object>
+        <sys_id>0ba6dda417a44522a22a5abcfd3a1fc9</sys_id>
+        <sys_metadata>a2b1ea6f1b16881048a242e58d4bcb04</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>JiraRequest</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_script_include_a2b1ea6f1b16881048a242e58d4bcb04</sys_update_name>
+        <sys_update_version display_value="sys_script_include_a2b1ea6f1b16881048a242e58d4bcb04">328846fbdb960c10f255132968961937</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 08:55:15</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

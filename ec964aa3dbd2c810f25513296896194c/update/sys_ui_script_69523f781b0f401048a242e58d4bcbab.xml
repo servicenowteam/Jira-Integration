@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <ignore_in_now_experience>false</ignore_in_now_experience>
+        <name>x_momo_jira_integr.readMore</name>
+        <script><![CDATA['use strict';
+
+readMore.$inject = ["$templateCache"];
+angular
+  .module('hm.readmore', ['ngAnimate', 'ngSanitize', 'hc.marked'])
+  .directive('hmReadMore', readMore)
+  .config(["$logProvider", function ($logProvider) {
+    $logProvider.debugEnabled(false);
+  }])
+
+/** @ngInject */
+function readMore($templateCache) {
+  hmReadMoreController.$inject = ["$filter", "$scope", "$log"];
+  var directive = {
+    restrict: 'AE',
+    scope: {
+      hmText: '@',
+      hmLimit: '@',
+      hmMoreText: '@',
+      hmLessText: '@',
+      hmDotsClass: '@',
+      hmLinkClass: '@',
+      hmResetState: '@'
+    },
+    template: $templateCache.get('readmore.template.html'),
+    controller: hmReadMoreController,
+    controllerAs: 'vm',
+    bindToController: true
+  };
+
+  return directive;
+
+  /** @ngInject */
+  // "bindToController: true" binds scope variables to Controller
+  function hmReadMoreController($filter, $scope, $log) {
+    var vm = this;
+    
+    vm.toggle = {
+      dots: ' ...',
+      dotsClass: vm.hmDotsClass,
+      linkClass: vm.hmLinkClass
+    }
+
+    vm.$onInit = function () {
+      setToggleMoreText();
+      setToggleLessText();
+      validateLimit();
+      setLessAndMoreText();
+      setShowToggle();
+      setCurrentToggleText();
+      setLinkClass();
+      setDotsClass();
+    }
+
+    // Toggle functions
+    function setToggleMoreText() {
+      vm.toggle.moreText = vm.hmMoreText || 'Read More...';
+    }
+
+    function setToggleLessText() {
+      if (!vm.toggle.state) {
+        vm.toggle.lessText = 'Read Less';
+      }
+
+    }
+
+    function setCurrentToggleText() {
+      vm.toggle.text = vm.toggle.state ? vm.toggle.lessText : vm.toggle.moreText;
+    }
+
+    function setShowToggle() {
+      vm.toggle.show = vm.moreText && vm.moreText.length > 0;
+    }
+
+    function setLinkClass() {
+      if (vm.toggle.state) {
+        vm.toggle.linkClass = vm.hmLinkClass + ' move-read-less';
+      } else {
+        vm.toggle.linkClass = vm.hmLinkClass
+      }
+
+    }
+
+    function setDotsClass() {
+      vm.toggle.dotsClass = vm.hmDotsClass;
+    }
+
+    vm.doToggle = function (evt) {
+      if (evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+      }
+
+      vm.toggle.state = !vm.toggle.state;
+      vm.showMoreText = !vm.showMoreText;
+      setCurrentToggleText();
+      setLinkClass();
+    }
+
+    $scope.$watch('vm.hmResetState', function (v, old) {
+      if (v && vm.toggle.state) {
+        vm.doToggle();
+      }
+    });
+
+    $scope.$watch('vm.hmMoreText', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        setToggleMoreText();
+        setLinkClass();
+        setCurrentToggleText();
+      }
+    });
+
+    $scope.$watch('vm.hmLessText', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        setToggleLessText();
+        setLinkClass();
+        setCurrentToggleText();
+      }
+    });
+
+    $scope.$watch('vm.hmDotsClass', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        setDotsClass();
+      }
+    });
+
+    $scope.$watch('vm.hmLinkClass', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        setLinkClass();
+      }
+    });
+
+    // ----------
+
+    // If negative number, set to undefined
+    function validateLimit() {
+      vm.hmLimit = (vm.hmLimit && vm.hmLimit <= 0) ? undefined : vm.hmLimit;
+    }
+
+    function getMoreTextLimit() {
+      return vm.hmLimit && vm.hmLimit < vm.hmText.length ? vm.hmLimit - vm.hmText.length : 0;
+    }
+
+    function setLessAndMoreText() {
+      vm.lessText = $filter('limitTo')(vm.hmText, vm.hmLimit);
+      vm.moreText = $filter('limitTo')(vm.hmText, getMoreTextLimit());
+    }
+
+    $scope.$watch('vm.hmText', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        validateLimit();
+        setLessAndMoreText();
+        setShowToggle();
+      }
+    });
+
+    $scope.$watch('vm.hmLimit', function (newValue, oldValue) {
+      if (newValue != oldValue) {
+        validateLimit();
+        setLessAndMoreText();
+        setShowToggle();
+      }
+    });
+  }
+};
+
+angular.module('hm.readmore').run(['$templateCache', function ($templateCache) {
+  $templateCache.put('readmore.template.html', '<span name="text" style="white-space:pre-wrap;"><span ng-bind-html="vm.lessText" style="white-space:pre-wrap;word-break:break-all;"></span><span ng-show="vm.showMoreText" class="more-show-hide" ng-bind-html="vm.moreText" style="white-space:pre-wrap;word-break:break-all;"></span></span><span name="toggle" ng-show="vm.toggle.show"><span ng-class="vm.toggle.dotsClass" ng-show="!vm.toggle.state">{{ vm.toggle.dots }}</span><a ng-class="vm.toggle.linkClass" ng-click="vm.doToggle($event)">{{ vm.toggle.text }}</a></span>');
+}]);]]></script>
+        <script_name>readMore</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-16 15:41:16</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>69523f781b0f401048a242e58d4bcbab</sys_id>
+        <sys_mod_count>30</sys_mod_count>
+        <sys_name>x_momo_jira_integr.readMore</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ui_script_69523f781b0f401048a242e58d4bcbab</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-20 11:27:44</sys_updated_on>
+        <ui_type>0</ui_type>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

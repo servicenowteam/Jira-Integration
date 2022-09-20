@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_momo_jira_integr.JiraRequestV2</api_name>
+        <caller_access>2</caller_access>
+        <client_callable>false</client_callable>
+        <description>This is the second version of the JiraRequest script include. It will eventually replace JiraRequest. &#13;
+&#13;
+This is a much more efficient script include than JiraRequest.</description>
+        <name>JiraRequestV2</name>
+        <script><![CDATA[var JiraRequestV2 = Class.create();
+JiraRequestV2.prototype = {
+  initialize: function () {
+    var defaultOptions = {
+      auth: {
+        username: this._getProperty('username'),
+        password: this._getProperty('password')
+      },
+      async: false,
+      // for super slow api calls when running async
+      timeout: 10000,
+      method: 'GET'
+    };
+    var useBasicProfile = this._getProperty('use_basic_profile') == true;
+    var basicProfile = this._getProperty('basic_profile_id');
+    if (useBasicProfile && !gs.nil(basicProfile)) {
+      defaultOptions.auth = basicProfile;
+    }
+    this._previousOptions = defaultOptions;
+    this._options = defaultOptions;
+    this._response = null;
+  },
+  send: function (options) {
+    var util = new global.ArrayUtil();
+    if (options) {
+      this.setOptions(options);
+    }
+
+    var opts = this.getOptions();
+
+    var request = new sn_ws.RESTMessageV2();
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.setRequestHeader('Accept', 'application/json');
+    request.setHttpMethod(opts.method.toUpperCase());
+    request.setLogLevel('all');
+    var isValid = {
+      endpoint: false,
+      body: false,
+      method: false,
+      auth: false
+    };
+    var host = this._getProperty('instance_name');
+    if (this._previousOptions.endpoint && this._previousOptions === opts.endpoint) {
+      request.setEndpoint(opts.endpoint);
+      isValid.endpoint = true;
+    } else if (host && typeof host === 'string') {
+      var base = this._getProperty('base_path') || '';
+      var endpoint = host + '/' + base + '/' + opts.path;
+      if (opts.qs && typeof opts.qs === 'object') {
+        var qs = Object.keys(opts.qs);
+        if (qs.length > 0) {
+          var queries = [];
+          for (var q in qs) {
+            var queryKey = q;
+            var queryValue = qs[q];
+            if (queryValue) {
+              queries.push(queryKey + '=' + queryValue);
+            }
+          }
+          if (queries.length > 0) {
+            endpoint = endpoint + '?' + queries.join('&');
+          }
+        }
+      }
+      request.setEndpoint(endpoint);
+      isValid.endpoint = true;
+      this._previousOptions.endpoint = endpoint;
+    }
+    if (this._previousOptions.method && this._previousOptions.method === opts.method) {
+      request.setRequestBody(JSON.stringify(opts.body));
+      isValid.body = true;
+    } else if (util.contains(['POST', 'PUT', 'PATCH'], opts.method) && opts.body) {
+      request.setRequestBody(JSON.stringify(opts.body));
+      isValid.body = true;
+    }
+
+    if (typeof auth === 'string') {
+      request.setAuthenticationProfile('basic', opts.auth);
+      isValid.auth = true;
+    } else if (opts.auth.username && opts.auth.password) {
+      request.setBasicAuth(opts.auth.username, opts.auth.password);
+      isValid.auth = true;
+    }
+
+    if (!isValid.auth || !isValid.endpoint) {
+      this._response = {
+        error: 'Invalid options your endpoint or auth is improperly formatted',
+        status: 400
+      };
+    } else if (!isValid.body) {
+      this._response = {
+        error: 'You cannot have an empty body with POST, PUT, or PATCH HTTP methods.',
+        status: 400
+      };
+    } else if (opts.async) {
+      var asyncResponse = request.executeAsync();
+      asyncResponse.waitForResponse(opts.timeout);
+      this._response = null;
+    } else {
+      var response = request.execute();
+      var responseBody = deserialize(response.getBody());
+      var res = {
+        status: response.getStatusCode()
+      };
+
+      if (response.haveError()) {
+        res.error = responseBody;
+      } else {
+        res.results = responseBody;
+      }
+      this._response = res;
+    }
+
+
+    function deserialize(str) {
+      if (typeof str !== 'string') return str;
+      try {
+        return JSON.parse(str);
+      } catch (e) {
+        return str;
+      }
+    }
+    return this;
+  },
+  setOption: function (option) {
+    var VALID_OPTIONS = [
+      'path',
+      'method',
+      'body',
+      'qs',
+      'auth',
+      'async',
+      'timeout'
+    ];
+
+    for (var i in VALID_OPTIONS) {
+      var name = VALID_OPTIONS[i];
+      if (this._previousOptions[name] === option[name]) {
+        continue;
+      }
+      if (option[name]) {
+        if (name === 'auth' && this._validateAuth(option[name])) {
+          this._previousOptions[name] = this._options[name];
+          this._options[name] = option[name];
+        } else if (name === 'qs' && this._validateQS(option[name])) {
+          this._previousOptions[name] = this._options[name];
+          this._options[name] = option[name];
+        } else if (name === 'method' && this._validateMethod(option[name])) {
+          this._previousOptions[name] = this._options[name];
+          this._options[name] = option[name];
+        } else if (name === 'body' && this._validateBody(option[name])) {
+          this._previousOptions[name] = this._options[name];
+          this._options[name] = option[name];
+        } else if (name === 'path' && this._validatePath(option[name])) {
+          this._previousOptions[name] = this._options[name];
+          this._options[name] = option[name];
+        } else if (name === 'async' && typeof option[name] === 'boolean') {
+          this._previousOptions[name] = this._options[name];
+          this._options[name] = option[name];
+        } else if (name === 'timeout' && this._validateTimeout(option[name])) {
+          this._previousOptions[name] = this._options[name];
+          this._options[name] = option[name];
+        }
+      }
+    }
+    return this;
+  },
+  setOptions: function (options) {
+    if (typeof options !== 'object') return this;
+    this.setOption(options);
+    return this;
+  },
+  getOption: function (key) {
+    return this._options[key];
+  },
+  getOptions: function () {
+    return this._options;
+  },
+  getResponse: function (callback) {
+    var isAsync = this.getOption('async');
+    if (isAsync) return;
+    var res = this._response;
+    this._response = null;
+    if (!res) return;
+    if (res.error || res.status > 204) {
+      var err = res.error;
+      if (typeof err === 'object') {
+        if (Array.isArray(err.errorMessages)) {
+          for (var e in err.errorMessages) {
+            var errMsg = err.errorMessages[e];
+            gs.addErrorMessage(errMsg);
+          }
+        }
+      } else {
+        gs.addErrorMessage('Request failed with status ' + res.status);
+      }
+    } else if (typeof callback === 'function') {
+      return callback(res.results, res.status);
+    } else {
+      return res.results;
+    }
+  },
+  _validatePath: function (path) {
+    return (typeof path === 'string');
+  },
+  _validateMethod: function (method) {
+    var util = new global.ArrayUtil();
+    if (typeof method !== 'string') return false;
+    return util.contains(['PUT', 'POST', 'PATCH', 'DELETE', 'GET'], method.toUpperCase());
+  },
+  _validateBody: function (body) {
+    if (typeof body !== 'object' && !Array.isArray(body)) return false;
+    if (Object.keys(body).length === 0) return false;
+    return true;
+  },
+  _validateQS: function (qs) {
+    return this._validateBody(qs);
+  },
+  _validateHeaders: function (headers) {
+    return this._validateBody(headers);
+  },
+  _validateAuth: function (auth) {
+    var useBasicProfile = this._getProperty('use_basic_profile') == true;
+    var hasBasicProfile = this._getProperty('basic_profile_id');
+    if (typeof auth === 'object') {
+      return (auth.username && auth.password);
+    } else if (typeof auth === 'string') {
+      return useBasicProfile && !gs.nil(hasBasicProfile);
+    }
+    return false;
+  },
+  _validateTimeout: function (timeout) {
+    if (typeof timeout === 'number') {
+      // no timeout should be over 10 seconds for Jira API calls.
+      // default is 10 seconds (in milliseconds)
+      return (timeout > 0 && timeout <= 10000);
+    }
+    return false;
+  },
+  _getProperty: function (key) {
+    var prop = gs.getProperty('x_momo_jira_integr.' + key);
+    return prop;
+  },
+  type: 'JiraRequestV2'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-21 13:03:06</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>e8049637dbe7c810f25513296896191a</sys_id>
+        <sys_mod_count>44</sys_mod_count>
+        <sys_name>JiraRequestV2</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_include_e8049637dbe7c810f25513296896191a</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2021-01-29 17:39:08</sys_updated_on>
+    </sys_script_include>
+</record_update>

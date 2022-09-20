@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_angular_provider">
+    <sp_angular_provider action="DELETE">
+        <name>jiraSortList</name>
+        <script/>
+        <sys_class_name>sp_angular_provider</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-07-23 11:31:01</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>1a34a8bb1b465050f13655b61a4bcb55</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>jiraSortList</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_angular_provider_1a34a8bb1b465050f13655b61a4bcb55</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-07-23 11:31:01</sys_updated_on>
+        <type>factory</type>
+    </sp_angular_provider>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sp_angular_provider_1a34a8bb1b465050f13655b61a4bcb55</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_angular_provider"><sp_angular_provider action="INSERT_OR_UPDATE"><name>jiraSortList</name><script/><sys_class_name>sp_angular_provider</sys_class_name><sys_created_by>douglas.schamberg@movement.com</sys_created_by><sys_created_on>2020-07-23 11:31:01</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>1a34a8bb1b465050f13655b61a4bcb55</sys_id><sys_mod_count>0</sys_mod_count><sys_name>jiraSortList</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sp_angular_provider_1a34a8bb1b465050f13655b61a4bcb55</sys_update_name><sys_updated_by>douglas.schamberg@movement.com</sys_updated_by><sys_updated_on>2020-07-23 11:31:01</sys_updated_on><type>factory</type></sp_angular_provider></record_update>]]></payload>
+        <payload_hash>396054362</payload_hash>
+        <record_name>jiraSortList</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-07-23 11:31:01</sys_created_on>
+        <sys_id>ab442c7b1b465050f13655b61a4bcbe4</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1737b70e0290000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-07-23 11:31:01</sys_updated_on>
+        <type>Widget Angular Provider</type>
+        <update_guid>a3442c7b50465050ac6e15d41ed2bee4</update_guid>
+        <update_guid_history>a3442c7b50465050ac6e15d41ed2bee4:396054362</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">e5cb6cf31b865050f13655b61a4bcb85</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-07-23 12:03:40</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sp_angular_provider">sp_angular_provider</sys_db_object>
+        <sys_id>84358806870246568e126d5bbed29eb9</sys_id>
+        <sys_metadata>1a34a8bb1b465050f13655b61a4bcb55</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>jiraSortList</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sp_angular_provider_1a34a8bb1b465050f13655b61a4bcb55</sys_update_name>
+        <sys_update_version display_value="sp_angular_provider_1a34a8bb1b465050f13655b61a4bcb55">ab442c7b1b465050f13655b61a4bcbe4</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-07-23 12:03:40</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

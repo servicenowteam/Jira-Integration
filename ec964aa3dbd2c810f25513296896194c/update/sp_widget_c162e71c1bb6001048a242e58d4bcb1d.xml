@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function jiraSidebarForm($scope, spUtil, spModal, $rootScope) {
+  /* widget controller */
+  var c = this;
+  $scope.form = $scope.data.form;
+  $scope.$on('field.change', function (e, args) {
+
+    if (args.field.name === 'status') {
+      $scope.data.status = args.newValue;
+      $scope.server.update().then(function (data) {
+        if (data.isStatusCategoryDone) {
+          // Change this later on
+          args.isStatusDone = true;
+        }
+        $rootScope.$broadcast('jira.transition.updated', args);
+      });
+    }
+
+    if (args.field.name == 'project') {
+      $rootScope.$broadcast('jira.issue.updated', {
+        field: args.field.name,
+        value: args.newValue
+      });
+    }
+  });
+  spUtil.recordWatch($scope, $scope.data.table, 'sys_id=' + $scope.data.sys_id + '^active=true', function (response) {
+    $scope.server.update().then(function (data) {
+      $scope.form = data.form;
+    });
+    if (response.data.changes.includes('work_notes')) {
+      $rootScope.$broadcast('jira.journal-field.inserted');
+    }
+  });
+
+  $scope.onApprovalClicked = function ($event) {
+    spModal.open({
+      title: 'Approval Confirmation',
+      message: 'Confirm you would like to approve this request.'
+    }).then(function (confirmed) {
+      if (confirmed) {
+        $rootScope.$broadcast('jira.issue.approved', {
+          field: 'approval',
+          value: 'approved'
+        });
+      }
+    })
+  }
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>legend {&#13;
+  display: none;&#13;
+}&#13;
+&#13;
+.shown-xs {&#13;
+  display: none;&#13;
+}&#13;
+&#13;
+input:read-only {&#13;
+  cursor: not-allowed;&#13;
+}&#13;
+&#13;
+&#13;
+&#13;
+@media screen and (max-width:600px) {&#13;
+  .shown-xs {&#13;
+    display: block;&#13;
+  }&#13;
+}&#13;
+&#13;
+@media screen and (min-width:601px) {&#13;
+&#13;
+  .panel {&#13;
+    border: none;&#13;
+  }&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira-sidebar-form</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Jira Sidebar Form</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  var table = (input ? input.table : undefined) || options.table || $sp.getParameter('table');
+  var sys_id = (input ? input.sys_id : undefined) || options.sys_id || $sp.getParameter('sys_id');
+  data.sys_id = sys_id;
+  data.table = table;
+  data.formView = (input ? input.formView : undefined) || options.formView;
+
+
+  if (!table || !sys_id) return;
+
+  data.canApprove = gs.hasRole('x_momo_jira_integr.issue_tech') && data.formView == 'spsideviewapproval';
+
+  data.form = cleanForm($sp.getForm(table, sys_id, "", data.formView));
+  data.external_key = (input ? input.external_key : undefined) || options.external_key;
+
+  data.isStatusCategoryDone = (input ? isStatusCategoryDone(input.status) : false);
+
+  function cleanForm(form) {
+    var _form = form;
+    if (_form) {
+      if (_form.ui_scripts) {
+        _form.ui_scripts = _form.ui_scripts.filter(function (script) {
+          return !/x_momo/gmi.test(script.name);
+        });
+      }
+    }
+    return _form;
+  }
+
+  function isStatusCategoryDone(status) {
+    if (!status) return false;
+    var gr = new GlideRecord('x_momo_jira_integr_status');
+    gr.get(status);
+
+    if (gr.isValidRecord()) {
+      if (!gr.category.nil()) {
+        return gr.category.external_key.toString() == 'done';
+      }
+    }
+    return false;
+  }
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-02 14:58:43</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>c162e71c1bb6001048a242e58d4bcb1d</sys_id>
+        <sys_mod_count>156</sys_mod_count>
+        <sys_name>Jira Sidebar Form</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_c162e71c1bb6001048a242e58d4bcb1d</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2021-02-05 08:33:32</sys_updated_on>
+        <template><![CDATA[<div class="panel panel-default">
+  <div class="panel-heading shown-xs" ng-if="data.external_key && !data.canApprove">
+    <h4 class="panel-title">{{ ::data.external_key }}</h4>
+  </div>
+  <div class="panel-heading side-panel-heading" ng-if="data.canApprove">
+    <div class="row">
+      <div class="col-md-6"></div>
+      <div class="col-md-6">
+        <button class="btn btn-primary pull-right" 
+          ng-click="onApprovalClicked($event)" 
+          ng-disabled="!data.canApprove">Approve</button>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <sp-model form_model="form" mandatory="mandatory" />
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="db_image">
+    <db_image action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <category/>
+        <format>JPEG</format>
+        <height>78</height>
+        <image>7e5003721bc3c81048a242e58d4bcb62</image>
+        <name>step-2.jpg</name>
+        <size_bytes>2874</size_bytes>
+        <sys_class_name>db_image</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 17:02:15</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>5d7eb2fe1b83c81048a242e58d4bcbd5</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>step-2.jpg</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>db_image_5d7eb2fe1b83c81048a242e58d4bcbd5</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-22 17:10:32</sys_updated_on>
+        <thumbnail/>
+        <width>109</width>
+    </db_image>
+    <sys_attachment action="INSERT_OR_UPDATE">
+        <average_image_color>#4f4f4f</average_image_color>
+        <chunk_size_bytes>700000</chunk_size_bytes>
+        <compressed>true</compressed>
+        <content_type>image/jpeg</content_type>
+        <encryption_context/>
+        <file_name>image</file_name>
+        <hash>0a0d8691341ea0b9a9abb9bbd7cb4cb3ff20aebfe095d7a828e9ad0783d28d58</hash>
+        <image_height>78</image_height>
+        <image_width>109</image_width>
+        <size_bytes>2874</size_bytes>
+        <size_compressed>2316</size_compressed>
+        <state>available</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 17:10:31</sys_created_on>
+        <sys_id>7e5003721bc3c81048a242e58d4bcb62</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_updated_by>guest</sys_updated_by>
+        <sys_updated_on>2020-02-22 17:10:32</sys_updated_on>
+        <table_name>ZZ_YYdb_image</table_name>
+        <table_sys_id>5d7eb2fe1b83c81048a242e58d4bcbd5</table_sys_id>
+    </sys_attachment>
+    <sys_attachment_doc action="INSERT_OR_UPDATE">
+        <data>H4sIAAAAAAAAAA==</data>
+        <length>16</length>
+        <position>0</position>
+        <sys_attachment display_value="image" sys_id="7e5003721bc3c81048a242e58d4bcb62">7e5003721bc3c81048a242e58d4bcb62</sys_attachment>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 17:10:31</sys_created_on>
+        <sys_id>be5003721bc3c81048a242e58d4bcb62</sys_id>
+    </sys_attachment_doc>
+    <sys_attachment_doc action="INSERT_OR_UPDATE">
+        <data>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</data>
+        <length>3076</length>
+        <position>1</position>
+        <sys_attachment display_value="image" sys_id="7e5003721bc3c81048a242e58d4bcb62">7e5003721bc3c81048a242e58d4bcb62</sys_attachment>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 17:10:31</sys_created_on>
+        <sys_id>325003721bc3c81048a242e58d4bcb63</sys_id>
+    </sys_attachment_doc>
+</record_update>

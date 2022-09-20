@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function jiraWidgetList($scope, spUtil, jiraLiveProfile, $window, $http) {
+  /* widget controller */
+  var c = this;
+  $scope.orderByField = {};
+  $scope.liveProfiles = jiraLiveProfile;
+  $scope.filterOpen = false;
+  $scope.currentProject = null;
+  $scope.projectTitle = "Filter By Project";
+  spUtil.recordWatch($scope, $scope.data.table, 'active=true^approval=approved', function (response) {
+    if (response.data.changes.includes('external_id')) {
+      $scope.server.update().then(function (data) {
+        if ($scope.orderByField.hasOwnProperty('dir') && $scope.orderByField.hasOwnProperty('name')) {
+          $scope.issues = data.issues.sort(function (current, previous) {
+            var prop;
+
+            if (/[ ]+/gi.test($scope.orderByField.name)) {
+              prop = $scope.orderByField.name.split(' ').join('_').toLowerCase();
+            } else if ($scope.orderByField.name === 'requestType') {
+              prop = $scope.orderByField.name;
+            } else {
+              prop = $scope.orderByField.name.toLowerCase();
+            }
+            var prev;
+            var cur;
+            if (/[\-]+/gi.test(previous[prop]) && typeof previous[prop] === 'string') {
+              prev = previous[prop].split('-')[1];
+              cur = current[prop].split('-')[1];
+            } else if (typeof previous[prop] === 'string') {
+              prev = previous[prop];
+              cur = current[prop];
+            } else {
+              prev = previous[prop].name;
+              cur = current[prop].name;
+            }
+
+            if ($scope.orderByField.dir === 'down') {
+
+              if (prev > cur) {
+
+                return -1;
+              }
+              if (cur > prev) {
+                return 1;
+              }
+              return 0;
+            } else {
+
+              if (prev < cur) {
+                return -1;
+              }
+              if (cur < prev) {
+                return 1;
+              }
+              return 0;
+            }
+          });
+        } else {
+          $scope.issues = data.issues.sort(function (current, prev) {
+            if (current.key < prev.key) {
+              return -1;
+            }
+
+            if (current.key > prev.key) {
+              return 1;
+            }
+            return 0;
+          });
+        }
+
+      });
+    }
+  });
+
+
+  c.$onInit = function () {
+    $scope.issues = $scope.data.issues.sort(function (current, prev) {
+      if (current.key < prev.key) {
+        return -1;
+      }
+
+      if (current.key > prev.key) {
+        return 1;
+      }
+      return 0;
+    });
+    $scope.fields = $scope.data.fields.map(function (item) {
+      if (item === 'Jira Number') {
+        return {
+          display_value: item,
+          name: 'key',
+          icon: undefined
+        };
+      } else if (item === 'Request Type') {
+        return {
+          display_value: item,
+          name: 'requestType',
+          icon: undefined
+        };
+      }
+      return {
+        display_value: item,
+        name: item,
+        icon: undefined
+      };
+    });
+  };
+
+  $scope.setOrderByIcon = function (name) {
+    return $scope.fields.find(function (field) {
+      return (field.name === name);
+    }).icon;
+  };
+
+  c.filterToggle = function (toggle) {
+    $scope.filterOpen = !toggle;
+  };
+
+  $scope.onProjectFiltered = function (project) {
+    if (project) {
+      $scope.data.query = {
+        'project': '=' + project.id
+      };
+      $scope.currentProject = project.id;
+    } else {
+      $scope.data.query = {};
+      $scope.currentProject = null;
+      $scope.projectTitle = "Filter By Project";
+    }
+    $scope.data.page = 1;
+
+    $scope.server.update().then(function (results) {
+			if (project) {
+				$scope.projectTitle = "Viewing " + project.name;
+				$scope.currentProject = project.id;
+			}
+      
+      $scope.issues = results.issues.sort(function (current, prev) {
+        if (current.key < prev.key) {
+          return -1;
+        }
+
+        if (current.key > prev.key) {
+          return 1;
+        }
+        return 0;
+      });
+
+      $scope.fields = results.fields.map(function (item) {
+        if (item === 'Jira Number') {
+          return {
+            display_value: item,
+            name: 'key',
+            icon: undefined
+          };
+        } else if (item === 'Request Type') {
+          return {
+            display_value: item,
+            name: 'requestType',
+            icon: undefined
+          };
+        }
+        return {
+          display_value: item,
+          name: item,
+          icon: undefined
+        };
+      });
+    });
+  };
+
+  $scope.onPageChange = function () {
+    $scope.isLoading = true;
+    if ($scope.currentProject) {
+      $scope.data.query = {
+        'project': '=' + $scope.currentProject
+      };
+    }
+    $scope.server.update().then(function (results) {
+      $scope.issues = results.issues.sort(function (current, prev) {
+        if (current.key < prev.key) {
+          return -1;
+        }
+
+        if (current.key > prev.key) {
+          return 1;
+        }
+        return 0;
+      });
+
+      $scope.fields = $scope.data.fields.map(function (item) {
+        if (item === 'Jira Number') {
+          return {
+            display_value: item,
+            name: 'key',
+            icon: undefined
+          };
+        } else if (item === 'Request Type') {
+          return {
+            display_value: item,
+            name: 'requestType',
+            icon: undefined
+          };
+        }
+        return {
+          display_value: item,
+          name: item,
+          icon: undefined
+        };
+      });
+      $scope.isLoading = false;
+    });
+  };
+
+  $scope.setOrderBy = function (fieldName) {
+    if ($scope.orderByField.name !== fieldName) {
+      $scope.orderByField.dir = 'down';
+    } else if (!$scope.orderByField.dir) {
+      $scope.orderByField.dir = 'down';
+    } else if ($scope.orderByField.dir === 'down') {
+      $scope.orderByField.dir = 'up';
+    } else {
+      $scope.orderByField.dir = 'down';
+    }
+
+    $scope.orderByField.name = fieldName;
+
+    $scope.issues = $scope.issues.sort(function (current, previous) {
+      var prop;
+
+      if (/[ ]+/gi.test(fieldName)) {
+        prop = fieldName.split(' ').join('_').toLowerCase();
+      } else if (fieldName === 'requestType') {
+        prop = fieldName;
+      } else {
+        prop = fieldName.toLowerCase();
+      }
+      var prev;
+      var cur;
+      if (/[\-]+/gi.test(previous[prop]) && typeof previous[prop] === 'string') {
+        prev = previous[prop].split('-')[1];
+        cur = current[prop].split('-')[1];
+      } else if (typeof previous[prop] === 'string') {
+        prev = previous[prop];
+        cur = current[prop];
+      } else {
+        prev = previous[prop] ? previous[prop].name : -1;
+        cur = current[prop] ? current[prop].name : 1;
+      }
+
+      if ($scope.orderByField.dir === 'down') {
+
+        if (prev > cur) {
+
+          return -1;
+        }
+        if (cur > prev) {
+          return 1;
+        }
+        return 0;
+      } else {
+
+        if (prev < cur) {
+          return -1;
+        }
+        if (cur < prev) {
+          return 1;
+        }
+        return 0;
+      }
+    });
+
+    $scope.fields = $scope.fields.map(function (item) {
+      if (item.name === $scope.orderByField.name) {
+        return {
+          display_value: item.display_value,
+          name: item.name,
+          icon: 'glyphicon ' + 'glyphicon-chevron-' + $scope.orderByField.dir
+        };
+      } else {
+        return {
+          display_value: item.display_value,
+          name: item.name,
+          icon: undefined
+        };
+      }
+    });
+  };
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>::-webkit-scrollbar {
+  width: 0.2em;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 0.5px rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 0.5em;
+  outline: 0.5px solid #eee;
+}
+
+.panel-filter {
+  padding-left: 15px;
+}
+
+.btn-dropdown {
+  background: #fff;
+  border-color: #ccc;
+  color: #000;
+
+  &amp; i {
+    padding-left: 5px;
+  }
+
+  &amp; .clear-filter {
+    border: 0px;
+    color: #000;
+  }
+
+  &amp;:focus,
+  &amp;:hover {
+    outline: none;
+    box-shadow: none;
+    border-color: inherit;
+  }
+}
+
+.filter-menu {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+@media screen and (max-width: 600px) {
+  ::-webkit-scrollbar {
+    width: 0em;
+  }
+
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 0.5px rgba(0, 0, 0, 0.1);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 0.1em;
+    outline: 0.5px solid #eee;
+  }
+}
+
+.col {
+
+  &amp;-md,
+  &amp;-xs,
+  &amp;-lg,
+  &amp;-xl {
+    &amp;-12 {
+      padding: 0px !important;
+    }
+  }
+
+  &amp;-md,
+  &amp;-lg,
+  &amp;-xl {
+    &amp;-12 {
+      margin-top: 15px;
+    }
+  }
+}
+
+.table-responsive {
+  overflow-y: auto;
+  max-height: 350px;
+
+  &amp; table thead {
+    background: #fff;
+
+    &amp; th {
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 1001;
+    }
+  }
+}
+
+.pager .next:not(.disabled)&gt;a,
+.pager .previous:not(.disabled)&gt;a {
+  color: $brand-primary;
+}
+
+.panel-header {
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  width: 100%;
+
+  &amp;.no-border {
+    border-bottom: 1px solid transparent;
+  }
+
+  &amp; .panel-title {
+    width: 80%;
+    line-height: 2;
+  }
+
+  &amp; .panel-search {
+    position: absolute;
+    left: 89%;
+    width: 10%;
+    padding-right: 15px;
+    transition: all 0.3s ease-in;
+
+    &amp;:focus-within {
+      width: 30%;
+      left: 69%;
+      transition: all 0.3s ease-out;
+    }
+  }
+}
+
+.header-icon {
+  margin-right: 15px;
+}
+
+.img-status-responsive {
+  display: inline-flex;
+  max-width: 20px;
+  max-height: 20px;
+}
+
+.list-link {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+&amp;.table {
+  &amp;-header {
+    text-align: center;
+  }
+}
+
+th.active {
+  background-color: #fff !important;
+  color: #428bca;
+
+  &amp;:hover {
+    color: #2a6496;
+  }
+}
+
+table tbody {
+  overflow-x: auto;
+  height: 350px;
+}
+
+.panel-body {
+  border-bottom: 1px solid transparent;
+
+  &amp;.no-records {
+    &amp;:hover {
+      background-color: rgba(0, 0, 0, 0.01);
+      border-radius: 4px;
+      color: rgba(0, 0, 0);
+      text-decoration: underline;
+      transition: all 0.1s ease-in;
+    }
+  }
+}
+
+.single-view {
+  text-align: center;
+  padding: 15px;
+}
+
+.panel {
+  margin-bottom: 0px;
+}
+
+td.issue-data {
+  vertical-align: middle;
+}
+
+.short-description {
+  width: 40%;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira_issue_list</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+
+ }]]></link>
+        <name>Jira Issue List</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  data.table = (input ? (input.table ? input.table : undefined) : undefined) || options.table || $sp.getParameter('table');
+  data.issues = [];
+  data.fields = options.tableHeaders;
+  data.orderBy = (input ? (input.orderBy ? input.orderBy : undefined) : undefined) || options.orderBy || $sp.getParameter('orderBy');
+  data.limit = data.limit || 100;
+  data.page = (input ? input.page : undefined) || 1;
+  data.projects = getProjects();
+  data.canReadAll = Boolean(gs.hasRole('x_momo_jira_integr.issue_tech'));
+  if (input) {
+    if (input.query) {
+      data.query = makeQueryString(input.query, data.canReadAll);
+    }
+  } else {
+
+    data.query = makeQueryString(options.query, data.canReadAll);
+  }
+
+  var gr = new GlideRecord(data.table);
+  gr.addQuery('active', true);
+  gr.addQuery('approval', 'approved');
+  gr.addNotNullQuery('external_id');
+  gr.addEncodedQuery(data.query);
+  var offset = (data.limit * data.page);
+  var limit = (data.page === 1 ? 0 : (data.limit + 1));
+  if (offset > data.total) {
+    offset = (data.total - data.limit) * data.page;
+    limit = data.limit;
+  }
+  if (!data.orderBy) {
+    gr.orderByDesc('sys_created_on');
+  }
+  gr.chooseWindow(limit, offset, true);
+  gr.query();
+
+  data.canRead = gr.canRead();
+
+
+
+  while (gr.next()) {
+    data.total = gr.getRowCount();
+    data.issues.push({
+      sys_id: gr.getUniqueValue(),
+      link: '?id=jira_issues_form&action=2&table=' + gr.getTableName() + '&sys_id=' + gr.getUniqueValue(),
+      short_description: gr.getValue('short_description'),
+      description: gr.getValue('description'),
+      key: gr.getValue('external_key'),
+      assigned_to: gs.nil(gr.getValue('assigned_to')) ? null : gr.getValue('assigned_to'),
+      priority: {
+        name: gr.priority.name.toString(),
+        icon: gr.priority.icon.toString(),
+        sys_id: gr.priority.sys_id.toString(),
+        color: gr.priority.color.toString()
+      },
+      project: {
+        name: gr.project.name.toString(),
+        key: gr.project.external_key.toString(),
+        sys_id: gr.project.sys_id.toString()
+      },
+      requestType: {
+        name: gr.issue_type.name.toString(),
+        icon: gr.issue_type.icon.toString(),
+        sys_id: gr.issue_type.sys_id.toString()
+      },
+      status: {
+        name: gr.status.name.toString(),
+        icon: gr.status.icon.toString(),
+        sys_id: gr.status.sys_id.toString()
+      }
+    });
+  }
+
+  /**
+   * Creates a glide encoded query from widget options or input.
+   * 
+   * @param {object} query The query object. The object should have values with the operator included.
+   * 
+   * @returns {string} The encoded query string.
+   */
+  function makeQueryString(query, canReadAll) {
+    var queryString = [];
+    if (!canReadAll) {
+      queryString.push('sys_created_by=' + gs.getUserName() + '^ORrequested_for=' + gs.getUserID());
+    }
+		if (typeof query === 'string') {
+			queryString.push(query);
+			return queryString.join('^').replace('/^$/', '');
+		}
+    if (typeof query !== 'object' || Array.isArray(query)) return queryString.join('^').replace('/^$/', '');
+
+    var keys = Object.keys(query);
+
+    for (var i in keys) {
+      if (keys[i].toLowerCase() !== 'active') {
+        queryString.push(keys[i].toLowerCase() + query[keys[i]]);
+      }
+    }
+
+
+    return queryString.join('^').replace('/^$/', '');
+  }
+
+  function getProjects() {
+    var results = [];
+    var pgr = new GlideRecord('x_momo_jira_integr_project');
+    pgr.addQuery('active', true);
+    pgr.orderBy('name');
+    pgr.query();
+
+    while (pgr.next()) {
+      results.push({
+        name: pgr.getValue('name'),
+        id: pgr.getUniqueValue()
+      });
+    }
+    return results;
+  }
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 14:52:55</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>27cadfbbdb5e0c10f255132968961927</sys_id>
+        <sys_mod_count>429</sys_mod_count>
+        <sys_name>Jira Issue List</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_27cadfbbdb5e0c10f255132968961927</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2021-03-11 12:37:13</sys_updated_on>
+        <template><![CDATA[<div class="panel panel-default" ng-if="data.canRead">
+  <div class="panel-header" ng-class="{'no-border': (data.canRead && data.issues.length > 0)}">
+    <div class="panel-filter hidden-xs">
+      <span uib-dropdown on-toggle="c.filterToggle(filterOpen)">
+        <button class="btn btn-dropdown btn-default" id="filter-dropdown" uib-dropdown-toggle>
+          {{ projectTitle }}
+          <a class="clear-filter" ng-if="currentProject" href ng-click="onProjectFiltered()">
+            <i class="fa fa-close" aria-hidden="true"></i>
+          </a>
+          <i class="fa" aria-hidden="true" ng-if="!currentProject"
+            ng-class="{'fa-chevron-right': !filterOpen, 'fa-chevron-down': filterOpen}"></i>
+        </button>
+        <ul class="dropdown-menu filter-menu" uib-dropdown-menu aria-labelledby="filter-dropdown">
+          <li ng-repeat="project in data.projects" ng-if="project.id !== currentProject">
+            <a href ng-click="onProjectFiltered(project)">{{project.name}}</a>
+          </li>
+        </ul>
+      </span>
+    </div>
+    <h2 class="panel-title"><span>${Jira Issues}</span></h2>
+    <div class="panel-search hidden-xs">
+      <widget id="jira-search-input"></widget>
+    </div>
+  </div>
+  <div class="panel-body" ng-class="{'no-records': (!data.canRead || data.issues.length === 0)}">
+    <div ng-if="!data.canRead || data.issues.length === 0" class="single-view">
+      <span ng-if="!data.canRead">You do not have permisisons to view Jira Issues</span>
+      <span ng-if="data.issues.length === 0">No records found</span>
+    </div>
+    <div class="table-responsive" ng-if="data.canRead && data.issues.length > 0">
+      <table class="table table-hover">
+        <thead>
+          <th ng-click="setOrderBy(field.name)" scope="col" ng-class="{'active': (orderByField.name == field.name)}"
+            class="table-header" ng-repeat="field in fields">
+            <span>{{::field.display_value}}</span>
+            <span ng-class="setOrderByIcon(field.name)" class="pull-right header-icon hidden-xs"></span>
+          </th>
+        </thead>
+        <tbody>
+          <tr ng-repeat="issue in data.issues">
+            <th scope="row">
+              <a href="{{issue.link}}">
+                <img ng-if="issue.priority" src="{{issue.priority.icon}}"
+                  class="img-responsive img-status-responsive" />
+                <span class="list-link">{{issue.key}}</span>
+              </a>
+            </th>
+            <td class="issue-data">{{issue.requestType.name}}</td>
+            <td class="issue-data">{{issue.status.name}}</td>
+            <td class="issue-data">{{issue.priority.name}}</td>
+            <td class="issue-data">{{issue.project.name}}</td>
+            <td class="issue-data">
+              <div class="padder" ng-if="liveProfiles.hasLiveProfile(issue.assigned_to)">
+                <sn-avatar-once class="avatar-xs" primary="liveProfiles.getLiveProfileById(issue.assigned_to)"
+                  enable-context-menu="false" show-presence="true" enable-tooltip="true"></sn-avatar-once>
+              </div>
+
+            </td>
+            <td class="issue-data short-description">{{issue.short_description}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <div class="row m-l-none m-r-none">
+      <div class="col-md-6 col-xs-4 padder-l-none"></div>
+      <div class="col-md-6 col-xs-8 padder-r-none">
+        <ul uib-pager total-items="data.total" items-per-page="data.limit + 1" ng-disabled="isLoading"
+          ng-model="data.page" ng-change="onPageChange()" class="pull-right pager-primary m-t-none m-b-none"></ul>
+      </div>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

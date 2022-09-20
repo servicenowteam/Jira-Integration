@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sc_cat_item_catalog">
+    <sc_cat_item_catalog action="DELETE">
+        <sc_cat_item display_value="">f687932b1b1a881048a242e58d4bcb87</sc_cat_item>
+        <sc_catalog display_value="Service Catalog">e0d08b13c3330100c8b837659bba8fb4</sc_catalog>
+        <sys_class_name>sc_cat_item_catalog</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-18 20:01:29</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>f5d7d7eb1b1a881048a242e58d4bcb51</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Service Catalog.</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sc_cat_item_catalog_f5d7d7eb1b1a881048a242e58d4bcb51</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-18 20:01:29</sys_updated_on>
+    </sc_cat_item_catalog>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sc_cat_item_catalog_f5d7d7eb1b1a881048a242e58d4bcb51</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sc_cat_item_catalog"><sc_cat_item_catalog action="INSERT_OR_UPDATE"><sc_cat_item display_value="">f687932b1b1a881048a242e58d4bcb87</sc_cat_item><sc_catalog display_value="Service Catalog">e0d08b13c3330100c8b837659bba8fb4</sc_catalog><sys_class_name>sc_cat_item_catalog</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-01-18 20:01:29</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>f5d7d7eb1b1a881048a242e58d4bcb51</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Service Catalog.</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sc_cat_item_catalog_f5d7d7eb1b1a881048a242e58d4bcb51</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-01-18 20:01:29</sys_updated_on></sc_cat_item_catalog></record_update>]]></payload>
+        <payload_hash>-1784050942</payload_hash>
+        <record_name>Service Catalog.</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-18 20:01:29</sys_created_on>
+        <sys_id>75d7d7eb1b1a881048a242e58d4bcb54</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fba3f03710000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-18 20:01:29</sys_updated_on>
+        <type>Catalog Items Catalog</type>
+        <update_guid>7dd7d7eb271a8810e2be7091fdad3653</update_guid>
+        <update_guid_history>7dd7d7eb271a8810e2be7091fdad3653:-1784050942</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">3aeb8a33dbd60c10f25513296896193f</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 09:08:16</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sc_cat_item_catalog">sc_cat_item_catalog</sys_db_object>
+        <sys_id>129752ddbd1b4ba48843f0fa5ad34e29</sys_id>
+        <sys_metadata>f5d7d7eb1b1a881048a242e58d4bcb51</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Service Catalog.</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent display_value="">f687932b1b1a881048a242e58d4bcb87</sys_parent>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sc_cat_item_catalog_f5d7d7eb1b1a881048a242e58d4bcb51</sys_update_name>
+        <sys_update_version display_value="sc_cat_item_catalog_f5d7d7eb1b1a881048a242e58d4bcb51">75d7d7eb1b1a881048a242e58d4bcb54</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 09:08:16</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

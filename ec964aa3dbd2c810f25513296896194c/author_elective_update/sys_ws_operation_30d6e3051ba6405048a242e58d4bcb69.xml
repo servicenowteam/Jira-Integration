@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_operation">
+    <sys_ws_operation action="DELETE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <http_method>POST</http_method>
+        <name>Add Linked Issue</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+  var userAgent = request.getHeader('user-agent');
+  if (!request.getHeader('x-atlassian-webhook-identifier') || !userAgent || !/Atlassian Webhook/gi.test(userAgent)) {
+    response.setError(new sn_ws_err.BadRequestError('Unauthorized'));
+  }
+  var body = request.body.data;
+  var keys = Object.keys(body);
+  if (!body || keys.length === 0) {
+    response.setError(new sn_ws_err.BadRequestError('Empty bodies are not allowed'));
+    response.setStatus(400);
+  }
+
+
+  var issueTable = 'x_momo_jira_integr_issue';
+  var issueLinkTable = 'x_momo_jira_integr_issue_link';
+  var issueLinkTypeTable = 'x_momo_jira_integr_issue_link_type';
+  var issueLink = getRecordByExternalId(issueLinkTable, body.issueLink.id);
+  var issueLinkType = getRecordByExternalId(issueLinkTypeTable, body.issueLink.issueLinkType.id);
+
+  // Check to make sure that the issue link does not already exist
+  // rare case of updating service now, and jira at the same time. Jira beats out
+  // the rest api request from service now. Which would cause duplication.
+  if (!issueLink && body.webhookEvent == 'issuelink_created') {
+    var outwardIssue = getRecordByExternalId(issueTable, body.issueLink.destinationIssueId);
+    var inwardIssue = getRecordByExternalId(issueTable, body.issueLink.sourceIssueId);
+    if (inwardIssue && outwardIssue && issueLinkType) {
+      createdIssueLink(inwardIssue, outwardIssue, issueLinkType, body.issueLink.id);
+      response.setStatus(201);
+    } else {
+      response.setStatus(404);
+    }
+  } else if (body.webhookEvent == 'issuelink_deleted' && issueLink) {
+    deleteIssueLink(issueLink);
+    response.setStatus(204);
+  }
+
+  function deleteIssueLink(sys_id) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue_link');
+
+    gr.get(sys_id);
+
+    if (gr && gr.isValid()) {
+      gr.deleteRecord();
+    }
+  }
+  
+  function createdIssueLink(inwardSysId, outwardSysId, issueLinkTypeSysId, issueLinkId) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue_link');
+    gr.initialize();
+    gr.external_id = issueLinkId;
+    gr.outward_issues = outwardSysId;
+    gr.inward_issue = inwardSysId;
+    gr.type_id = issueLinkTypeSysId;
+    gr.insert();
+    return gr.getUniqueValue();
+  }
+
+  
+  function getRecordByExternalId(table, external_id) {
+    var gr = new GlideRecord(table);
+
+    gr.get("external_id", external_id);
+
+    if (gr && gr.isValid()) return gr.getUniqueValue();
+
+    return false;
+  }
+  
+})(request, response);]]></operation_script>
+        <operation_uri>/api/x_momo_jira_integr/webhooks/issue/linked_issues</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/issue/linked_issues</relative_path>
+        <request_example/>
+        <requires_acl_authorization>true</requires_acl_authorization>
+        <requires_authentication>false</requires_authentication>
+        <requires_snc_internal_role>true</requires_snc_internal_role>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-23 12:58:28</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>30d6e3051ba6405048a242e58d4bcb69</sys_id>
+        <sys_mod_count>17</sys_mod_count>
+        <sys_name>Add Linked Issue</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ws_operation_30d6e3051ba6405048a242e58d4bcb69</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-28 09:14:33</sys_updated_on>
+        <web_service_definition display_value="Issue Webhooks">bd56d3811b66405048a242e58d4bcb33</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_ws_operation_30d6e3051ba6405048a242e58d4bcb69</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ws_operation"&gt;&lt;sys_ws_operation action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;consumes&gt;application/json,application/xml,text/xml&lt;/consumes&gt;&lt;consumes_customized&gt;false&lt;/consumes_customized&gt;&lt;default_operation_uri/&gt;&lt;enforce_acl&gt;cf9d01d3e73003009d6247e603f6a990&lt;/enforce_acl&gt;&lt;http_method&gt;POST&lt;/http_method&gt;&lt;name&gt;Add Linked Issue&lt;/name&gt;&lt;operation_script&gt;&lt;![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+  var userAgent = request.getHeader('user-agent');
+  if (!request.getHeader('x-atlassian-webhook-identifier') || !userAgent || !/Atlassian Webhook/gi.test(userAgent)) {
+    response.setError(new sn_ws_err.BadRequestError('Unauthorized'));
+  }
+  var body = request.body.data;
+  var keys = Object.keys(body);
+  if (!body || keys.length === 0) {
+    response.setError(new sn_ws_err.BadRequestError('Empty bodies are not allowed'));
+    response.setStatus(400);
+  }
+
+
+  var issueTable = 'x_momo_jira_integr_issue';
+  var issueLinkTable = 'x_momo_jira_integr_issue_link';
+  var issueLinkTypeTable = 'x_momo_jira_integr_issue_link_type';
+  var issueLink = getRecordByExternalId(issueLinkTable, body.issueLink.id);
+  var issueLinkType = getRecordByExternalId(issueLinkTypeTable, body.issueLink.issueLinkType.id);
+
+  // Check to make sure that the issue link does not already exist
+  // rare case of updating service now, and jira at the same time. Jira beats out
+  // the rest api request from service now. Which would cause duplication.
+  if (!issueLink &amp;&amp; body.webhookEvent == 'issuelink_created') {
+    var outwardIssue = getRecordByExternalId(issueTable, body.issueLink.destinationIssueId);
+    var inwardIssue = getRecordByExternalId(issueTable, body.issueLink.sourceIssueId);
+    if (inwardIssue &amp;&amp; outwardIssue &amp;&amp; issueLinkType) {
+      createdIssueLink(inwardIssue, outwardIssue, issueLinkType, body.issueLink.id);
+      response.setStatus(201);
+    } else {
+      response.setStatus(404);
+    }
+  } else if (body.webhookEvent == 'issuelink_deleted' &amp;&amp; issueLink) {
+    deleteIssueLink(issueLink);
+    response.setStatus(204);
+  }
+
+  function deleteIssueLink(sys_id) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue_link');
+
+    gr.get(sys_id);
+
+    if (gr &amp;&amp; gr.isValid()) {
+      gr.deleteRecord();
+    }
+  }
+  
+  function createdIssueLink(inwardSysId, outwardSysId, issueLinkTypeSysId, issueLinkId) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue_link');
+    gr.initialize();
+    gr.external_id = issueLinkId;
+    gr.outward_issues = outwardSysId;
+    gr.inward_issue = inwardSysId;
+    gr.type_id = issueLinkTypeSysId;
+    gr.insert();
+    return gr.getUniqueValue();
+  }
+
+  
+  function getRecordByExternalId(table, external_id) {
+    var gr = new GlideRecord(table);
+
+    gr.get("external_id", external_id);
+
+    if (gr &amp;&amp; gr.isValid()) return gr.getUniqueValue();
+
+    return false;
+  }
+  
+})(request, response);]]&gt;&lt;/operation_script&gt;&lt;operation_uri&gt;/api/x_momo_jira_integr/webhooks/issue/linked_issues&lt;/operation_uri&gt;&lt;produces&gt;application/json,application/xml,text/xml&lt;/produces&gt;&lt;produces_customized&gt;false&lt;/produces_customized&gt;&lt;relative_path&gt;/issue/linked_issues&lt;/relative_path&gt;&lt;request_example/&gt;&lt;requires_acl_authorization&gt;true&lt;/requires_acl_authorization&gt;&lt;requires_authentication&gt;false&lt;/requires_authentication&gt;&lt;requires_snc_internal_role&gt;true&lt;/requires_snc_internal_role&gt;&lt;short_description/&gt;&lt;sys_class_name&gt;sys_ws_operation&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg@movement.com&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-01-23 12:58:28&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;30d6e3051ba6405048a242e58d4bcb69&lt;/sys_id&gt;&lt;sys_mod_count&gt;17&lt;/sys_mod_count&gt;&lt;sys_name&gt;Add Linked Issue&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ws_operation_30d6e3051ba6405048a242e58d4bcb69&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-02-28 09:14:33&lt;/sys_updated_on&gt;&lt;web_service_definition display_value="Issue Webhooks"&gt;bd56d3811b66405048a242e58d4bcb33&lt;/web_service_definition&gt;&lt;web_service_version/&gt;&lt;/sys_ws_operation&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>-1821026058</payload_hash>
+        <record_name>Add Linked Issue</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-28 09:14:33</sys_created_on>
+        <sys_id>4dfc04b81b93045048a242e58d4bcb94</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1708b13771d0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-28 09:14:33</sys_updated_on>
+        <type>Scripted REST Resource</type>
+        <update_guid>05fc04b8f3930450b9d31bff535ba294</update_guid>
+        <update_guid_history>05fc04b8f3930450b9d31bff535ba294:-1821026058,bdd15b70a18b4010e3fa66a79f8ba0d6:2016492293,d090df30658b40106f39b3b05d031e66:929755410,c530df30228b4010f201707e4abdd05e:595022875,f0ef4ffc324b4010a0c25880400e6683:1976039923,15bf4730478b4010d3430bbfe5c7fb0f:1748890427,3e2fcb7ce34b401010a1ac327b8644b3:-897075573,5a9e8fbc124b4010a76d087b9ae5fa3a:368558882,5d9e0b7cf14b401073e0494d1e5093af:1704107416,e9fb0ff8da4b4010c5605e253900660b:967948651,ab6b83f8f94b4010565441ea04fd9278:187413647,147a0b78a64b401076d40231d3ad7f64:-651687402,391a4338134b40104061710407787e30:1384841853,03488fb4b74b40101a5e4404daf670ac:1194572733,581843f4c84b4010ae0524d4abb2e653:-676823370,776145d9872e4050a2fd2fa3b184acba:1130360482,f00cef4992a64050cc8adf7f5a8a08d6:575741757,8ef6e3050aa640509d6b340576341e6d:1795088155</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-05 09:23:39</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_ws_operation">sys_ws_operation</sys_db_object>
+        <sys_id>0b08889bb68548738239003a642860e9</sys_id>
+        <sys_metadata>30d6e3051ba6405048a242e58d4bcb69</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Add Linked Issue</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_ws_operation_30d6e3051ba6405048a242e58d4bcb69</sys_update_name>
+        <sys_update_version display_value="sys_ws_operation_30d6e3051ba6405048a242e58d4bcb69">4dfc04b81b93045048a242e58d4bcb94</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-05 09:23:39</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

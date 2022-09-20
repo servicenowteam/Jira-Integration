@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope, spUtil) {
+  /* widget controller */
+  var c = this;
+  $scope.chart = $scope.data.chart;
+  spUtil.recordWatch($scope, $scope.data.table, $scope.data.filter, function(response) {
+    $scope.server.update().then(function(data) {
+      $scope.chart.data = data.chart.data;
+      $scope.chart.labels = data.chart.labels;
+    });
+  });
+
+  $scope.getChartColors = function() {
+    return $scope.data.chart.colors;
+  };
+
+  $scope.getClassName = function() {
+    return 'chart-' + $scope.data.chart.type;
+  };
+
+  $scope.getChartOptions = function() {
+    return $scope.data.chart.options;
+  };
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>&amp;.loader {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.98);
+  transition: all 0.4s ease;
+  display: inline-flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1002;
+
+  &amp;&gt;.sp-loading-indicator {
+    display: flex;
+    width: 54px;
+    height: 18px;
+    margin-left: 20px;
+    justify-content: center;
+    color: $brand-primary;
+  }
+}
+
+.panel-reports {
+  &amp; .panel-body {
+    &amp; canvas {
+      max-height: 222px;
+    }
+  }
+}
+
+.no-data-found {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+  justify-content: center;
+  text-align: center;
+
+  &amp; .no-data-text {
+    text-align: center;
+    text-decoration: underline;
+  }
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira-report-card</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) { 
+
+ }]]></link>
+        <name>Jira Report Card</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  var dset = getDataset({
+    query: options.query,
+    groupBy: options.groupBy,
+    table: options.table,
+    trendBy: options.trendBy,
+    useSeries: options.type === 'bar',
+    limitResults: options.limitResults
+  });
+
+  data.noResultsMsg = options.noResultsMsg;
+
+  data.table = options.table;
+  data.query = options.query;
+  data.filter = options.filter || 'active=true^approval=approved';
+  data.chart = {
+    type: getChartTypeByOptions(options.chartType),
+    colors: getChartColors(options.colors, dset.labels.length),
+    title: options.title,
+    data: dset.data,
+    labels: dset.labels,
+    legend: {
+      display: true,
+      position: 'bottom',
+      align: 'center'
+    }
+  };
+
+  data.canRead = gs.hasRole('x_momo_jira_integr.issue_tech');
+
+  function getDataset(opts) {
+    var dataset = {
+      labels: [],
+      data: []
+    };
+    var ga = new GlideAggregate(opts.table);
+    ga.addAggregate('COUNT');
+    ga.addEncodedQuery(opts.query);
+    
+    if (opts.groupBy) {
+      ga.groupBy(opts.groupBy);
+    }
+
+    if (opts.trendBy) {
+      ga.addTrend(opts.trendBy, 'Month');
+    }
+    
+    ga.query();
+
+    while (ga.next()) {
+      if (opts.groupBy) {
+        dataset.labels.push(ga.getDisplayValue(opts.groupBy));
+      }
+      dataset.data.push(ga.getAggregate('COUNT'));
+    }
+    dataset.data = dataset.data.map(function(d) {
+      if (typeof d === 'string') {
+        return opts.useSeries ? [ Number(d) ] : Number(d);
+      }
+      return opts.useSeries ? [ d ] : d;
+    });
+    return dataset;
+  }
+
+
+  function getChartColors(colors, maxLength) {
+    if (!colors) return;
+    if (!Array.isArray(colors)) return;
+
+    return colors.slice(0, maxLength);
+  }
+
+  function getChartTypeByOptions(type) {
+    var VALID_CHART_TYPES = [
+      'doughnut',
+      'pie',
+      'line',
+      'bubble',
+      'radar',
+      'polar-area',
+      'bar',
+      'horizontal-bar'
+    ];
+
+    if (!type) return 'bar';
+
+    if (VALID_CHART_TYPES.indexOf(type) < 0) {
+      return 'bar';
+    }
+
+    return type;
+  }
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-13 12:26:57</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>333f74111b6b889048a242e58d4bcb8d</sys_id>
+        <sys_mod_count>84</sys_mod_count>
+        <sys_name>Jira Report Card</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_333f74111b6b889048a242e58d4bcb8d</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-07-15 14:06:10</sys_updated_on>
+        <template><![CDATA[<div class="panel panel-default panel-reports">
+  <div class="panel-heading" ng-if="data.chart.title">
+    <div class="panel-title">{{ data.chart.title }}</div>
+  </div>
+  <div class="panel-body">
+    <div class="no-data-found" ng-if="data.chart.data.length === 0">
+      <span class="no-data-text" ng-if="data.noResultsMsg" ng-bind="data.noResultsMsg"></span>
+      <span class="no-data-text" ng-if="!data.noResultsMsg">${Nothing to see here}</span>
+    </div>
+    <canvas class="chart-doughnut"
+      ng-if="data.chart.type === 'doughnut' && data.chart.data.length > 0"
+      chart-type="data.chart.type"
+      id="doughnut"
+      chart-legend="data.chart.legend"
+      chart-colors="data.chart.colors"
+      chart-data="chart.data"
+      chart-labels="chart.labels"></canvas>
+    <canvas class="chart-pie"
+      ng-if="data.chart.type === 'pie' && data.chart.data.length > 0"
+      chart-type="data.chart.type"
+      id="pie"
+      chart-legend="data.chart.legend"
+      chart-colors="data.chart.colors"
+      chart-data="chart.data"
+      chart-labels="chart.labels"></canvas>
+    <canvas class="chart-bar"
+      ng-if="data.chart.type === 'bar' && data.chart.data.length > 0"
+      chart-type="data.chart.type"
+      id="bar"
+      chart-legend="data.chart.legend"
+      chart-colors="data.chart.colors"
+      chart-series="chart.data"
+      chart-labels="chart.labels"></canvas>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

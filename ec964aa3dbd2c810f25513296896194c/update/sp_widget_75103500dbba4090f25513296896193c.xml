@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>standard</category>
+        <client_script><![CDATA[function($scope, $rootScope, spUtil) {
+	var c = this;
+	c.expanded = !spUtil.isMobile();
+	c.expand = function() {
+		c.expanded = true;
+	};
+
+	var deregister = $rootScope.$on("sp.update.breadcrumbs", function(e, list) {
+		c.breadcrumbs = list;
+	});
+
+	$scope.$on('$destroy', function(){
+		deregister();
+  });
+  
+  c.goBack = function() {
+    window.location.href = "?id=application_development_requests";
+  }
+
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.nav {
+  li {
+    padding: 10px 7px;
+
+    &gt; span {
+      &gt; a {
+          display: inline;
+      }
+
+      &gt; i {
+          padding-left: 15px;
+      }
+    }
+  }
+}
+
+.a-disabled {
+  cursor: default;
+  color: $sp-disabled-breadcrumb;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira-breadcrumbs</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Jira Form Breadcrumbs</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-01 12:00:51</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>75103500dbba4090f25513296896193c</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>Jira Form Breadcrumbs</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_75103500dbba4090f25513296896193c</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-08 18:31:40</sys_updated_on>
+        <template><![CDATA[<div aria-label="${Page breadcrumbs}" role="navigation">
+<ul class="nav nav-pills nav-sm">
+  <li>
+    <span><a ng-click="c.goBack()" role="button">${Home}</a>
+      <i aria-hidden="true" class="fa fa-chevron-right"></i></span>
+  </li>
+  <li ng-if="!c.expanded &amp;&amp; c.breadcrumbs &amp;&amp; c.breadcrumbs.length > 2">
+    <span><a ng-click="c.expand()"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></a>
+      <i aria-hidden="true" class="fa fa-chevron-right"></i></span>
+  </li>
+  <li ng-if="!c.breadcrumbs"><span><a style="display: inline;" class="a-disabled" aria-current="page" href>{{page.title}}</a></span></li>
+  <li ng-if="c.expanded || ((c.breadcrumbs.length > 2  &amp;&amp; $index > c.breadcrumbs.length-3) || (c.breadcrumbs.length <= 2))" ng-repeat="item in c.breadcrumbs track by $index" >
+    <span><a ng-if="!$last" ng-href="{{item.url}}">{{item.label}}</a>
+      <a class="a-disabled" ng-if="$last" aria-current="page" href>{{item.label}}</a>
+      <i aria-hidden="true" ng-if="!$last" class="fa fa-chevron-right"></i></span>
+  </li>
+</ul>
+</div>]]></template>
+    </sp_widget>
+</record_update>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_widget_dependency">
+    <m2m_sp_widget_dependency action="DELETE">
+        <sp_dependency display_value="ngMarkdown">1714b2d9db7a1050f2551329689619a6</sp_dependency>
+        <sp_widget display_value="Jira Issue Form">d4366904db7a4090f255132968961901</sp_widget>
+        <sys_class_name>m2m_sp_widget_dependency</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-08-22 11:21:03</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>0eb18bd9dbba1050f2551329689619df</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>ngMarkdown.Jira Issue Form</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>m2m_sp_widget_dependency_0eb18bd9dbba1050f2551329689619df</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-08-22 11:21:03</sys_updated_on>
+    </m2m_sp_widget_dependency>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>m2m_sp_widget_dependency_0eb18bd9dbba1050f2551329689619df</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_widget_dependency"><m2m_sp_widget_dependency action="INSERT_OR_UPDATE"><sp_dependency display_value="ngMarkdown">1714b2d9db7a1050f2551329689619a6</sp_dependency><sp_widget display_value="Jira Issue Form">d4366904db7a4090f255132968961901</sp_widget><sys_class_name>m2m_sp_widget_dependency</sys_class_name><sys_created_by>douglas.schamberg@movement.com</sys_created_by><sys_created_on>2020-08-22 11:21:03</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>0eb18bd9dbba1050f2551329689619df</sys_id><sys_mod_count>0</sys_mod_count><sys_name>ngMarkdown.Jira Issue Form</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>m2m_sp_widget_dependency_0eb18bd9dbba1050f2551329689619df</sys_update_name><sys_updated_by>douglas.schamberg@movement.com</sys_updated_by><sys_updated_on>2020-08-22 11:21:03</sys_updated_on></m2m_sp_widget_dependency></record_update>]]></payload>
+        <payload_hash>2056077675</payload_hash>
+        <record_name>ngMarkdown.Jira Issue Form</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-08-22 11:21:03</sys_created_on>
+        <sys_id>86b18bd9dbba1050f2551329689619e2</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>17415e687ae0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-08-22 11:21:03</sys_updated_on>
+        <type>Widget Dependency</type>
+        <update_guid>8eb18bd996ba105048b4c499ea1112e1</update_guid>
+        <update_guid_history>8eb18bd996ba105048b4c499ea1112e1:2056077675</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">1e52c35ddbba1050f255132968961937</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-08-22 11:23:48</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="m2m_sp_widget_dependency">m2m_sp_widget_dependency</sys_db_object>
+        <sys_id>3fada8f42f4b4748a4fe943130827924</sys_id>
+        <sys_metadata>0eb18bd9dbba1050f2551329689619df</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>ngMarkdown.Jira Issue Form</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>m2m_sp_widget_dependency_0eb18bd9dbba1050f2551329689619df</sys_update_name>
+        <sys_update_version display_value="m2m_sp_widget_dependency_0eb18bd9dbba1050f2551329689619df">86b18bd9dbba1050f2551329689619e2</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-08-22 11:23:48</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

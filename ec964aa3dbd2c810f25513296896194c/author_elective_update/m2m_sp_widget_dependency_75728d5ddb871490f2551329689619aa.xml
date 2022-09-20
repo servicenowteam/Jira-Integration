@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_widget_dependency">
+    <m2m_sp_widget_dependency action="DELETE">
+        <sp_dependency display_value="ng-quill-dev">6f4d7099db871490f2551329689619cc</sp_dependency>
+        <sp_widget display_value="Jira Quill Editor">d362c75ddbba1050f255132968961997</sp_widget>
+        <sys_class_name>m2m_sp_widget_dependency</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-09-03 12:20:47</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>75728d5ddb871490f2551329689619aa</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>ng-quill-dev.Jira Quill Editor</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>m2m_sp_widget_dependency_75728d5ddb871490f2551329689619aa</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-09-03 12:20:47</sys_updated_on>
+    </m2m_sp_widget_dependency>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>m2m_sp_widget_dependency_75728d5ddb871490f2551329689619aa</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_widget_dependency"><m2m_sp_widget_dependency action="INSERT_OR_UPDATE"><sp_dependency display_value="ng-quill-dev">6f4d7099db871490f2551329689619cc</sp_dependency><sp_widget display_value="Jira Quill Editor">d362c75ddbba1050f255132968961997</sp_widget><sys_class_name>m2m_sp_widget_dependency</sys_class_name><sys_created_by>douglas.schamberg@movement.com</sys_created_by><sys_created_on>2020-09-03 12:20:47</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>75728d5ddb871490f2551329689619aa</sys_id><sys_mod_count>0</sys_mod_count><sys_name>ng-quill-dev.Jira Quill Editor</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>m2m_sp_widget_dependency_75728d5ddb871490f2551329689619aa</sys_update_name><sys_updated_by>douglas.schamberg@movement.com</sys_updated_by><sys_updated_on>2020-09-03 12:20:47</sys_updated_on></m2m_sp_widget_dependency></record_update>]]></payload>
+        <payload_hash>-324053685</payload_hash>
+        <record_name>ng-quill-dev.Jira Quill Editor</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-09-03 12:20:47</sys_created_on>
+        <sys_id>bd728d5ddb871490f2551329689619ac</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>17453e985ed0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-09-03 12:20:47</sys_updated_on>
+        <type>Widget Dependency</type>
+        <update_guid>b5728d5dfd87149078334afbab4fddac</update_guid>
+        <update_guid_history>b5728d5dfd87149078334afbab4fddac:-324053685</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">e7aa451ddbc71490f2551329689619f3</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-09-03 12:56:40</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="m2m_sp_widget_dependency">m2m_sp_widget_dependency</sys_db_object>
+        <sys_id>20625c7417f94339a4fd10df02d999e1</sys_id>
+        <sys_metadata>75728d5ddb871490f2551329689619aa</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>ng-quill-dev.Jira Quill Editor</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>m2m_sp_widget_dependency_75728d5ddb871490f2551329689619aa</sys_update_name>
+        <sys_update_version display_value="m2m_sp_widget_dependency_75728d5ddb871490f2551329689619aa">bd728d5ddb871490f2551329689619ac</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-09-03 12:56:40</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

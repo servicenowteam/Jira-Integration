@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_momo_jira_integr_issue_link</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="x_momo_jira_integr_issue_link">inward_issueISNOTEMPTY^outward_issuesISNOTEMPTY^outward_issues.approval=approved^inward_issue.approval=approved^EQ<item endquery="false" field="inward_issue" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item endquery="false" field="outward_issues" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item endquery="false" field="outward_issues.approval" goto="false" newquery="false" operator="=" or="false" value="approved"/>
+            <item endquery="false" field="inward_issue.approval" goto="false" newquery="false" operator="=" or="false" value="approved"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Create Issue Link</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/ ) {
+  if (current.getValue('sys_updated_by') == 'guest') return;
+  
+  gs.include('JiraRequestV2');
+
+  var request = new JiraRequestV2();
+  var body = {
+    type: {
+      name: current.type_id.name.toString()
+    },
+    outwardIssue: {
+      id: current.outward_issues.external_id.toString()
+    },
+    inwardIssue: {
+      id: current.inward_issue.external_id.toString()
+    }
+  };
+  var created = request.send({
+    path: 'issueLink',
+    method: 'POST',
+    body: body
+  }).getResponse(function(results, status) {
+    return (status == 200 || status == 204);
+  });
+
+  if (created) {
+    var issuelinks = request.send({
+      path: 'issue/' + current.inward_issue.external_id.toString(),
+      qs: {
+        fields: 'issuelinks'
+      },
+      method: 'GET',
+      body: null
+    }).getResponse(function(results) {
+      if (!results) return;
+      return results.fields.issuelinks;
+    });
+
+    if (Array.isArray(issuelinks)) {
+      var type_id = current.type_id.external_id.toString();
+      var table_name = current.getTableName();
+      var linkId = getIssueLinkId(type_id, table_name, issuelinks);
+
+      if (linkId && typeof linkId === 'string') {
+        current.setValue("external_id", linkId);
+        current.update();
+      } else {
+        current.deleteRecord();
+      }
+    }
+  } else {
+    current.deleteRecord();
+  }
+  function getIssueLinkId(typeId, table, issueLinks) {
+    var issue = issueLinks.filter(function(link) {
+      return link.type.id === typeId;
+    }).map(function(item) {
+      return item.id;
+    })[0];
+
+    var gr = new GlideRecord(table);
+    gr.get("external_id", issue);
+    if (gr.isValid()) return issue;
+    return false;
+  }
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-13 08:22:30</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>fc01b6fb1bfe005048a242e58d4bcb9e</sys_id>
+        <sys_mod_count>34</sys_mod_count>
+        <sys_name>Create Issue Link</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_fc01b6fb1bfe005048a242e58d4bcb9e</sys_update_name>
+        <sys_updated_by>Adrian.Wilson</sys_updated_by>
+        <sys_updated_on>2022-09-15 17:51:40</sys_updated_on>
+        <template/>
+        <when>async_always</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=fc01b6fb1bfe005048a242e58d4bcb9e"/>
+</record_update>

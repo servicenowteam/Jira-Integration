@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>false</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_momo_jira_integr_issue</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="x_momo_jira_integr_issue">active=true^external_idISNOTEMPTY^approval=approved^short_descriptionVALCHANGES^ORprocess_changeVALCHANGES^ORpriorityVALCHANGES^ORproductsVALCHANGES^ORrequest_implementation_dateVALCHANGES^ORrequested_forVALCHANGES^ORdescriptionVALCHANGES^EQ<item endquery="false" field="active" goto="false" newquery="false" operator="=" or="false" value="true"/>
+            <item endquery="false" field="external_id" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item endquery="false" field="approval" goto="false" newquery="false" operator="=" or="false" value="approved"/>
+            <item endquery="false" field="short_description" goto="false" newquery="false" operator="VALCHANGES" or="false" value=""/>
+            <item endquery="false" field="process_change" goto="false" newquery="false" operator="VALCHANGES" or="true" value=""/>
+            <item endquery="false" field="priority" goto="false" newquery="false" operator="VALCHANGES" or="true" value=""/>
+            <item endquery="false" field="products" goto="false" newquery="false" operator="VALCHANGES" or="true" value=""/>
+            <item endquery="false" field="request_implementation_date" goto="false" newquery="false" operator="VALCHANGES" or="true" value=""/>
+            <item endquery="false" field="requested_for" goto="false" newquery="false" operator="VALCHANGES" or="true" value=""/>
+            <item endquery="false" field="description" goto="false" newquery="false" operator="VALCHANGES" or="true" value=""/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Update Jira Issue</name>
+        <order>101</order>
+        <priority>101</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions>x_momo_jira_integr.issue_user</role_conditions>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/ ) {
+  if (current.getValue('sys_updated_by') == 'guest') return;
+  gs.include('JiraRequestV2');
+
+  var body = {
+    fields: {
+      summary: current.getValue('short_description'),
+      description: current.getValue('description'),
+      priority: {
+        id: getExternalId('x_momo_jira_integr_priority', current.getValue('priority'))
+      },
+      customfield_10953: {
+        value: current.getValue('process_change') == 0 ? "No" : "Yes"
+      },
+      customfield_10301: current.getDisplayValue('requested_for')
+    },
+    update: {}
+  };
+
+  if (!current.request_implementation_date.nil()) {
+    body.fields.customfield_10941 = current.getValue('request_implementation_date');
+  }
+
+  var products = [];
+
+  if (!current.products.nil()) {
+    var _products = current.getValue('products');
+    if (/,/gi.test(_products)) {
+      _products = _products.split(',');
+      for (var i in _products) {
+        products.push({
+          id: getExternalId('x_momo_jira_integr_product', _products[i])
+        });
+      }
+    } else {
+      products.push({
+        id: getExternalId('x_momo_jira_integr_product', _products)
+      });
+    }
+  }
+  body.fields.components = products;
+
+  var request = new JiraRequestV2();
+
+  request.send({
+    path: 'issue/' + current.getValue('external_id'),
+    method: 'PUT',
+    body: body,
+    async: true
+  });
+
+  function getExternalId(table, sys_id) {
+    var instance = new GlideRecord(table);
+    instance.addQuery('sys_id', sys_id.toString());
+    instance.query();
+    while (instance.next()) {
+      return instance.getValue('external_id');
+    }
+  }
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-09 13:11:53</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>3a6c8fee1b32c81048a242e58d4bcb13</sys_id>
+        <sys_mod_count>81</sys_mod_count>
+        <sys_name>Update Jira Issue</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_3a6c8fee1b32c81048a242e58d4bcb13</sys_update_name>
+        <sys_updated_by>Adrian.Wilson</sys_updated_by>
+        <sys_updated_on>2022-09-15 18:01:56</sys_updated_on>
+        <template/>
+        <when>async_always</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=3a6c8fee1b32c81048a242e58d4bcb13"/>
+</record_update>

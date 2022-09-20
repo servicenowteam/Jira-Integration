@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_action">
+    <sys_ui_action action="INSERT_OR_UPDATE">
+        <action_name>sysverb_new</action_name>
+        <active>true</active>
+        <client>false</client>
+        <client_script_v2><![CDATA[function onClick(g_form) {
+
+}]]></client_script_v2>
+        <comments/>
+        <condition/>
+        <form_action>false</form_action>
+        <form_button>false</form_button>
+        <form_button_v2>false</form_button_v2>
+        <form_context_menu>false</form_context_menu>
+        <form_link>false</form_link>
+        <form_menu_button_v2>false</form_menu_button_v2>
+        <form_style/>
+        <format_for_configurable_workspace>false</format_for_configurable_workspace>
+        <hint/>
+        <isolate_script>false</isolate_script>
+        <list_action>true</list_action>
+        <list_banner_button>true</list_banner_button>
+        <list_button>false</list_button>
+        <list_choice>false</list_choice>
+        <list_context_menu>false</list_context_menu>
+        <list_link>false</list_link>
+        <list_save_with_form_button>false</list_save_with_form_button>
+        <list_style>unstyled</list_style>
+        <messages/>
+        <name>Import Projects</name>
+        <onclick/>
+        <order>100</order>
+        <script><![CDATA[gs.include('JiraRequestV2');
+
+var util = new global.ArrayUtil();
+
+var request = new JiraRequestV2();
+
+request.send({
+  path: 'project/search?expand=issueTypes'
+}).getResponse(function (results) {
+  if (!results) return;
+  if (!Array.isArray(results.values)) return;
+
+  var included = gs.getProperty('x_momo_jira_integr.included_project_keys');
+  if (!gs.nil(included)) {
+    if (/,/gi.test(included)) {
+      included = included.split(',');
+    } else {
+      included = [included];
+    }
+  }
+  var gProjects = new GlideRecord('x_momo_jira_integr_project');
+  var alreadyExistsInTable = [];
+
+  gProjects.addQuery('active', true);
+  gProjects.query();
+  while (gProjects.next()) {
+    alreadyExistsInTable.push(gProjects.getValue('external_id'));
+  }
+  results.values.filter(function (item) {
+    return !item.isPrivate && !util.contains(included, item.key) && !util.contains(alreadyExistsInTable, item.id);
+  }).map(function (proj) {
+    return {
+      external_id: proj.id,
+      external_key: proj.key,
+      name: proj.name,
+      issueTypes: proj.issueTypes
+    };
+  }).forEach(function (project) {
+    var keys = Object.keys(project);
+    var instance = new GlideRecord('x_momo_jira_integr_project');
+
+    instance.initialize();
+
+    for (var i in keys) {
+      instance[keys[i]] = project[keys[i]];
+    }
+
+    instance.insert();
+    var issueTypes = project.issueTypes.map(function (item) {
+      var host = gs.getProperty('x_momo_jira_integr.instance_name') + '/';
+      return {
+        external_id: item.id,
+        description: item.description,
+        icon: item.iconUrl !== host ? item.iconUrl : '',
+        name: item.name
+      }
+    })
+    for (var iss in issueTypes) {
+      var issueType = issueTypes[iss];
+      var alreadyExistsInTable = [];
+      var gIssueTypes = new GlideRecord('x_momo_jira_integr_issue_type');
+      gIssueTypes.addQuery('project', instance.getUniqueValue());
+      gIssueTypes.query();
+      while (gIssueTypes.next()) {
+        alreadyExistsInTable.push(gIssueTypes.getValue('external_id'));
+      }
+      var kys = Object.keys(issueType);
+
+      if (!util.contains(alreadyExistsInTable, issueType.external_id)) {
+        var inst = new GlideRecord('x_momo_jira_integr_issue_type');
+        inst.initialize();
+        for (var a in kys) {
+          inst[kys[a]] = issueType[kys[a]];
+        }
+        inst.project = instance.getUniqueValue();
+        inst.insert();
+      }
+    }
+  });
+});]]></script>
+        <show_insert>false</show_insert>
+        <show_multiple_update>false</show_multiple_update>
+        <show_query>false</show_query>
+        <show_update>true</show_update>
+        <sys_class_name>sys_ui_action</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-20 16:15:50</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>59073cd8db2a8c10f25513296896195a</sys_id>
+        <sys_mod_count>20</sys_mod_count>
+        <sys_name>Import Projects</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_ui_action_59073cd8db2a8c10f25513296896195a</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-07-16 15:29:15</sys_updated_on>
+        <table>x_momo_jira_integr_project</table>
+        <ui11_compatible>true</ui11_compatible>
+        <ui16_compatible>false</ui16_compatible>
+    </sys_ui_action>
+</record_update>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_widget_dependency">
+    <m2m_sp_widget_dependency action="INSERT_OR_UPDATE">
+        <sp_dependency display_value="angular-marked.min.js">3d6bbf341b4f401048a242e58d4bcb70</sp_dependency>
+        <sp_widget display_value="Jira Form Activity Feed">39870a701bb6801048a242e58d4bcb1d</sp_widget>
+        <sys_class_name>m2m_sp_widget_dependency</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-16 17:24:09</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>f3e9c4851b8f401048a242e58d4bcbc0</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>angular-marked.min.js.Jira Form Activity Feed</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>m2m_sp_widget_dependency_f3e9c4851b8f401048a242e58d4bcbc0</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-16 17:24:09</sys_updated_on>
+    </m2m_sp_widget_dependency>
+</record_update>

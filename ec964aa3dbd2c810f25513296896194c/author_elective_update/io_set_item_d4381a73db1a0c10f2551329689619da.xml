@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="io_set_item">
+    <io_set_item action="DELETE">
+        <order>2</order>
+        <sc_cat_item display_value="Application Defect">e9cc8ef3dbd60c10f255132968961966</sc_cat_item>
+        <sys_class_name>io_set_item</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 10:12:24</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>d4381a73db1a0c10f2551329689619da</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Application Description.Application Defect</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>io_set_item_d4381a73db1a0c10f2551329689619da</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 10:12:24</sys_updated_on>
+        <variable_set display_value="Application Description">8238de73db1a0c10f2551329689619b1</variable_set>
+    </io_set_item>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>io_set_item_d4381a73db1a0c10f2551329689619da</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="io_set_item"><io_set_item action="INSERT_OR_UPDATE"><order>2</order><sc_cat_item display_value="Application Defect">e9cc8ef3dbd60c10f255132968961966</sc_cat_item><sys_class_name>io_set_item</sys_class_name><sys_created_by>douglas.schamberg@movement.com</sys_created_by><sys_created_on>2020-01-19 10:12:24</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>d4381a73db1a0c10f2551329689619da</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Application Description.Application Defect</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>io_set_item_d4381a73db1a0c10f2551329689619da</sys_update_name><sys_updated_by>douglas.schamberg@movement.com</sys_updated_by><sys_updated_on>2020-01-19 10:12:24</sys_updated_on><variable_set display_value="Application Description">8238de73db1a0c10f2551329689619b1</variable_set></io_set_item></record_update>]]></payload>
+        <payload_hash>172331372</payload_hash>
+        <record_name>Application Description.Application Defect</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 10:12:24</sys_created_on>
+        <sys_id>e69a96b3db1a0c10f25513296896198e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fbd4a0e650000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 10:12:24</sys_updated_on>
+        <type>Catalog Variable Set</type>
+        <update_guid>ee9a96b3f11a0c10e61e5922c330d58d</update_guid>
+        <update_guid_history>ee9a96b3f11a0c10e61e5922c330d58d:172331372</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">a4526affdb1a0c10f2551329689619ef</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 10:46:08</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="io_set_item">io_set_item</sys_db_object>
+        <sys_id>3795c4bd0b66448094e62346bcef4400</sys_id>
+        <sys_metadata>d4381a73db1a0c10f2551329689619da</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Application Description.Application Defect</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>io_set_item_d4381a73db1a0c10f2551329689619da</sys_update_name>
+        <sys_update_version display_value="io_set_item_d4381a73db1a0c10f2551329689619da">e69a96b3db1a0c10f25513296896198e</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 10:46:08</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

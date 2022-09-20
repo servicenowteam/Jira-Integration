@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module">
+    <sys_app_module action="DELETE">
+        <active>true</active>
+        <application display_value="Jira Integration">4dd60ee3dbd2c810f255132968961935</application>
+        <assessment/>
+        <content_page/>
+        <device_type/>
+        <filter/>
+        <hint/>
+        <homepage/>
+        <image/>
+        <link_type>SEPARATOR</link_type>
+        <map_page/>
+        <mobile_app_module/>
+        <mobile_title>Catalog Item</mobile_title>
+        <mobile_view_name>Mobile</mobile_view_name>
+        <name/>
+        <order>1</order>
+        <override_menu_roles>false</override_menu_roles>
+        <query/>
+        <report/>
+        <roles/>
+        <survey/>
+        <survey_overwrite>true</survey_overwrite>
+        <sys_class_name>sys_app_module</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-18 14:07:32</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path/>
+        <sys_id>c5d64e27dbd2c810f255132968961991</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Catalog Item</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_app_module_c5d64e27dbd2c810f255132968961991</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-18 14:07:32</sys_updated_on>
+        <timeline_page/>
+        <title>Catalog Item</title>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+        <view_on_mobile>false</view_on_mobile>
+        <window_name/>
+    </sys_app_module>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_app_module_c5d64e27dbd2c810f255132968961991</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module"><sys_app_module action="INSERT_OR_UPDATE"><active>true</active><application display_value="Jira Integration">4dd60ee3dbd2c810f255132968961935</application><assessment/><content_page/><device_type/><filter/><hint/><homepage/><image/><link_type>SEPARATOR</link_type><map_page/><mobile_app_module/><mobile_title>Catalog Item</mobile_title><mobile_view_name>Mobile</mobile_view_name><name/><order>1</order><override_menu_roles>false</override_menu_roles><query/><report/><roles/><survey/><survey_overwrite>true</survey_overwrite><sys_class_name>sys_app_module</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-01-18 14:07:32</sys_created_on><sys_customer_update>false</sys_customer_update><sys_domain>global</sys_domain><sys_domain_path/><sys_id>c5d64e27dbd2c810f255132968961991</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Catalog Item</sys_name><sys_overrides/><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sys_app_module_c5d64e27dbd2c810f255132968961991</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-01-18 14:07:32</sys_updated_on><timeline_page/><title>Catalog Item</title><uncancelable>false</uncancelable><view_name/><view_on_mobile>false</view_on_mobile><window_name/></sys_app_module></record_update>]]></payload>
+        <payload_hash>951150417</payload_hash>
+        <record_name>Catalog Item</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-18 14:07:32</sys_created_on>
+        <sys_id>c1d64e27dbd2c810f255132968961994</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fb8faf6b30000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-18 14:07:32</sys_updated_on>
+        <type>Module</type>
+        <update_guid>c9d64e27f1d2c8100a07fbb1f23d5893</update_guid>
+        <update_guid_history>c9d64e27f1d2c8100a07fbb1f23d5893:951150417</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">a42a82abdbd2c810f25513296896198d</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-18 14:21:59</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_app_module">sys_app_module</sys_db_object>
+        <sys_id>0523184658b941e8802ed97a54dc3284</sys_id>
+        <sys_metadata>c5d64e27dbd2c810f255132968961991</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Catalog Item</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_app_module_c5d64e27dbd2c810f255132968961991</sys_update_name>
+        <sys_update_version display_value="sys_app_module_c5d64e27dbd2c810f255132968961991">c1d64e27dbd2c810f255132968961994</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-18 14:21:59</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

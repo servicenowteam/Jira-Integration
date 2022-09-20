@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_instance">
+    <sp_instance action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <class_name/>
+        <color>default</color>
+        <css/>
+        <glyph/>
+        <id>jira-issue-list</id>
+        <order>1</order>
+        <roles/>
+        <short_description/>
+        <size>md</size>
+        <sp_column display_value="1">65b60988dbb64090f2551329689619f8</sp_column>
+        <sp_widget display_value="Jira Issue List">27cadfbbdb5e0c10f255132968961927</sp_widget>
+        <sys_class_name>sp_instance</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-01 09:00:11</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>cbb68d88dbb64090f2551329689619bb</sys_id>
+        <sys_mod_count>8</sys_mod_count>
+        <sys_name>Jira Issue List</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_instance_cbb68d88dbb64090f2551329689619bb</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-05 12:39:15</sys_updated_on>
+        <title>Jira Issue List</title>
+        <url/>
+        <widget_parameters><![CDATA[{
+  "table": "x_momo_jira_integr_issue",
+  "orderBy": "sys_created_on",
+  "tableHeaders": ["Jira Number", "Request Type", "Status", "Priority", "Project", "Assigned to", "Short Description"]
+}]]></widget_parameters>
+    </sp_instance>
+    <sys_translated_text action="delete_multiple" query="documentkey=cbb68d88dbb64090f2551329689619bb"/>
+</record_update>

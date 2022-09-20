@@ -1,0 +1,1011 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="DELETE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_momo_jira_integr.JiraADFBuilder</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description>Text utils for comments,  mocked after Jira's client library for javascript&#13;
+&#13;
+https://developer.atlassian.com/cloud/jira/platform/apis/document/libs/</description>
+        <name>JiraADFBuilder</name>
+        <script><![CDATA[var JiraADFBuilder = Class.create();
+JiraADFBuilder.prototype = {
+  version: 1,
+  initialize: function (version) {
+    var ContentNode = this.ContentNode;
+    this.version = version || 1;
+    this.content = new ContentNode('doc', 0);
+  },
+  ContentNode: function(type, minLength) {
+    function ContentNode(type, minLength) {
+      this.content = [];
+      this.type = type;
+      this.minLength = minLength;
+    }
+
+    ContentNode.prototype.add = function(node) {
+      if (!node) {
+        throw new Error('Illegal Value');
+      }
+      if (node instanceof ContentNode) {
+        this.content.push(node);
+      }
+      return node;
+    };
+
+    ContentNode.prototype.toJSON = function() {
+      return {
+        type: this.type,
+        content: this.content.map(function(n) {
+          return n.toJSON();
+        })
+      };
+    };
+    // Noop to be used with child classes.
+    ContentNode.prototype.toHTML = function() {};
+
+    return ContentNode.bind(this, type, minLength);
+  },
+  Mark: function(type) {
+    function Mark(type) {
+      this.type = type;
+    };
+
+    Mark.prototype.toHTML = function(text) {
+      return '<' + this.type + '>' + text + '</' + this.type + '>';
+    }
+
+    Mark.prototype.toJSON = function() {
+      return {
+        type: this.type
+      };
+    };
+
+    Mark.prototype.toHTML = function() {};
+
+    return Mark.bind(this, type);
+  },
+  Marks: function() {
+    var Mark = this.Mark;
+    
+    function SubSup(type, variant) {
+      Mark.call(this, type);
+      this.variant = variant;
+    }
+
+    SubSup.prototype = Object.create(Mark);
+    SubSup.prototype.constructor = SubSup;
+
+    SubSup.prototype.toJSON = function() {
+      return {
+        type: this.type,
+        attrs: {
+          type: this.variant
+        }
+      };
+    };
+
+    SubSup.prototype.toHTML = function() {};
+
+    function Marks() {
+      this.marks = [];
+    }
+
+    Marks.prototype.code = function() {
+      return this.add(new Mark('code'));
+    };
+
+    Marks.prototype.em = function() {
+      return this.add(new Mark('em'));
+    };
+    Marks.prototype.link = function(href, title) {
+      
+      function Link(href, title) {
+        Mark.call(this, 'link');
+        this.href = href;
+        this.title = title;
+      }
+
+      Link.prototype = Object.create(Mark.prototype);
+      Link.prototype.constructor = Link;
+      Link.prototype.toHTML = function() {
+        return '<a href="' + this.href + '">' + (this.title ? this.title : this.href) + '</a>'; 
+      };
+      Link.prototype.toJSON = function() {
+        var linkMark = {
+          type: this.type,
+          attrs: {
+            href: this.href
+          }
+        };
+
+        if (this.title) {
+          linkMark.attrs.title = this.title;
+        }
+
+        return linkMark;
+      };
+
+      return this.add(new Link(href, title));
+    };
+
+    Marks.prototype.strike = function() {
+      return this.add(new Mark('strike'));
+    };
+
+    Marks.prototype.strong = function() {
+      return this.add(new Mark('strong'));
+    };
+
+    Marks.prototype.sub = function(type) {
+      return this.add(new SubSup(type, 'sub'));
+    };
+
+    Marks.prototype.sup = function(type) {
+      return this.add(new SubSup(type, 'sup'));
+    };
+
+    Marks.prototype.textColor = function(color) {
+      function TextColor(color) {
+        Mark.call(this, 'textColor');
+        this.color = color;
+      }
+
+      TextColor.prototype = Object.create(Mark.prototype);
+      TextColor.prototype.constructor = TextColor;
+
+      TextColor.prototype.toHTML = function(text) {
+        return '<p style="color: ' + this.color + ';">' + text + '</p>';
+      };
+
+      TextColor.prototype.toJSON = function() {
+        return {
+          type: this.type,
+          attrs: {
+            color: this.color
+          }
+        };
+      };
+
+      return this.add(new TextColor(color));
+    };
+    Marks.prototype.underline = function() {
+      return this.add(new Mark('underline'));
+    };
+
+    Marks.prototype.action = function(title, target, actionParameters) {
+      function Action(title, target, actionParameters) {
+        Mark.call(this, 'action');
+        this.title = title;
+        this.target = target;
+        this.actionParameters = actionParameters;
+      }
+
+      Action.prototype = Object.create(Mark.prototype);
+      Action.prototype.constructor = Action;
+
+      Action.prototype.toJSON = function() {
+        var actionMark = {
+          type: this.type,
+          attrs: {
+            title: this.title,
+            target: this.target
+          }
+        };
+
+        if (this.actionParameters) {
+          actionMark.attrs.parameters = this.actionParameters;
+        }
+        return actionMark;
+      };
+
+      return this.add(new Action(title, target, actionParameters));
+    };
+
+    Marks.prototype.toJSON = function() {
+      if (this.marks.length === 0) {
+        throw new Error('At least one mark is required');
+      }
+      return this.marks.map(function(mark) {
+        return mark.toJSON();
+      });
+    };
+
+    Marks.prototype.add = function(mark) {
+      var existing = this.marks.filter(function(m) {
+        return m.type === mark.type;
+      });
+      
+      if (existing.length > 0) return;
+      if (mark instanceof Mark) {
+        this.marks.push(mark);
+      }
+      
+      return this;
+    };
+
+    return Marks;
+  },
+  Paragraph: function() {
+    var Text = this.Text;
+    var ContentNode = this.ContentNode;
+    function Paragraph() {
+      this.content = new ContentNode('paragraph', 1);
+    }
+
+    Paragraph.prototype.code = function(text) {
+      var txt = new Text(text);
+      return this.add(txt.code());
+    };
+
+    Paragraph.prototype.text = function(text, marks) {
+      return this.add(new Text(text, marks));
+    };
+
+    Paragraph.prototype.em = function(text) {
+      var txt = new Text(text);
+      return this.add(txt.em());
+    };
+
+    Paragraph.prototype.link = function(text, href, title) {
+      var txt = new Text(text);
+      return this.add(txt.link(href, title));
+    };
+
+    Paragraph.prototype.strong = function(text) {
+      var txt = new Text(text);
+      return this.add(txt.strong());
+    };
+    Paragraph.prototype.add = function(node) {
+      if (node instanceof ContentNode) {
+        this.content.add(node);
+      }
+      return this;
+    };
+
+    Paragraph.prototype.toJSON = function() {
+      return this.content.toJSON();
+    };
+    return Paragraph.bind(this);
+  },
+  Text: function(text, marks) {
+    var ContentNode = this.ContentNode;
+    var Marks = this.Marks;
+    function Text(text, marks) {
+      ContentNode.call(this, 'text', 1);
+      this.text = text;
+      if (Array.isArray(marks)) {
+        var _marks = marks.filter(function(m) {
+          return m instanceof Mark;
+        });
+        this.marks = _marks;
+      }
+    }
+
+    Text.prototype = Object.create(ContentNode.prototype);
+    Text.prototype.constructor = Text;
+
+    Text.prototype.plain = function(text) {
+      return new Text(text);
+    };
+
+    Text.prototype.strike = function(text) {
+      var mark = new Marks();
+      return new Text(text, mark.strike());
+    };
+
+    Text.prototype.strong = function(text) {
+      var mark = new Marks();
+      return new Text(text, mark.strong());
+    };
+
+    Text.prototype.em = function(text) {
+      var mark = new Marks();
+      return new Text(text, mark.em());
+    };
+
+    Text.prototype.link = function(text, href, title) {
+      var mark = new Marks();
+      return new Text(text, mark.link(href, title));
+    };
+
+    Text.prototype.code = function(text) {
+      var mark = new Marks();
+      return new Text(text, mark.code());
+    };
+
+    Text.prototype.toJSON = function() {
+      var textNode = {
+        type: 'text',
+        text: this.text
+      };
+      if (this.marks) {
+        textNode.marks = this.marks.toJSON();
+      }
+      return textNode;
+    };
+
+    Text.prototype.toHTML = function() {
+      return this.content.map(function(node) {
+        var t = '<p>';
+        if (node.marks) {
+          t += node.marks.toHTML(node.text);
+        }
+        t += '</p>';
+        return t;
+      }).join('');
+    };
+    return Text.bind(this, text, marks);
+  },
+  ListItem: function() {
+    var BullList = this.BulletList;
+    var OrderedList = this.OrderedList;
+    function ListItem() {
+      this.content = new this.ContentNode('listItem', 0);
+    }
+
+    ListItem.prototype.paragraph = function() {
+      return this.content.add(new Paragraph());
+    };
+
+    ListItem.prototype.bulletList = function() {
+      return this.content.add(new BullList());
+    };
+
+    ListItem.prototype.orderedList = function() {
+      return this.content.add(new OrderedList());
+    };
+
+    ListItem.prototype.toJSON = function() {
+      return this.content.toJSON();
+    };
+
+    return ListItem;
+  },
+  blockQuote: function() {
+    function BlockQuote() {
+      this.content = new this.ContentNode('blockquote', 1);
+    }
+
+    BlockQuote.prototype.paragraph = function () {
+      return this.content.add(new this.Paragraph());
+    };
+
+    BlockQuote.prototype.toJSON = function() {
+      return this.content.toJSON();
+    };
+
+    return this.content.add(new BlockQuote());
+  },
+  BulletList: function() {
+    var ListItem = this.ListItem;
+    function BulletList() {
+      this.content = new this.ContentNode('bulletList', 0);
+    }
+
+    BulletList.prototype.item = function() {
+      return this.content.add(new ListItem());
+    };
+
+    BulletList.prototype.textItem = function(text, marks) {
+      this.item().paragraph().text(text, marks);
+      return this;
+    };
+
+    BulletList.prototype.linkItem = function(text, href, title) {
+      this.item().paragraph().link(text, href, title);
+      return this;
+    };
+
+    BulletList.prototype.toJSON = function() {
+      return this.content.toJSON();
+    };
+    return BulletList;
+  },
+  bulletList: function() {
+    var BulletList = this.BulletList
+    return this.content.add(new BulletList());
+  },
+  codeBlock: function(language) {
+    function CodeBlock(language) {
+      this.content = new this.ContentNode('codeBlock');
+      this.language = language;
+    }
+
+    CodeBlock.prototype.text = function(code) {
+      var plain = new Text(code);
+      this.content.add(plain(code));
+      return this;
+    };
+
+    CodeBlock.prototype.toJSON = function() {
+      var codeBlock = this.content.toJSON();
+      if (this.language) {
+        codeBlock.attrs = {
+          language: this.language
+        };
+      }
+
+      return codeBlock;
+    }
+
+    return this.content.add(new CodeBlock(language));
+  },
+  OrderedList: function() {
+    var ListItem = this.ListItem;
+    function OrderedList() {
+      this.content = new this.ContentNode('orderedList');
+    }
+
+    OrderedList.prototype.item = function() {
+      return this.content.add(new ListItem());
+    };
+
+    OrderedList.prototype.textItem = function(text, marks) {
+      this.item().paragraph().text(text, marks);
+      return this;
+    };
+
+    OrderedList.prototype.linkItem = function(text, href, title) {
+      this.item().paragraph().link(text, href, title);
+      return this;
+    };
+
+    OrderedList.prototype.toJSON = function() {
+      return this.content.toJSON();
+    };
+
+    return OrderedList;
+  },
+  orderedList: function() {
+    var OrderedList = this.OrderedList;
+    return this.content.add(new OrderedList());
+  },
+  paragraph: function() {
+    var Paragraph = this.Paragraph;
+    return this.content.add(new Paragraph());
+  },
+  toString: function() {
+    return JSON.stringify(this);
+  },
+  toJSON: function() {
+    return {
+      version: this.version,
+      content: this.content.toJSON()
+    };
+  },
+  type: 'JiraADFBuilder'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-24 10:03:13</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>b0280caddb2a0450f255132968961966</sys_id>
+        <sys_mod_count>41</sys_mod_count>
+        <sys_name>JiraADFBuilder</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_include_b0280caddb2a0450f255132968961966</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-01 18:55:47</sys_updated_on>
+    </sys_script_include>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_script_include_b0280caddb2a0450f255132968961966</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_script_include"&gt;&lt;sys_script_include action="INSERT_OR_UPDATE"&gt;&lt;access&gt;package_private&lt;/access&gt;&lt;active&gt;true&lt;/active&gt;&lt;api_name&gt;x_momo_jira_integr.JiraADFBuilder&lt;/api_name&gt;&lt;caller_access/&gt;&lt;client_callable&gt;false&lt;/client_callable&gt;&lt;description&gt;Text utils for comments,  mocked after Jira's client library for javascript&amp;#13;
+&amp;#13;
+https://developer.atlassian.com/cloud/jira/platform/apis/document/libs/&lt;/description&gt;&lt;name&gt;JiraADFBuilder&lt;/name&gt;&lt;script&gt;&lt;![CDATA[var JiraADFBuilder = Class.create();
+JiraADFBuilder.prototype = {
+  version: 1,
+  initialize: function (version) {
+    var ContentNode = this.ContentNode;
+    this.version = version || 1;
+    this.content = new ContentNode('doc', 0);
+  },
+  ContentNode: function(type, minLength) {
+    function ContentNode(type, minLength) {
+      this.content = [];
+      this.type = type;
+      this.minLength = minLength;
+    }
+
+    ContentNode.prototype.add = function(node) {
+      if (!node) {
+        throw new Error('Illegal Value');
+      }
+      if (node instanceof ContentNode) {
+        this.content.push(node);
+      }
+      return node;
+    };
+
+    ContentNode.prototype.toJSON = function() {
+      return {
+        type: this.type,
+        content: this.content.map(function(n) {
+          return n.toJSON();
+        })
+      };
+    };
+    // Noop to be used with child classes.
+    ContentNode.prototype.toHTML = function() {};
+
+    return ContentNode.bind(this, type, minLength);
+  },
+  Mark: function(type) {
+    function Mark(type) {
+      this.type = type;
+    };
+
+    Mark.prototype.toHTML = function(text) {
+      return '&lt;' + this.type + '&gt;' + text + '&lt;/' + this.type + '&gt;';
+    }
+
+    Mark.prototype.toJSON = function() {
+      return {
+        type: this.type
+      };
+    };
+
+    Mark.prototype.toHTML = function() {};
+
+    return Mark.bind(this, type);
+  },
+  Marks: function() {
+    var Mark = this.Mark;
+    
+    function SubSup(type, variant) {
+      Mark.call(this, type);
+      this.variant = variant;
+    }
+
+    SubSup.prototype = Object.create(Mark);
+    SubSup.prototype.constructor = SubSup;
+
+    SubSup.prototype.toJSON = function() {
+      return {
+        type: this.type,
+        attrs: {
+          type: this.variant
+        }
+      };
+    };
+
+    SubSup.prototype.toHTML = function() {};
+
+    function Marks() {
+      this.marks = [];
+    }
+
+    Marks.prototype.code = function() {
+      return this.add(new Mark('code'));
+    };
+
+    Marks.prototype.em = function() {
+      return this.add(new Mark('em'));
+    };
+    Marks.prototype.link = function(href, title) {
+      
+      function Link(href, title) {
+        Mark.call(this, 'link');
+        this.href = href;
+        this.title = title;
+      }
+
+      Link.prototype = Object.create(Mark.prototype);
+      Link.prototype.constructor = Link;
+      Link.prototype.toHTML = function() {
+        return '&lt;a href="' + this.href + '"&gt;' + (this.title ? this.title : this.href) + '&lt;/a&gt;'; 
+      };
+      Link.prototype.toJSON = function() {
+        var linkMark = {
+          type: this.type,
+          attrs: {
+            href: this.href
+          }
+        };
+
+        if (this.title) {
+          linkMark.attrs.title = this.title;
+        }
+
+        return linkMark;
+      };
+
+      return this.add(new Link(href, title));
+    };
+
+    Marks.prototype.strike = function() {
+      return this.add(new Mark('strike'));
+    };
+
+    Marks.prototype.strong = function() {
+      return this.add(new Mark('strong'));
+    };
+
+    Marks.prototype.sub = function(type) {
+      return this.add(new SubSup(type, 'sub'));
+    };
+
+    Marks.prototype.sup = function(type) {
+      return this.add(new SubSup(type, 'sup'));
+    };
+
+    Marks.prototype.textColor = function(color) {
+      function TextColor(color) {
+        Mark.call(this, 'textColor');
+        this.color = color;
+      }
+
+      TextColor.prototype = Object.create(Mark.prototype);
+      TextColor.prototype.constructor = TextColor;
+
+      TextColor.prototype.toHTML = function(text) {
+        return '&lt;p style="color: ' + this.color + ';"&gt;' + text + '&lt;/p&gt;';
+      };
+
+      TextColor.prototype.toJSON = function() {
+        return {
+          type: this.type,
+          attrs: {
+            color: this.color
+          }
+        };
+      };
+
+      return this.add(new TextColor(color));
+    };
+    Marks.prototype.underline = function() {
+      return this.add(new Mark('underline'));
+    };
+
+    Marks.prototype.action = function(title, target, actionParameters) {
+      function Action(title, target, actionParameters) {
+        Mark.call(this, 'action');
+        this.title = title;
+        this.target = target;
+        this.actionParameters = actionParameters;
+      }
+
+      Action.prototype = Object.create(Mark.prototype);
+      Action.prototype.constructor = Action;
+
+      Action.prototype.toJSON = function() {
+        var actionMark = {
+          type: this.type,
+          attrs: {
+            title: this.title,
+            target: this.target
+          }
+        };
+
+        if (this.actionParameters) {
+          actionMark.attrs.parameters = this.actionParameters;
+        }
+        return actionMark;
+      };
+
+      return this.add(new Action(title, target, actionParameters));
+    };
+
+    Marks.prototype.toJSON = function() {
+      if (this.marks.length === 0) {
+        throw new Error('At least one mark is required');
+      }
+      return this.marks.map(function(mark) {
+        return mark.toJSON();
+      });
+    };
+
+    Marks.prototype.add = function(mark) {
+      var existing = this.marks.filter(function(m) {
+        return m.type === mark.type;
+      });
+      
+      if (existing.length &gt; 0) return;
+      if (mark instanceof Mark) {
+        this.marks.push(mark);
+      }
+      
+      return this;
+    };
+
+    return Marks;
+  },
+  Paragraph: function() {
+    var Text = this.Text;
+    var ContentNode = this.ContentNode;
+    function Paragraph() {
+      this.content = new ContentNode('paragraph', 1);
+    }
+
+    Paragraph.prototype.code = function(text) {
+      var txt = new Text(text);
+      return this.add(txt.code());
+    };
+
+    Paragraph.prototype.text = function(text, marks) {
+      return this.add(new Text(text, marks));
+    };
+
+    Paragraph.prototype.em = function(text) {
+      var txt = new Text(text);
+      return this.add(txt.em());
+    };
+
+    Paragraph.prototype.link = function(text, href, title) {
+      var txt = new Text(text);
+      return this.add(txt.link(href, title));
+    };
+
+    Paragraph.prototype.strong = function(text) {
+      var txt = new Text(text);
+      return this.add(txt.strong());
+    };
+    Paragraph.prototype.add = function(node) {
+      if (node instanceof ContentNode) {
+        this.content.add(node);
+      }
+      return this;
+    };
+
+    Paragraph.prototype.toJSON = function() {
+      return this.content.toJSON();
+    };
+    return Paragraph.bind(this);
+  },
+  Text: function(text, marks) {
+    var ContentNode = this.ContentNode;
+    var Marks = this.Marks;
+    function Text(text, marks) {
+      ContentNode.call(this, 'text', 1);
+      this.text = text;
+      if (Array.isArray(marks)) {
+        var _marks = marks.filter(function(m) {
+          return m instanceof Mark;
+        });
+        this.marks = _marks;
+      }
+    }
+
+    Text.prototype = Object.create(ContentNode.prototype);
+    Text.prototype.constructor = Text;
+
+    Text.prototype.plain = function(text) {
+      return new Text(text);
+    };
+
+    Text.prototype.strike = function(text) {
+      var mark = new Marks();
+      return new Text(text, mark.strike());
+    };
+
+    Text.prototype.strong = function(text) {
+      var mark = new Marks();
+      return new Text(text, mark.strong());
+    };
+
+    Text.prototype.em = function(text) {
+      var mark = new Marks();
+      return new Text(text, mark.em());
+    };
+
+    Text.prototype.link = function(text, href, title) {
+      var mark = new Marks();
+      return new Text(text, mark.link(href, title));
+    };
+
+    Text.prototype.code = function(text) {
+      var mark = new Marks();
+      return new Text(text, mark.code());
+    };
+
+    Text.prototype.toJSON = function() {
+      var textNode = {
+        type: 'text',
+        text: this.text
+      };
+      if (this.marks) {
+        textNode.marks = this.marks.toJSON();
+      }
+      return textNode;
+    };
+
+    Text.prototype.toHTML = function() {
+      return this.content.map(function(node) {
+        var t = '&lt;p&gt;';
+        if (node.marks) {
+          t += node.marks.toHTML(node.text);
+        }
+        t += '&lt;/p&gt;';
+        return t;
+      }).join('');
+    };
+    return Text.bind(this, text, marks);
+  },
+  ListItem: function() {
+    var BullList = this.BulletList;
+    var OrderedList = this.OrderedList;
+    function ListItem() {
+      this.content = new this.ContentNode('listItem', 0);
+    }
+
+    ListItem.prototype.paragraph = function() {
+      return this.content.add(new Paragraph());
+    };
+
+    ListItem.prototype.bulletList = function() {
+      return this.content.add(new BullList());
+    };
+
+    ListItem.prototype.orderedList = function() {
+      return this.content.add(new OrderedList());
+    };
+
+    ListItem.prototype.toJSON = function() {
+      return this.content.toJSON();
+    };
+
+    return ListItem;
+  },
+  blockQuote: function() {
+    function BlockQuote() {
+      this.content = new this.ContentNode('blockquote', 1);
+    }
+
+    BlockQuote.prototype.paragraph = function () {
+      return this.content.add(new this.Paragraph());
+    };
+
+    BlockQuote.prototype.toJSON = function() {
+      return this.content.toJSON();
+    };
+
+    return this.content.add(new BlockQuote());
+  },
+  BulletList: function() {
+    var ListItem = this.ListItem;
+    function BulletList() {
+      this.content = new this.ContentNode('bulletList', 0);
+    }
+
+    BulletList.prototype.item = function() {
+      return this.content.add(new ListItem());
+    };
+
+    BulletList.prototype.textItem = function(text, marks) {
+      this.item().paragraph().text(text, marks);
+      return this;
+    };
+
+    BulletList.prototype.linkItem = function(text, href, title) {
+      this.item().paragraph().link(text, href, title);
+      return this;
+    };
+
+    BulletList.prototype.toJSON = function() {
+      return this.content.toJSON();
+    };
+    return BulletList;
+  },
+  bulletList: function() {
+    var BulletList = this.BulletList
+    return this.content.add(new BulletList());
+  },
+  codeBlock: function(language) {
+    function CodeBlock(language) {
+      this.content = new this.ContentNode('codeBlock');
+      this.language = language;
+    }
+
+    CodeBlock.prototype.text = function(code) {
+      var plain = new Text(code);
+      this.content.add(plain(code));
+      return this;
+    };
+
+    CodeBlock.prototype.toJSON = function() {
+      var codeBlock = this.content.toJSON();
+      if (this.language) {
+        codeBlock.attrs = {
+          language: this.language
+        };
+      }
+
+      return codeBlock;
+    }
+
+    return this.content.add(new CodeBlock(language));
+  },
+  OrderedList: function() {
+    var ListItem = this.ListItem;
+    function OrderedList() {
+      this.content = new this.ContentNode('orderedList');
+    }
+
+    OrderedList.prototype.item = function() {
+      return this.content.add(new ListItem());
+    };
+
+    OrderedList.prototype.textItem = function(text, marks) {
+      this.item().paragraph().text(text, marks);
+      return this;
+    };
+
+    OrderedList.prototype.linkItem = function(text, href, title) {
+      this.item().paragraph().link(text, href, title);
+      return this;
+    };
+
+    OrderedList.prototype.toJSON = function() {
+      return this.content.toJSON();
+    };
+
+    return OrderedList;
+  },
+  orderedList: function() {
+    var OrderedList = this.OrderedList;
+    return this.content.add(new OrderedList());
+  },
+  paragraph: function() {
+    var Paragraph = this.Paragraph;
+    return this.content.add(new Paragraph());
+  },
+  toString: function() {
+    return JSON.stringify(this);
+  },
+  toJSON: function() {
+    return {
+      version: this.version,
+      content: this.content.toJSON()
+    };
+  },
+  type: 'JiraADFBuilder'
+};]]&gt;&lt;/script&gt;&lt;sys_class_name&gt;sys_script_include&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg@movement.com&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-01-24 10:03:13&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;b0280caddb2a0450f255132968961966&lt;/sys_id&gt;&lt;sys_mod_count&gt;41&lt;/sys_mod_count&gt;&lt;sys_name&gt;JiraADFBuilder&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy&gt;read&lt;/sys_policy&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_script_include_b0280caddb2a0450f255132968961966&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg@movement.com&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-02-01 18:55:47&lt;/sys_updated_on&gt;&lt;/sys_script_include&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>-1511331221</payload_hash>
+        <record_name>JiraADFBuilder</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-02-01 18:55:47</sys_created_on>
+        <sys_id>001f8788db728090f255132968961976</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>170021be67d0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-01 18:55:47</sys_updated_on>
+        <type>Script Include</type>
+        <update_guid>c41f8788c3728090177596ea27d34275</update_guid>
+        <update_guid_history>c41f8788c3728090177596ea27d34275:-1511331221,040fcf08a87280906997720f49f2c8fd:-1555969671,b38e0b48b37280901ef59a8a8baa84d4:1434061063,c87ecf08da728090e4892e5c261f4a95:109704626,db1dcbc472728090c74286e5f8057707:1434061063,23eb4b845f728090d7e1736aa29f6d56:440783035,4a9b8384ed7280906c3c05610d450384:1562035866,d93b4744037280909e0388d80129c615:594075436,ad1bc744e87280902cf662c51635ede3:-1262800582,4ddacb042372809077b62a92f9c1a4b6:1002989330,908acb04f3728090d473d5cff35c35cb:-1626884864,8c8acb04067280901d29735b3bb1a9ae:-1265096607,63c90fc0947280902ebf62fae3f248c0:-216145726,b1c90fc043728090184c0561176aafad:-1484016013,07a9c3c00072809094281fed7949262d:324088574,d3698f009f32cc504d6383e650aac553:1706899830,611783002f72809066e345a2874c6c5b:2013781396,c0964fcc3b328090bc4190d398c77e6a:828902523,adb48bc849328090bb9f917dbd110505:235164493,1ee243c81e328090c85eba73cec1ddef:-598437312,9de287480b328090f1ac8f44deedcf42:-171250175,2ac18f48f832809004137c64de114550:1942629206,c8110708fb328090201799a84701f991:-1807338035,8b004fc4f3328090a051d5de90a782c8:-288032765,f4365b46542e4450eaf767e069b436e4:-1529880657,05caebb9a66e8450657a4220589466a5:742956881,576a2bb9e86e8450a49b6c13b9c05a48:403149659,ca09eb39c46e845043ea074810e59fad:136151203,cd282bfd582e845036f5cfc1127416c5:1450201588,5218e77d802e8450272aedda87363a5a:10288242,0d18ebf5146e84502d851a6743b5bfad:-840547244,73c767f5a16e845020e40c8b0d20a21d:-1030369915,a8272bb5966e8450130ec600dfc4c889:-136659601,802763758a6e8450d6bb88dc390d8b8b:-922871584,05c52375aa6e8450ea9a8d9992a897ec:1566045103,3424a731bf6e8450f46907522a59c0f7:-1148432655,8f10677d502e845098f5c144521334fa:1881653240,2ddf177d472e84502ae3378fc72105d0:1475751258,6fbf13bdd92e845001ce6ac759d85fd5:443277858,cf5fdbf9412e8450a8d1edaeda2545f3:-1450761509,9299c4212c6a0450bd9988c88e38dd47:-292568563,ac78842dbf2a04502187411779c3e84e:-880101887</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-13 08:39:31</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_script_include">sys_script_include</sys_db_object>
+        <sys_id>14cb99f6c1be49ca87bee93dbae8a884</sys_id>
+        <sys_metadata>b0280caddb2a0450f255132968961966</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>JiraADFBuilder</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_script_include_b0280caddb2a0450f255132968961966</sys_update_name>
+        <sys_update_version display_value="sys_script_include_b0280caddb2a0450f255132968961966">001f8788db728090f255132968961976</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-13 08:39:31</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

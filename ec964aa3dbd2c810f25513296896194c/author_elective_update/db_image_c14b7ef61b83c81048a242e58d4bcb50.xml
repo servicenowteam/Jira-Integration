@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="db_image">
+    <db_image action="DELETE">
+        <active>true</active>
+        <category/>
+        <format>JPEG</format>
+        <height>78</height>
+        <image/>
+        <name>step-2.jpg</name>
+        <size_bytes>3639</size_bytes>
+        <sys_class_name>db_image</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 16:48:17</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>c14b7ef61b83c81048a242e58d4bcb50</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>step-2.jpg</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>db_image_c14b7ef61b83c81048a242e58d4bcb50</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-22 16:48:17</sys_updated_on>
+        <thumbnail/>
+        <width>109</width>
+    </db_image>
+    <sys_attachment action="DELETE">
+        <average_image_color/>
+        <chunk_size_bytes>700000</chunk_size_bytes>
+        <compressed>true</compressed>
+        <content_type>image/jpeg</content_type>
+        <encryption_context/>
+        <file_name>image</file_name>
+        <hash>c965e5e791c8a7bbf327df1005918d5d756e6b2c740cf04343b4ab0dda5d8f76</hash>
+        <image_height/>
+        <image_width/>
+        <size_bytes>3639</size_bytes>
+        <size_compressed>3134</size_compressed>
+        <state>pending</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 16:48:17</sys_created_on>
+        <sys_id>814b7ef61b83c81048a242e58d4bcb52</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-22 16:48:17</sys_updated_on>
+        <table_name>ZZ_YYdb_image</table_name>
+        <table_sys_id>c14b7ef61b83c81048a242e58d4bcb50</table_sys_id>
+    </sys_attachment>
+    <sys_attachment_doc action="DELETE">
+        <data>H4sIAAAAAAAAAA==</data>
+        <length>16</length>
+        <position>0</position>
+        <sys_attachment display_value="image" sys_id="814b7ef61b83c81048a242e58d4bcb52">814b7ef61b83c81048a242e58d4bcb52</sys_attachment>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 16:48:17</sys_created_on>
+        <sys_id>c14b7ef61b83c81048a242e58d4bcb52</sys_id>
+    </sys_attachment_doc>
+    <sys_attachment_doc action="DELETE">
+        <data>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</data>
+        <length>4168</length>
+        <position>1</position>
+        <sys_attachment display_value="image" sys_id="814b7ef61b83c81048a242e58d4bcb52">814b7ef61b83c81048a242e58d4bcb52</sys_attachment>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 16:48:17</sys_created_on>
+        <sys_id>454b7ef61b83c81048a242e58d4bcb52</sys_id>
+    </sys_attachment_doc>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>db_image_c14b7ef61b83c81048a242e58d4bcb50</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="db_image"><db_image action="INSERT_OR_UPDATE"><active>true</active><category/><format>JPEG</format><height>78</height><image/><name>step-2.jpg</name><size_bytes>3639</size_bytes><sys_class_name>db_image</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-02-22 16:48:17</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>c14b7ef61b83c81048a242e58d4bcb50</sys_id><sys_mod_count>1</sys_mod_count><sys_name>step-2.jpg</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>db_image_c14b7ef61b83c81048a242e58d4bcb50</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-02-22 16:48:17</sys_updated_on><thumbnail/><width>109</width></db_image><sys_attachment action="INSERT_OR_UPDATE"><average_image_color/><chunk_size_bytes>700000</chunk_size_bytes><compressed>true</compressed><content_type>image/jpeg</content_type><encryption_context/><file_name>image</file_name><hash>c965e5e791c8a7bbf327df1005918d5d756e6b2c740cf04343b4ab0dda5d8f76</hash><image_height/><image_width/><size_bytes>3639</size_bytes><size_compressed>3134</size_compressed><state>pending</state><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-02-22 16:48:17</sys_created_on><sys_id>814b7ef61b83c81048a242e58d4bcb52</sys_id><sys_mod_count>0</sys_mod_count><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-02-22 16:48:17</sys_updated_on><table_name>ZZ_YYdb_image</table_name><table_sys_id>c14b7ef61b83c81048a242e58d4bcb50</table_sys_id></sys_attachment><sys_attachment_doc action="INSERT_OR_UPDATE"><data>H4sIAAAAAAAAAA==</data><length>16</length><position>0</position><sys_attachment display_value="image" sys_id="814b7ef61b83c81048a242e58d4bcb52">814b7ef61b83c81048a242e58d4bcb52</sys_attachment><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-02-22 16:48:17</sys_created_on><sys_id>c14b7ef61b83c81048a242e58d4bcb52</sys_id></sys_attachment_doc><sys_attachment_doc action="INSERT_OR_UPDATE"><data>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</data><length>4168</length><position>1</position><sys_attachment display_value="image" sys_id="814b7ef61b83c81048a242e58d4bcb52">814b7ef61b83c81048a242e58d4bcb52</sys_attachment><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-02-22 16:48:17</sys_created_on><sys_id>454b7ef61b83c81048a242e58d4bcb52</sys_id></sys_attachment_doc></record_update>]]></payload>
+        <payload_hash>104771853</payload_hash>
+        <record_name>step-2.jpg</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 16:48:18</sys_created_on>
+        <sys_id>854bb6fa1b83c81048a242e58d4bcbde</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1706dccb86c0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-22 16:48:18</sys_updated_on>
+        <type>Images</type>
+        <update_guid>4d4bb6fa6983c810c5c7e49d1d5779dd</update_guid>
+        <update_guid_history>4d4bb6fa6983c810c5c7e49d1d5779dd:104771853,4d4bb6fae983c810da3d6859445e40db:104771853,854b7ef64983c81014cd4daffb502551:1530886619</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">564e327e1b83c81048a242e58d4bcba4</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 17:01:29</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="db_image">db_image</sys_db_object>
+        <sys_id>092f83c5ec8e472080be2b0d23f08b10</sys_id>
+        <sys_metadata>c14b7ef61b83c81048a242e58d4bcb50</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>step-2.jpg</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>db_image_c14b7ef61b83c81048a242e58d4bcb50</sys_update_name>
+        <sys_update_version display_value="db_image_c14b7ef61b83c81048a242e58d4bcb50">854bb6fa1b83c81048a242e58d4bcbde</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-22 17:01:29</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

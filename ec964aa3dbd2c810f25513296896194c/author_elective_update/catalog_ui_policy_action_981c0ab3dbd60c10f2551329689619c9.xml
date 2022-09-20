@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="catalog_ui_policy_action">
+    <catalog_ui_policy_action action="DELETE">
+        <catalog_item display_value="Copy of Bug Request">6b0c46b3dbd60c10f2551329689619a9</catalog_item>
+        <catalog_variable>IO:7b0c0ab3dbd60c10f25513296896192f</catalog_variable>
+        <cleared>false</cleared>
+        <disabled>ignore</disabled>
+        <field/>
+        <mandatory>true</mandatory>
+        <order>100</order>
+        <sys_class_name>catalog_ui_policy_action</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 09:08:54</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>981c0ab3dbd60c10f2551329689619c9</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>description_of_issue_pcl</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>catalog_ui_policy_action_981c0ab3dbd60c10f2551329689619c9</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 09:08:54</sys_updated_on>
+        <table/>
+        <ui_policy display_value="PCL Bug Request">141c0ab3dbd60c10f2551329689619c4</ui_policy>
+        <variable>description_of_issue_pcl</variable>
+        <variable_set/>
+        <visible>true</visible>
+    </catalog_ui_policy_action>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>catalog_ui_policy_action_981c0ab3dbd60c10f2551329689619c9</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="catalog_ui_policy_action"><catalog_ui_policy_action action="INSERT_OR_UPDATE"><catalog_item display_value="Copy of Bug Request">6b0c46b3dbd60c10f2551329689619a9</catalog_item><catalog_variable>IO:7b0c0ab3dbd60c10f25513296896192f</catalog_variable><cleared>false</cleared><disabled>ignore</disabled><field/><mandatory>true</mandatory><order>100</order><sys_class_name>catalog_ui_policy_action</sys_class_name><sys_created_by>douglas.schamberg@movement.com</sys_created_by><sys_created_on>2020-01-19 09:08:54</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>981c0ab3dbd60c10f2551329689619c9</sys_id><sys_mod_count>0</sys_mod_count><sys_name>description_of_issue_pcl</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>catalog_ui_policy_action_981c0ab3dbd60c10f2551329689619c9</sys_update_name><sys_updated_by>douglas.schamberg@movement.com</sys_updated_by><sys_updated_on>2020-01-19 09:08:54</sys_updated_on><table/><ui_policy display_value="PCL Bug Request">141c0ab3dbd60c10f2551329689619c4</ui_policy><variable>description_of_issue_pcl</variable><variable_set/><visible>true</visible></catalog_ui_policy_action></record_update>]]></payload>
+        <payload_hash>-1640045660</payload_hash>
+        <record_name>description_of_issue_pcl</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 09:08:54</sys_created_on>
+        <sys_id>dc1c0ab3dbd60c10f2551329689619cb</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fbd0feaa60000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 09:08:54</sys_updated_on>
+        <type>Catalog UI Policy Action</type>
+        <update_guid>d41c0ab377d60c10de6e0ed6e9f3bacb</update_guid>
+        <update_guid_history>d41c0ab377d60c10de6e0ed6e9f3bacb:-1640045660</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">b95c42f3dbd60c10f2551329689619ae</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 09:10:06</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="catalog_ui_policy_action">catalog_ui_policy_action</sys_db_object>
+        <sys_id>0d6ed8ef6d744d3883a3ab8aecbab0d9</sys_id>
+        <sys_metadata>981c0ab3dbd60c10f2551329689619c9</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>description_of_issue_pcl</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>catalog_ui_policy_action_981c0ab3dbd60c10f2551329689619c9</sys_update_name>
+        <sys_update_version display_value="catalog_ui_policy_action_981c0ab3dbd60c10f2551329689619c9">dc1c0ab3dbd60c10f2551329689619cb</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 09:10:06</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

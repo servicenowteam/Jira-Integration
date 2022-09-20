@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_processor">
+    <sys_processor action="DELETE">
+        <active>true</active>
+        <class_name/>
+        <description/>
+        <interactive>false</interactive>
+        <name>Redirect Jira Issues to SP</name>
+        <parameters/>
+        <params_endpoint/>
+        <path/>
+        <path_endpoint/>
+        <require_csrf>true</require_csrf>
+        <roles/>
+        <script><![CDATA[(function process(g_request, g_response, g_processor) {
+	var uri = g_request.getParameter('uri');
+	gs.error(uri);
+	if (uri == 'x_momo_jira_integr_issue.do') {
+		var sysId = g_request.getParameter('sys_id');
+		g_processor.redirect('/sp?id=jira_issues_form&table=x_momo_jira_integr_issue&action=2&sys_id=' + sysId);
+	}
+
+})(g_request, g_response, g_processor);]]></script>
+        <sys_class_name>sys_processor</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-09-03 15:23:50</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>ab4ba5d9db8b1490f25513296896191a</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Redirect Jira Issues to SP</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_processor_ab4ba5d9db8b1490f25513296896191a</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-09-03 15:24:15</sys_updated_on>
+        <type>script</type>
+    </sys_processor>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_processor_ab4ba5d9db8b1490f25513296896191a</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_processor"&gt;&lt;sys_processor action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;class_name/&gt;&lt;description/&gt;&lt;interactive&gt;false&lt;/interactive&gt;&lt;name&gt;Redirect Jira Issues to SP&lt;/name&gt;&lt;parameters/&gt;&lt;params_endpoint/&gt;&lt;path/&gt;&lt;path_endpoint/&gt;&lt;require_csrf&gt;true&lt;/require_csrf&gt;&lt;roles/&gt;&lt;script&gt;&lt;![CDATA[(function process(g_request, g_response, g_processor) {
+	var uri = g_request.getParameter('uri');
+	gs.error(uri);
+	if (uri == 'x_momo_jira_integr_issue.do') {
+		var sysId = g_request.getParameter('sys_id');
+		g_processor.redirect('/sp?id=jira_issues_form&amp;table=x_momo_jira_integr_issue&amp;action=2&amp;sys_id=' + sysId);
+	}
+
+})(g_request, g_response, g_processor);]]&gt;&lt;/script&gt;&lt;sys_class_name&gt;sys_processor&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg@movement.com&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-09-03 15:23:50&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;ab4ba5d9db8b1490f25513296896191a&lt;/sys_id&gt;&lt;sys_mod_count&gt;1&lt;/sys_mod_count&gt;&lt;sys_name&gt;Redirect Jira Issues to SP&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_processor_ab4ba5d9db8b1490f25513296896191a&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg@movement.com&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-09-03 15:24:15&lt;/sys_updated_on&gt;&lt;type&gt;script&lt;/type&gt;&lt;/sys_processor&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>1449153545</payload_hash>
+        <record_name>Redirect Jira Issues to SP</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-09-03 15:24:15</sys_created_on>
+        <sys_id>ad7c215ddb8b1490f255132968961911</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>174549180c50000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-09-03 15:24:15</sys_updated_on>
+        <type>Processor</type>
+        <update_guid>257c215ddf8b14903682040f57793811</update_guid>
+        <update_guid_history>257c215ddf8b14903682040f57793811:1449153545,935ce9d9398b14908e85af19a8cd8228:-2061503900</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-09-03 15:25:16</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_processor">sys_processor</sys_db_object>
+        <sys_id>05b8aa61b69d42728f095518f45da964</sys_id>
+        <sys_metadata>ab4ba5d9db8b1490f25513296896191a</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Redirect Jira Issues to SP</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_processor_ab4ba5d9db8b1490f25513296896191a</sys_update_name>
+        <sys_update_version display_value="sys_processor_ab4ba5d9db8b1490f25513296896191a">ad7c215ddb8b1490f255132968961911</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-09-03 15:25:16</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

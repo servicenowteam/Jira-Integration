@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="implementation_plan" label="Implementation Plan" language="en" table="x_momo_jira_integr_issue">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>implementation_plan</element>
+            <help/>
+            <hint/>
+            <label>Implementation Plan</label>
+            <language>en</language>
+            <name>x_momo_jira_integr_issue</name>
+            <plural>Implementation Plans</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>douglas.schamberg</sys_created_by>
+            <sys_created_on>2021-01-22 12:21:41</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_id>2c63f0101b8a6494b482dce8cc4bcb55</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Implementation Plan</sys_name>
+            <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+            <sys_update_name>sys_documentation_x_momo_jira_integr_issue_implementation_plan_en</sys_update_name>
+            <sys_updated_by>douglas.schamberg</sys_updated_by>
+            <sys_updated_on>2021-01-22 12:21:41</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

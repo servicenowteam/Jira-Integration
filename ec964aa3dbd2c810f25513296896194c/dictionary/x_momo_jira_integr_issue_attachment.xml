@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Issue Attachment" max_length="40" name="x_momo_jira_integr_issue_attachment" sizeclass="4716" type="collection">
+        <element default="true" label="Active" max_length="40" name="active" read_only="true" type="boolean"/>
+        <element label="Attachment" max_length="32" name="attachment" read_only="true" reference="sys_attachment" type="reference"/>
+        <element label="Content URL" max_length="1024" name="content_url" read_only="true" type="url"/>
+        <element label="External ID" max_length="40" name="external_id" read_only="true" type="string"/>
+        <element label="File name" max_length="40" name="file_name" read_only="true" type="string"/>
+        <element label="Issue" max_length="32" name="issue" read_only="true" reference="x_momo_jira_integr_issue" type="reference"/>
+        <element attributes="ignore_filter_on_new=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" read_only="true" type="string"/>
+        <element default="local" label="Source" max_length="40" name="source" type="string"/>
+        <index name="index">
+            <element name="attachment"/>
+        </index>
+        <index name="index2">
+            <element name="issue"/>
+        </index>
+    </element>
+</database>

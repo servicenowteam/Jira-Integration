@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_email">
+    <sys_script_email action="INSERT_OR_UPDATE">
+        <name>jira_steps_renderer</name>
+        <new_lines_to_html>false</new_lines_to_html>
+        <script><![CDATA[  
+(function runMailScript(current, template, email, email_action, event) {
+  var issueType = current.getValue('issue_type');
+  var status = current.getValue('status');
+
+  var firstStep = getRelatedStep(issueType, status);
+
+  template.print('<td class="step" style="vertical-align: top;text-align:center;line-height:21px;border-collapse:collapse;font-size: 14px;">');
+  template.print('<img src="step-1.jpgx" style="width: 95px;height:62px;" /><br />');
+  template.print(firstStep.name);
+  template.print('</td>');
+
+  template.print('<td class="step active" style="vertical-align: top;font-weight: bold;text-align:center;line-height:21px;border-collapse:collapse;font-size: 14px;">');
+  template.print('<img src="step-2-active.jpgx" style="width: 95px;height:62px;" /><br />');
+  template.print(current.status.name.toString());
+  template.print('</td>');
+
+  var thirdStep = getRelatedStep(issueType, status, firstStep.sys_id);
+  
+  template.print('<td class="step" style="vertical-align: top;text-align:center;line-height:21px;border-collapse:collapse;font-size: 14px;">');
+  template.print('<img src="step-3.jpgx" style="width: 95px;height:62px;" /><br />');
+  template.print(thirdStep.name);
+  template.print('</td>');
+
+  function getRelatedStep(issueTypeId, currentStatus, firstStatus) {
+    var types = [];
+    var gr = new GlideRecord('x_momo_jira_integr_status');
+    var query = 'issue_type=' + issueTypeId + '^sys_id!=' + currentStatus + (!firstStatus ? '' : '^sys_id!=' + firstStatus);
+    gr.addEncodedQuery(query);
+    gr.setLimit(1);
+    
+    gr.query();
+    while (gr.next()) {
+      return {
+        sys_id: gr.getUniqueValue(),
+        name: gr.getValue('name'),
+        isActive: gr.getUniqueValue() == currentStatus
+      };
+    }
+    return types;
+  }
+})(current, template, email, email_action, event);]]></script>
+        <sys_class_name>sys_script_email</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-06 11:04:15</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>f819684b1b97cc5048a242e58d4bcb2a</sys_id>
+        <sys_mod_count>26</sys_mod_count>
+        <sys_name>jira_steps_renderer</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_email_f819684b1b97cc5048a242e58d4bcb2a</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-07 14:24:26</sys_updated_on>
+    </sys_script_email>
+</record_update>

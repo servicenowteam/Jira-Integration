@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="std_change_record_producer">
+    <std_change_record_producer action="INSERT_OR_UPDATE">
+        <access_type>restricted</access_type>
+        <active>true</active>
+        <allow_edit>false</allow_edit>
+        <availability>on_desktop</availability>
+        <available_in_ui>true</available_in_ui>
+        <billable>false</billable>
+        <can_cancel>false</can_cancel>
+        <category display_value="Template Management">00728916937002002dcef157b67ffb6d</category>
+        <checked_out/>
+        <closed_change_count>0</closed_change_count>
+        <color>#cbcbcb</color>
+        <cost>0</cost>
+        <current_version display_value="">a3590e8ddb72dc10f255132968961920</current_version>
+        <custom_cart/>
+        <delivery_plan/>
+        <delivery_plan_script/>
+        <delivery_time>1970-01-03 00:00:00</delivery_time>
+        <description/>
+        <display_price_property>non_zero</display_price_property>
+        <entitlement_script/>
+        <flow_designer_flow/>
+        <fulfillment_automation_level>unspecified</fulfillment_automation_level>
+        <group/>
+        <hide_sp>false</hide_sp>
+        <icon/>
+        <ignore_price>false</ignore_price>
+        <image/>
+        <list_price>0</list_price>
+        <location/>
+        <mandatory_attachment>false</mandatory_attachment>
+        <meta/>
+        <mobile_hide_price>false</mobile_hide_price>
+        <mobile_picture/>
+        <mobile_picture_type>use_desktop_picture</mobile_picture_type>
+        <model/>
+        <name>another</name>
+        <no_attachment_v2>false</no_attachment_v2>
+        <no_cart>false</no_cart>
+        <no_cart_v2>false</no_cart_v2>
+        <no_delivery_time_v2>false</no_delivery_time_v2>
+        <no_order>false</no_order>
+        <no_order_now>false</no_order_now>
+        <no_proceed_checkout>false</no_proceed_checkout>
+        <no_quantity>false</no_quantity>
+        <no_quantity_v2>false</no_quantity_v2>
+        <no_search>false</no_search>
+        <no_wishlist_v2>false</no_wishlist_v2>
+        <omit_price>false</omit_price>
+        <order>0</order>
+        <ordered_item_link/>
+        <owner/>
+        <percent_successful>0</percent_successful>
+        <picture/>
+        <post_insert_script/>
+        <preview>JavaScript: popupOpenStandard("com.glideapp.servicecatalog_cat_item_view.do?v=1&amp;sysparm_id=eb590e8ddb72dc10f25513296896190e&amp;sysparm_preview=true", "summary");</preview>
+        <price>0</price>
+        <published_ref/>
+        <recurring_frequency/>
+        <recurring_price>0</recurring_price>
+        <redirect_url>generated_record</redirect_url>
+        <request_method/>
+        <retired>false</retired>
+        <roles/>
+        <save_options/>
+        <save_script/>
+        <sc_catalogs>e0d08b13c3330100c8b837659bba8fb4</sc_catalogs>
+        <sc_ic_item_staging/>
+        <sc_ic_version/>
+        <sc_template/>
+        <script><![CDATA[current.std_change_producer_version= "a3590e8ddb72dc10f255132968961920";
+current.type= "standard";
+GlideSysAttachment.copy("std_change_record_producer", "eb590e8ddb72dc10f25513296896190e", current.getTableName(), current.getUniqueValue());
+]]></script>
+        <short_description>another</short_description>
+        <show_variable_help_on_load>false</show_variable_help_on_load>
+        <start_closed>false</start_closed>
+        <state/>
+        <sys_class_name>std_change_record_producer</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-08-21 12:36:22</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>eb590e8ddb72dc10f25513296896190e</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>another</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>std_change_record_producer_eb590e8ddb72dc10f25513296896190e</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-08-21 12:36:23</sys_updated_on>
+        <table_name>change_request</table_name>
+        <taxonomy_topic/>
+        <template display_value="another">eb590e8ddb72dc10f25513296896190b</template>
+        <template_manager_roles/>
+        <template_value/>
+        <type>item</type>
+        <unsuccessful_change_count>0</unsuccessful_change_count>
+        <use_sc_layout>true</use_sc_layout>
+        <vendor/>
+        <view/>
+        <visible_bundle>true</visible_bundle>
+        <visible_guide>true</visible_guide>
+        <visible_standalone>true</visible_standalone>
+        <workflow/>
+    </std_change_record_producer>
+    <sys_translated_text action="delete_multiple" query="documentkey=eb590e8ddb72dc10f25513296896190e"/>
+    <fx_price action="delete_multiple" query="id=eb590e8ddb72dc10f25513296896190e"/>
+    <fx_price action="INSERT_OR_UPDATE">
+        <amount>0</amount>
+        <currency display_value="USD">USD</currency>
+        <field>price</field>
+        <id>eb590e8ddb72dc10f25513296896190e</id>
+        <parent/>
+        <reference_amount>0</reference_amount>
+        <reference_currency display_value="USD">USD</reference_currency>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-08-21 12:36:22</sys_created_on>
+        <sys_id>e7590e8ddb72dc10f255132968961914</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-08-21 12:36:23</sys_updated_on>
+        <table>std_change_record_producer</table>
+        <type>calculated</type>
+    </fx_price>
+    <fx_price action="INSERT_OR_UPDATE">
+        <amount>0</amount>
+        <currency display_value="USD">USD</currency>
+        <field>recurring_price</field>
+        <id>eb590e8ddb72dc10f25513296896190e</id>
+        <parent/>
+        <reference_amount>0</reference_amount>
+        <reference_currency display_value="USD">USD</reference_currency>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-08-21 12:36:22</sys_created_on>
+        <sys_id>6f590e8ddb72dc10f255132968961915</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-08-21 12:36:23</sys_updated_on>
+        <table>std_change_record_producer</table>
+        <type>calculated</type>
+    </fx_price>
+</record_update>

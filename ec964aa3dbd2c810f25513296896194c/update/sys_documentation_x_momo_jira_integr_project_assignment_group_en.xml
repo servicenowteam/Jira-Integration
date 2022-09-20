@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="assignment_group" label="Assignment Group" language="en" table="x_momo_jira_integr_project">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>assignment_group</element>
+            <help/>
+            <hint/>
+            <label>Assignment Group</label>
+            <language>en</language>
+            <name>x_momo_jira_integr_project</name>
+            <plural>Assignment Groups</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>doug.s@movement.com</sys_created_by>
+            <sys_created_on>2021-05-09 15:14:02</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_id>5341e9cadb8438502b18c5bd13961925</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Assignment Group</sys_name>
+            <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+            <sys_update_name>sys_documentation_x_momo_jira_integr_project_assignment_group_en</sys_update_name>
+            <sys_updated_by>doug.s@movement.com</sys_updated_by>
+            <sys_updated_on>2021-05-09 15:14:02</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

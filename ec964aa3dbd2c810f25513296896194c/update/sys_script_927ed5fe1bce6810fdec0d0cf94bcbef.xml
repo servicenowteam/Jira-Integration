@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>false</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>change_request</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="change_request">state=3^stateVALCHANGES^EQ<item display_value="Closed" endquery="false" field="state" goto="false" newquery="false" operator="=" or="false" value="3"/>
+            <item endquery="false" field="state" goto="false" newquery="false" operator="VALCHANGES" or="false" value=""/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Update Jira Issue From CAB</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/ ) {
+  gs.include('JiraRequestV2');
+  var issue = getJiraIssueFromChange(current.sys_id.toString());
+
+  if (!issue) {
+    return;
+  }
+
+  var issueType = issue.issue_type.sys_id.toString();
+
+  updateCommentsFromClosureNotes(issue.getValue('external_id'), current.getValue('close_notes'));
+
+  var status = new GlideRecord('x_momo_jira_integr_status');
+  status.addQuery('issue_type', issueType);
+  status.query();
+
+  while (status.next()) {
+    gs.error('Status: ' + status.getValue('name'));
+
+    if (status.getValue('name') == 'Done') {
+      issue.status = status.getUniqueValue();
+      issue.setValue('active', false);
+      issue.update();
+      return;
+    }
+  }
+
+  function updateCommentsFromClosureNotes(externalId, notes) {
+    var request = new JiraRequestV2();
+    var body = gs.getUserDisplayName() +
+      ' added closure notes from ServiceNow:\n\n' + notes;
+    request.setOptions({
+      path: 'issue/' + externalId + '/comment',
+      method: 'POST',
+      body: {
+        body: body,
+        visibility: {
+          type: 'role',
+          value: 'Developers'
+        }
+      },
+      async: true
+    });
+    request.send();
+  }
+
+  function getJiraIssueFromChange(changeRequestId) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue');
+    gr.get('cab_request', changeRequestId);
+
+    if (gr.isValidRecord()) {
+      return gr;
+    }
+  }
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2021-02-04 09:23:36</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>927ed5fe1bce6810fdec0d0cf94bcbef</sys_id>
+        <sys_mod_count>26</sys_mod_count>
+        <sys_name>Update Jira Issue From CAB</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_927ed5fe1bce6810fdec0d0cf94bcbef</sys_update_name>
+        <sys_updated_by>Adrian.Wilson</sys_updated_by>
+        <sys_updated_on>2022-09-15 17:50:10</sys_updated_on>
+        <template/>
+        <when>async_always</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=927ed5fe1bce6810fdec0d0cf94bcbef"/>
+</record_update>

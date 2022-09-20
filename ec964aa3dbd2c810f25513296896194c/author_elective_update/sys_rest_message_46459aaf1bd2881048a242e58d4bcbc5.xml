@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_rest_message">
+    <sys_rest_message action="DELETE">
+        <access>package_private</access>
+        <authentication_type>no_authentication</authentication_type>
+        <basic_auth_password>BiEMFVqbCuh7MaSa+EyjGA==</basic_auth_password>
+        <basic_auth_profile/>
+        <basic_auth_user/>
+        <description/>
+        <name>Outbound Jira Connection</name>
+        <oauth2_profile/>
+        <protocol_name/>
+        <rest_endpoint>${javascript:gs.getProperty('x_momo_jira_integr.instance_name')}</rest_endpoint>
+        <sys_class_name>sys_rest_message</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-18 15:13:28</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>46459aaf1bd2881048a242e58d4bcbc5</sys_id>
+        <sys_mod_count>9</sys_mod_count>
+        <sys_name>Outbound Jira Connection</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_rest_message_46459aaf1bd2881048a242e58d4bcbc5</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-18 16:07:34</sys_updated_on>
+        <use_basic_auth>false</use_basic_auth>
+        <use_mutual_auth>false</use_mutual_auth>
+    </sys_rest_message>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_rest_message_46459aaf1bd2881048a242e58d4bcbc5</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_rest_message"><sys_rest_message action="INSERT_OR_UPDATE"><access>package_private</access><authentication_type>no_authentication</authentication_type><basic_auth_password>BiEMFVqbCuh7MaSa+EyjGA==</basic_auth_password><basic_auth_profile/><basic_auth_user/><description/><name>Outbound Jira Connection</name><oauth2_profile/><protocol_name/><rest_endpoint>${javascript:gs.getProperty('x_momo_jira_integr.instance_name')}</rest_endpoint><sys_class_name>sys_rest_message</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-01-18 15:13:28</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>46459aaf1bd2881048a242e58d4bcbc5</sys_id><sys_mod_count>9</sys_mod_count><sys_name>Outbound Jira Connection</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sys_rest_message_46459aaf1bd2881048a242e58d4bcbc5</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-01-18 16:07:34</sys_updated_on><use_basic_auth>false</use_basic_auth><use_mutual_auth>false</use_mutual_auth></sys_rest_message></record_update>]]></payload>
+        <payload_hash>-1096854321</payload_hash>
+        <record_name>Outbound Jira Connection</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-18 16:07:34</sys_created_on>
+        <sys_id>d3422a6f1b16881048a242e58d4bcb23</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>16fb968db730000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-18 16:07:34</sys_updated_on>
+        <type>REST Message</type>
+        <update_guid>9b422a6f20168810104afccee7a59522</update_guid>
+        <update_guid_history>9b422a6f20168810104afccee7a59522:-1096854321,7f51e22ff7168810543129ec473fa9da:2091329967,d8adda2b54168810e66950a51076655b:-2116054552,ed0c56676a1688104f9e0b2c1c7f750f:-690899754,1a9b9667a2168810ee6e42927b2fd0cc:1516734375,0207522328168810149ff8b90bbce7a1:1535890774,20f65a235f168810227d03ffe2d547d0:-1395700152,ae76daef88d28810f08c2cb07775913b:-515788478,b1469aeffcd28810556570ab6cf63589:-255885210,b2e596efded28810eb9ad7c05c89e50b:1846237137</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-01-19 09:01:11</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_rest_message">sys_rest_message</sys_db_object>
+        <sys_id>40c3e8adf42e4d34b386558b7816b3d9</sys_id>
+        <sys_metadata>46459aaf1bd2881048a242e58d4bcbc5</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Outbound Jira Connection</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_rest_message_46459aaf1bd2881048a242e58d4bcbc5</sys_update_name>
+        <sys_update_version display_value="sys_rest_message_46459aaf1bd2881048a242e58d4bcbc5">d3422a6f1b16881048a242e58d4bcb23</sys_update_version>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-01-19 09:01:11</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

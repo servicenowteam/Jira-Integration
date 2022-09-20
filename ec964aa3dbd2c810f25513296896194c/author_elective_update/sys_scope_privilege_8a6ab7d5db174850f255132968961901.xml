@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_scope_privilege">
+    <sys_scope_privilege action="DELETE">
+        <operation>execute</operation>
+        <source_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</source_scope>
+        <status>allowed</status>
+        <sys_class_name>sys_scope_privilege</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 15:49:55</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>8a6ab7d5db174850f255132968961901</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>GlideMobileExtensions</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_scope_privilege_8a6ab7d5db174850f255132968961901</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-01 15:52:08</sys_updated_on>
+        <target_name>GlideMobileExtensions</target_name>
+        <target_scope display_value="Mobile Studio">8d04a1c3b3a51300f7d1a13816a8dcd7</target_scope>
+        <target_type>sys_script_include</target_type>
+    </sys_scope_privilege>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_scope_privilege_8a6ab7d5db174850f255132968961901</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_scope_privilege"><sys_scope_privilege action="INSERT_OR_UPDATE"><operation>execute</operation><source_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</source_scope><status>allowed</status><sys_class_name>sys_scope_privilege</sys_class_name><sys_created_by>douglas.schamberg</sys_created_by><sys_created_on>2020-03-01 15:49:55</sys_created_on><sys_customer_update>false</sys_customer_update><sys_id>8a6ab7d5db174850f255132968961901</sys_id><sys_mod_count>2</sys_mod_count><sys_name>GlideMobileExtensions</sys_name><sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope><sys_update_name>sys_scope_privilege_8a6ab7d5db174850f255132968961901</sys_update_name><sys_updated_by>douglas.schamberg</sys_updated_by><sys_updated_on>2020-03-01 15:52:08</sys_updated_on><target_name>GlideMobileExtensions</target_name><target_scope display_value="Mobile Studio">8d04a1c3b3a51300f7d1a13816a8dcd7</target_scope><target_type>sys_script_include</target_type></sys_scope_privilege></record_update>]]></payload>
+        <payload_hash>-1655649250</payload_hash>
+        <record_name>GlideMobileExtensions</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 15:52:08</sys_created_on>
+        <sys_id>682bb319db174850f2551329689619e6</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>17096cc2f200000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-01 15:52:08</sys_updated_on>
+        <type>Cross scope privilege</type>
+        <update_guid>202bb3197b174850b29a531c269a95e6</update_guid>
+        <update_guid_history>202bb3197b174850b29a531c269a95e6:-1655649250,d4eaf3950b174850f20d80205d34af87:437579634,4caabbd52d17485081d83cc31fd4d4b6:1768359345</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-01 15:53:05</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_scope_privilege">sys_scope_privilege</sys_db_object>
+        <sys_id>77d07d0bed7e494c9b3bee92ee12fc90</sys_id>
+        <sys_metadata>8a6ab7d5db174850f255132968961901</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>GlideMobileExtensions</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_scope_privilege_8a6ab7d5db174850f255132968961901</sys_update_name>
+        <sys_update_version display_value="sys_scope_privilege_8a6ab7d5db174850f255132968961901">682bb319db174850f2551329689619e6</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-01 15:53:05</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

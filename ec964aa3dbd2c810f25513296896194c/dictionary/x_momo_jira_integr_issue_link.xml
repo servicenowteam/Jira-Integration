@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Issue Link" max_length="40" name="x_momo_jira_integr_issue_link" sizeclass="440" type="collection">
+        <element default="true" label="Active" max_length="40" name="active" type="boolean"/>
+        <element label="External ID" max_length="40" name="external_id" type="string"/>
+        <element label="Inward Issue" max_length="32" name="inward_issue" reference="x_momo_jira_integr_issue" reference_qual="active=true^external_idISNOTEMPTY^EQ" reference_qual_condition="active=true^external_idISNOTEMPTY^EQ" type="reference"/>
+        <element attributes="ignore_filter_on_new=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+        <element label="Outward Issue" max_length="32" name="outward_issues" reference="x_momo_jira_integr_issue" reference_qual="active=true^external_idISNOTEMPTY^EQ" reference_qual_condition="active=true^external_idISNOTEMPTY^EQ" type="reference"/>
+        <element label="Type ID" max_length="40" name="type_id" reference="x_momo_jira_integr_issue_link_type" reference_qual="external_idISNOTEMPTY^EQ" reference_qual_condition="external_idISNOTEMPTY^EQ" type="reference"/>
+        <index name="index">
+            <element name="type_id"/>
+        </index>
+        <index name="index2">
+            <element name="inward_issue"/>
+        </index>
+        <index name="index3">
+            <element name="outward_issues"/>
+        </index>
+    </element>
+</database>

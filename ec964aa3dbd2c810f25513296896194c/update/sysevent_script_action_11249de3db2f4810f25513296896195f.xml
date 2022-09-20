@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sysevent_script_action">
+    <sysevent_script_action action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <condition_script>gs.hasRole('x_momo_jira_integr.jira_admin')</condition_script>
+        <description/>
+        <event_name>x_momo_jira_integr.import.issues</event_name>
+        <name>Import Issues Async</name>
+        <order>100</order>
+        <script><![CDATA[(function(current, event) {
+  gs.include('JiraRequest');
+  var issues = [];
+  var p = 1;
+  var start = 0;
+  var total = 2;
+
+  while (p < total) {
+    var req = getFromJiraIssues(start, p);
+    if (!req) break;
+    if (req.isLast) break;
+    total = req.total;
+    start = req.startAt;
+    issues.concat(req.issues);
+    if (req.page >= p) break;
+    p++;
+  }
+
+  function getFromJiraIssues(startAt, page) {
+    var request = new JiraRequest();
+    var jql = createJQLQuery();
+    var response = request.getIssues(jql, startAt, page);
+    return response;
+  }
+
+  function createJQLQuery() {
+    var jql = 'status != "Done" AND status != "Closed" AND status != "Cancelled"';
+    if (!gs.nil(gs.getProperty('x_momo_jira_integr.included_project_keys'))) {
+      var projects = gs.getProperty('x_momo_jira_integr.included_project_keys');
+      jql += ' AND project IN (' + projects + ')';
+    }
+    return gs.urlEncode(jql);
+  }
+
+  function activeIssueExistsByExternalId(externalId) {
+    var gr = new GlideRecord('x_momo_jira_integr_issue');
+    gr.get('external_id', externalId);
+
+    if (gr.isValid()) {
+      return gr.getValue('active') == true;
+    }
+    return false;
+  }
+})(current, event);]]></script>
+        <synchronous>false</synchronous>
+        <sys_class_name>sysevent_script_action</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-20 13:45:09</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>11249de3db2f4810f25513296896195f</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>Import Issues Async</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sysevent_script_action_11249de3db2f4810f25513296896195f</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-20 14:11:20</sys_updated_on>
+    </sysevent_script_action>
+    <sys_translated_text action="delete_multiple" query="documentkey=11249de3db2f4810f25513296896195f"/>
+</record_update>

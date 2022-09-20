@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sysevent_email_action">
+    <sysevent_email_action action="DELETE">
+        <action_insert>false</action_insert>
+        <action_update>true</action_update>
+        <active>true</active>
+        <advanced_condition/>
+        <affected_field_on_event/>
+        <category display_value="Jira" name="Jira">122ea6fa1b43c81048a242e58d4bcbeb</category>
+        <collection>x_momo_jira_integr_issue</collection>
+        <condition table="x_momo_jira_integr_issue">statusVALCHANGES^approval=approved^active=true^EQ<item endquery="false" field="status" goto="false" newquery="false" operator="VALCHANGES" or="false" value=""/>
+            <item endquery="false" field="approval" goto="false" newquery="false" operator="=" or="false" value="approved"/>
+            <item endquery="false" field="active" goto="false" newquery="false" operator="=" or="false" value="true"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </condition>
+        <content_type>text/html</content_type>
+        <default_interval/>
+        <description/>
+        <digest_from/>
+        <digest_html/>
+        <digest_reply_to/>
+        <digest_separator_html><![CDATA[<p>&nbsp;</p>
+<hr />
+<p>&nbsp;</p>]]></digest_separator_html>
+        <digest_separator_text><![CDATA[\n--------------------------------------------------------------------------------\n]]></digest_separator_text>
+        <digest_subject/>
+        <digest_template/>
+        <digest_text/>
+        <digestable>false</digestable>
+        <event_name>antivirus.infected</event_name>
+        <event_parm_1>false</event_parm_1>
+        <event_parm_2>false</event_parm_2>
+        <exclude_delegates>false</exclude_delegates>
+        <force_delivery>false</force_delivery>
+        <from/>
+        <generation_type>engine</generation_type>
+        <importance/>
+        <include_attachments>false</include_attachments>
+        <item>event.parm1</item>
+        <item_table/>
+        <mandatory>false</mandatory>
+        <message/>
+        <message_html><![CDATA[<center></center>
+<table class="container-for-gmail-android" width="100%" cellspacing="0" cellpadding="0" align="center">
+<tbody>
+<tr>
+<td class="content-padding" style="background-color: #f7f7f7; padding: 5px 0 30px;" align="center" valign="top" width="100%"><center>
+<table class="w320" width="600" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="header-lg" style="padding-bottom: 20px; font-size: 18px; font-weight: bold; line-height: normal; color: #4d4d4d;">Almost done!</td>
+</tr>
+<tr>
+<td class="free-text">We are working hard on your application request! We have an update for you!</td>
+</tr>
+<tr>
+<td class="mini-block-container" style="padding: 8px 20px; width: 280px;">
+<table style="border-collapse: separate !important;" width="100%" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="mini-block" style="padding: 5px 0px 20px 0px; background-color: #ffffff; width: 278px; border: 1px solid #cccccc; border-radius: 5px;">${mail_script:jira_steps_renderer}</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="header-md" style="font-size: 18px; font-weight: bold; line-height: normal; color: #4d4d4d;">Status updated to&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</center></td>
+</tr>
+<tr>
+<td class="button" style="padding: 5px;">
+<div><!-- [if mso]>
+            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${mail_script:jira_sp_link}" style="height:60px;v-text-anchor:middle;width:200px;" arcsize="10%" strokecolor="#ff6f6f" fillcolor="#ff6f6f">
+              <w:anchorlock/>
+              <center style="color:#ffffff;font-family:sans-serif;font-size:13px;font-weight:bold;">Details Here</center>
+            </v:roundrect>
+          <![endif]--><a style="background-color: #ff6f6f; border: 1px solid #ff6f6f; border-radius: 4px; color: #ffffff; display: inline-block; font-family: sans-serif; font-size: 13px; font-weight: bold; line-height: 40px; text-align: center; text-decoration: none; width: 155px; -webkit-text-size-adjust: none; mso-hide: all;" href="${mail_script:jira_sp_link}">Details Here</a></div>
+</td>
+</tr>
+</tbody>
+</table>]]></message_html>
+        <message_list/>
+        <message_text/>
+        <name>Jira Transition Updated</name>
+        <omit_watermark>true</omit_watermark>
+        <order>100</order>
+        <push_message_only>false</push_message_only>
+        <recipient_fields>assigned_to</recipient_fields>
+        <recipient_groups/>
+        <recipient_users/>
+        <reply_to/>
+        <send_self>true</send_self>
+        <sms_alternate/>
+        <style/>
+        <subject>Great news! We have a status update for you!</subject>
+        <subscribable>false</subscribable>
+        <sys_class_name>sysevent_email_action</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-06 11:03:37</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>8cd8680b1b97cc5048a242e58d4bcb5a</sys_id>
+        <sys_mod_count>28</sys_mod_count>
+        <sys_name>Jira Transition Updated</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sysevent_email_action_8cd8680b1b97cc5048a242e58d4bcb5a</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-07 10:41:35</sys_updated_on>
+        <sys_version>2</sys_version>
+        <template display_value="Jira Default Template">139810871b57cc5048a242e58d4bcb75</template>
+        <type>email</type>
+        <weight>0</weight>
+    </sysevent_email_action>
+    <sys_translated_text action="DELETE" query="documentkey=8cd8680b1b97cc5048a242e58d4bcb5a"/>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sysevent_email_action_8cd8680b1b97cc5048a242e58d4bcb5a</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update sys_domain="global" table="sysevent_email_action"&gt;&lt;sysevent_email_action action="INSERT_OR_UPDATE"&gt;&lt;action_insert&gt;false&lt;/action_insert&gt;&lt;action_update&gt;true&lt;/action_update&gt;&lt;active&gt;true&lt;/active&gt;&lt;advanced_condition/&gt;&lt;affected_field_on_event/&gt;&lt;category display_value="Jira" name="Jira"&gt;122ea6fa1b43c81048a242e58d4bcbeb&lt;/category&gt;&lt;collection&gt;x_momo_jira_integr_issue&lt;/collection&gt;&lt;condition table="x_momo_jira_integr_issue"&gt;statusVALCHANGES^approval=approved^active=true^EQ&lt;item endquery="false" field="status" goto="false" newquery="false" operator="VALCHANGES" or="false" value=""/&gt;&lt;item endquery="false" field="approval" goto="false" newquery="false" operator="=" or="false" value="approved"/&gt;&lt;item endquery="false" field="active" goto="false" newquery="false" operator="=" or="false" value="true"/&gt;&lt;item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/&gt;&lt;/condition&gt;&lt;content_type&gt;text/html&lt;/content_type&gt;&lt;default_interval/&gt;&lt;description/&gt;&lt;digest_from/&gt;&lt;digest_html/&gt;&lt;digest_reply_to/&gt;&lt;digest_separator_html&gt;&lt;![CDATA[&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;]]&gt;&lt;/digest_separator_html&gt;&lt;digest_separator_text&gt;&lt;![CDATA[\n--------------------------------------------------------------------------------\n]]&gt;&lt;/digest_separator_text&gt;&lt;digest_subject/&gt;&lt;digest_template/&gt;&lt;digest_text/&gt;&lt;digestable&gt;false&lt;/digestable&gt;&lt;event_name&gt;antivirus.infected&lt;/event_name&gt;&lt;event_parm_1&gt;false&lt;/event_parm_1&gt;&lt;event_parm_2&gt;false&lt;/event_parm_2&gt;&lt;exclude_delegates&gt;false&lt;/exclude_delegates&gt;&lt;force_delivery&gt;false&lt;/force_delivery&gt;&lt;from/&gt;&lt;generation_type&gt;engine&lt;/generation_type&gt;&lt;importance/&gt;&lt;include_attachments&gt;false&lt;/include_attachments&gt;&lt;item&gt;event.parm1&lt;/item&gt;&lt;item_table/&gt;&lt;mandatory&gt;false&lt;/mandatory&gt;&lt;message/&gt;&lt;message_html&gt;&lt;![CDATA[&lt;center&gt;&lt;/center&gt;
+&lt;table class="container-for-gmail-android" width="100%" cellspacing="0" cellpadding="0" align="center"&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="content-padding" style="background-color: #f7f7f7; padding: 5px 0 30px;" align="center" valign="top" width="100%"&gt;&lt;center&gt;
+&lt;table class="w320" width="600" cellspacing="0" cellpadding="0"&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="header-lg" style="padding-bottom: 20px; font-size: 18px; font-weight: bold; line-height: normal; color: #4d4d4d;"&gt;Almost done!&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td class="free-text"&gt;We are working hard on your application request! We have an update for you!&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td class="mini-block-container" style="padding: 8px 20px; width: 280px;"&gt;
+&lt;table style="border-collapse: separate !important;" width="100%" cellspacing="0" cellpadding="0"&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="mini-block" style="padding: 5px 0px 20px 0px; background-color: #ffffff; width: 278px; border: 1px solid #cccccc; border-radius: 5px;"&gt;${mail_script:jira_steps_renderer}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table width="100%" cellspacing="0" cellpadding="0"&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="header-md" style="font-size: 18px; font-weight: bold; line-height: normal; color: #4d4d4d;"&gt;Status updated to&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/center&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td class="button" style="padding: 5px;"&gt;
+&lt;div&gt;&lt;!-- [if mso]&gt;
+            &lt;v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${mail_script:jira_sp_link}" style="height:60px;v-text-anchor:middle;width:200px;" arcsize="10%" strokecolor="#ff6f6f" fillcolor="#ff6f6f"&gt;
+              &lt;w:anchorlock/&gt;
+              &lt;center style="color:#ffffff;font-family:sans-serif;font-size:13px;font-weight:bold;"&gt;Details Here&lt;/center&gt;
+            &lt;/v:roundrect&gt;
+          &lt;![endif]--&gt;&lt;a style="background-color: #ff6f6f; border: 1px solid #ff6f6f; border-radius: 4px; color: #ffffff; display: inline-block; font-family: sans-serif; font-size: 13px; font-weight: bold; line-height: 40px; text-align: center; text-decoration: none; width: 155px; -webkit-text-size-adjust: none; mso-hide: all;" href="${mail_script:jira_sp_link}"&gt;Details Here&lt;/a&gt;&lt;/div&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;]]&gt;&lt;/message_html&gt;&lt;message_list/&gt;&lt;message_text/&gt;&lt;name&gt;Jira Transition Updated&lt;/name&gt;&lt;omit_watermark&gt;true&lt;/omit_watermark&gt;&lt;order&gt;100&lt;/order&gt;&lt;push_message_only&gt;false&lt;/push_message_only&gt;&lt;recipient_fields&gt;assigned_to&lt;/recipient_fields&gt;&lt;recipient_groups/&gt;&lt;recipient_users/&gt;&lt;reply_to/&gt;&lt;send_self&gt;true&lt;/send_self&gt;&lt;sms_alternate/&gt;&lt;style/&gt;&lt;subject&gt;Great news! We have a status update for you!&lt;/subject&gt;&lt;subscribable&gt;false&lt;/subscribable&gt;&lt;sys_class_name&gt;sysevent_email_action&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-03-06 11:03:37&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_domain&gt;global&lt;/sys_domain&gt;&lt;sys_domain_path&gt;/&lt;/sys_domain_path&gt;&lt;sys_id&gt;8cd8680b1b97cc5048a242e58d4bcb5a&lt;/sys_id&gt;&lt;sys_mod_count&gt;28&lt;/sys_mod_count&gt;&lt;sys_name&gt;Jira Transition Updated&lt;/sys_name&gt;&lt;sys_overrides/&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sysevent_email_action_8cd8680b1b97cc5048a242e58d4bcb5a&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-03-07 10:41:35&lt;/sys_updated_on&gt;&lt;sys_version&gt;2&lt;/sys_version&gt;&lt;template display_value="Jira Default Template"&gt;139810871b57cc5048a242e58d4bcb75&lt;/template&gt;&lt;type&gt;email&lt;/type&gt;&lt;weight&gt;0&lt;/weight&gt;&lt;/sysevent_email_action&gt;&lt;sys_translated_text action="delete_multiple" query="documentkey=8cd8680b1b97cc5048a242e58d4bcb5a"/&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>-1763004224</payload_hash>
+        <record_name>Jira Transition Updated</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-07 10:41:35</sys_created_on>
+        <sys_id>399da59b1bdf009048a242e58d4bcb87</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>170b49605b70000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-07 10:41:35</sys_updated_on>
+        <type>Notification</type>
+        <update_guid>fd9da59b37df0090913a0d025b75c586</update_guid>
+        <update_guid_history>fd9da59b37df0090913a0d025b75c586:-1763004224,c57d619b9edf0090ca1c206c311bf5b9:-2040586319,573ded5bc7df0090f3c1f7b5f5c177d8:-1856236697,b82de15ba1df00902276d30fd386e817:1835391424,781d2d5b00df0090ca4517d84eea9c64:1755839562,fcfc695b93df0090bd51ae0595c3d2a9:-1159271183,66dca15b8edf00900459c2ee95ceaa5c:411874945,1ccc655be1df0090c0f61da4e4e60858:608865748,471a2957c6df0090d64f836f6f393f87:-1978087493,550ae557e3df00905d2534f792dc8f62:-977687497,19b92157addf00904dd5ece4c435bff4:774081473,e4092dd3dedf00905edafece46dc8b46:-1310582885,6348e1d30adf00901ee1c4b8fa79e83a:836574345,d82861d3dbdf00909a891539186dfe06:-386456429,a8b7299389df0090cf6b406388a899a9:-1174041463,fc47219354df0090e8569ae37e4da327:1604269060,4427e95389df0090685beaec5e8992fe:-1962489011,fd17e55398df0090cfdb0baf8081e9a1:-254465418,14a62153a7df0090c4d68f83287fe224:-1567816555,57e46d9f869f0090447530e5fc99f748:-703185324,12d4ad9fcc9f009098a5f9d7ebf97b0b:929505291,3bc46d9f969f009069c81de8656c5eeb:1399637555,3bb4619fe59f0090916ff84fd4f683a5:2109239760,3cbae8cb9c5740906ff2207a10bd76ec:1144449802,339ae8cbff574090e68bf2aa0ad2fce6:527920614,b61a684b3b97cc5063837d460ff44833:-2093101109,14e9e08b4a574090636b5a39f52d84fa:1425761115,5779a08b3f574090d68f5246cd8a5022:2115099305,be0964c73f97cc509269913b50c9877b:1710221595</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-03-07 10:42:57</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sysevent_email_action">sysevent_email_action</sys_db_object>
+        <sys_id>0ead165109024b1f8399465584aba451</sys_id>
+        <sys_metadata>8cd8680b1b97cc5048a242e58d4bcb5a</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Jira Transition Updated</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent display_value="">452d16f7db1a0c10f255132968961945</sys_parent>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sysevent_email_action_8cd8680b1b97cc5048a242e58d4bcb5a</sys_update_name>
+        <sys_update_version display_value="sysevent_email_action_8cd8680b1b97cc5048a242e58d4bcb5a">399da59b1bdf009048a242e58d4bcb87</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-07 10:42:57</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Issue Link Type" max_length="40" name="x_momo_jira_integr_issue_link_type" sizeclass="6" type="collection">
+        <element label="External ID" max_length="40" name="external_id" read_only="true" type="string"/>
+        <element label="Inward Type Name" max_length="40" name="inward_type_name" type="string"/>
+        <element label="Name" max_length="40" name="name" type="string"/>
+        <element attributes="ignore_filter_on_new=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" read_only="true" type="string"/>
+        <element label="Outward Type Name" max_length="40" name="outward_type_name" type="string"/>
+        <element label="Self" max_length="1024" name="self" read_only="true" type="url"/>
+    </element>
+</database>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sysevent_register">
+    <sysevent_register action="INSERT_OR_UPDATE">
+        <caller_access/>
+        <description>Fired when an attachment is added to an issue record</description>
+        <event_name>x_momo_jira_integr.attachment.added</event_name>
+        <fired_by/>
+        <queue/>
+        <suffix>attachment.added</suffix>
+        <sys_class_name>sysevent_register</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-01-26 11:28:11</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>e2fea2c61b6a445048a242e58d4bcb6c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_momo_jira_integr.attachment.added</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sysevent_register_e2fea2c61b6a445048a242e58d4bcb6c</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-01-26 11:28:11</sys_updated_on>
+        <table/>
+    </sysevent_register>
+</record_update>

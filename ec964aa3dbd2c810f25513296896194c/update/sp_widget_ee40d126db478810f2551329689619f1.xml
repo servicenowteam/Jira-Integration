@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function ($scope, $window, $timeout) {
+  /* widget controller */
+  var c = this;
+  
+  $scope.ngModelOptions = {
+    debounce: {
+      default: 500,
+      blur: 0
+    }
+  };
+
+  $scope.searcher = undefined;
+
+  $scope.searchPlaceholder = $scope.data.placeholder || 'Search for an issue...';
+
+  $scope.onMouseOver = function($event) {
+    $event.stopPropagation();
+    $event.preventDefault();
+  };
+
+  $scope.goToIssue = function ($event, link) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $window.location.href = link;
+    
+  };
+
+  $scope.onSearchClose = function ($event) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    $timeout(function() {
+      $scope.dropdownOpened = false;
+      $scope.searcher = undefined;
+    }, 200);
+  };
+
+  $scope.$watch('searcher', function (val) {
+    if (!val) {
+      $scope.dropdownOpened = false;
+    } else if (val.length > 2 || (val.length > 1 && /[0-9]+/gi.test(val))) {
+      $scope.data.query = val;
+      $scope.data.limit = 5;
+      $scope.data.orderBy = "sys_created_on";
+      $scope.server.update().then(function (data) {
+        $scope.matches = data.matches;
+        $scope.dropdownOpened = true;
+      });
+    }
+  });
+
+  $scope.toggled = function (open) {
+    $scope.dropdownOpened = open;
+  };
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>::-webkit-scrollbar {&#13;
+  width: 0.2em;&#13;
+}&#13;
+&#13;
+::-webkit-scrollbar-track {&#13;
+  box-shadow: inset 0 0 0.5px rgba(0, 0, 0, 0.1);&#13;
+}&#13;
+&#13;
+::-webkit-scrollbar-thumb {&#13;
+  background-color: $brand-primary;&#13;
+  border-radius: 0.1em;&#13;
+  outline: 0.5px solid #eee;&#13;
+}&#13;
+&#13;
+ul.dropdown-menu {&#13;
+  min-width: 100%;&#13;
+  margin: 0px;&#13;
+  padding: 0px;&#13;
+}&#13;
+&#13;
+ul.dropdown-menu div.ta-item {&#13;
+  line-height: 20px;&#13;
+}&#13;
+&#13;
+ul.dropdown-menu i.ta-icon,&#13;
+i.ta-img {&#13;
+  width: 20px;&#13;
+  height: 20px;&#13;
+  background-size: contain;&#13;
+  display: inline-block;&#13;
+  background-repeat: no-repeat;&#13;
+  background-position: center center;&#13;
+  text-align: center;&#13;
+  line-height: 20px;&#13;
+  vertical-align: bottom;&#13;
+  margin-right: 8px;&#13;
+}&#13;
+&#13;
+.primary-display {&#13;
+  font-size: 17px;&#13;
+}&#13;
+&#13;
+.list-link {&#13;
+  color: black;&#13;
+}&#13;
+&#13;
+.list-link:hover,&#13;
+.list-link:active,&#13;
+.list-link:focus {&#13;
+  color: $brand-primary;&#13;
+}&#13;
+&#13;
+&#13;
+.list-group-item:not(:first-child) {&#13;
+  border-top: 1px solid #ccc;&#13;
+  border-bottom: 1px transparent;&#13;
+  border-left: 1px transparent;&#13;
+  border-right: 1px transparent;&#13;
+}&#13;
+&#13;
+.list-group-item:hover {&#13;
+  background: #FCFCFC;&#13;
+  cursor: pointer;&#13;
+}&#13;
+&#13;
+.list-group-item:first-child {&#13;
+  border: transparent;&#13;
+}&#13;
+&#13;
+.display-block {&#13;
+  display: block;&#13;
+  width: 100%;&#13;
+&#13;
+}&#13;
+&#13;
+.no-records {&#13;
+  display: inline-block;&#13;
+  text-align: center;&#13;
+  font-weight: 600;&#13;
+  width: 100%;&#13;
+  text-decoration: underline;&#13;
+}&#13;
+&#13;
+input[name="q"] {&#13;
+  color: black;&#13;
+&#13;
+}&#13;
+&#13;
+input[name="q"]:focus {&#13;
+  border: 1px solid $brand-primary;&#13;
+  box-shadow: 0px 0px 5px $brand-primary;&#13;
+  outline: none;&#13;
+}&#13;
+&#13;
+.dropdown-item-title {&#13;
+  color: rgba(0, 0, 0, 0.8);&#13;
+  font-weight: 700;&#13;
+  text-decoration: underline;&#13;
+&#13;
+  &amp;:hover {&#13;
+    color: $brand-primary;&#13;
+  }&#13;
+}&#13;
+&#13;
+.dropdown-item-details {&#13;
+  color: rgba(0, 0, 0, 0.6);&#13;
+  font-weight: 500;&#13;
+  white-space: wrap;&#13;
+}&#13;
+&#13;
+.jira-icon {&#13;
+  vertical-align: middle;&#13;
+  display: inline-flex;&#13;
+&#13;
+  &amp;.jira-icon-xs {&#13;
+    width: 20px;&#13;
+    height: 20px;&#13;
+  }&#13;
+}&#13;
+&#13;
+.btn-search {&#13;
+  background: #fff;&#13;
+  color: black;&#13;
+  border: 1px solid #ccc;&#13;
+  outline: none;&#13;
+  -webkit-transition: all .1s ease-out;&#13;
+  -moz-transition: all .1s ease-out;&#13;
+  -ms-transition: all .1s ease-out;&#13;
+  transition: all .1s ease-out;&#13;
+}&#13;
+&#13;
+&#13;
+.btn-search:active {&#13;
+  background: $brand-primary;&#13;
+  color: #fff;&#13;
+  outline: none;&#13;
+  border: 1px solid $brand-primary;&#13;
+  box-shadow: 0px 0px 5px $brand-primary;&#13;
+  -webkit-transition: all .1s ease-out;&#13;
+  -moz-transition: all .1s ease-out;&#13;
+  -ms-transition: all .1s ease-out;&#13;
+  transition: all .1s ease-out;&#13;
+}&#13;
+&#13;
+.btn-search:focus {&#13;
+  outline: none;&#13;
+  border: 1px solid $brand-primary;&#13;
+  box-shadow: 0px 0px 5px $brand-primary;&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>jira-search-input</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Jira Search Input</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.table = options.table || 'x_momo_jira_integr_issue';
+
+  if (input) {
+    data.matches = getSearchResults(data.table, input.query, input.limit, input.orderBy);
+  }
+
+  function createEncodedQuery(query) {
+    var url = [];
+    var baseQuery = 'active=true^external_idISNOTEMPTY';
+    if (!gs.hasRole('x_momo_jira_integr.issue_tech')) {
+      baseQuery += '^sys_created_by=' + gs.getUserName() + '^';
+    } else {
+      baseQuery += '^';
+    }
+
+    var QUERIES = [{
+      column: 'description',
+      operator: 'LIKE'
+    }, {
+      column: 'short_description',
+      operator: 'LIKE'
+    }, {
+      column: 'project.external_key',
+      operator: 'STARTSWITH'
+    }, {
+      column: 'external_key',
+      operator: 'STARTSWITH'
+    }, {
+      column: 'external_key',
+      or: true,
+      operator: 'ENDSWITH'
+    }];
+
+    for (var i in QUERIES) {
+      var field = QUERIES[i];
+
+      if (field.or) {
+        url.push(field.column + field.operator + query);
+      } else {
+        url.push(field.column + field.operator + query);
+      }
+    }
+
+    return baseQuery + url.join('^OR');
+  }
+
+  function getSearchResults(table, query, limit, orderBy) {
+    var matches = [];
+    var encodedQuery = createEncodedQuery(query);
+    data.url = encodedQuery;
+    var gr = new GlideRecord(table);
+    gr.setLimit(limit || 5);
+    gr.orderByDesc(orderBy);
+    gr.addEncodedQuery(encodedQuery);
+    gr.query();
+
+    while (gr.next()) {
+      matches.push({
+        sys_id: gr.getValue('sys_id'),
+        external_key: gr.getValue('external_key'),
+        short_description: gr.getValue('short_description'),
+        priority: {
+          name: gr.priority.name.toString(),
+          icon: gr.priority.icon.toString()
+        },
+        link: '?id=jira_issues_form&table=x_momo_jira_integr_issue&action=2&sys_id=' + gr.getValue('sys_id')
+      });
+    }
+    return matches;
+  }
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-21 14:22:25</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>ee40d126db478810f2551329689619f1</sys_id>
+        <sys_mod_count>70</sys_mod_count>
+        <sys_name>Jira Search Input</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_widget_ee40d126db478810f2551329689619f1</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-03-25 09:45:20</sys_updated_on>
+        <template><![CDATA[<form>
+  <input class="form-control" name="q" type="text" ng-model="searcher" ng-model-options="ngModelOptions"
+    autocomplete="off" role="textbox" ng-blur="onSearchClose($event)" placeholder="{{ searchPlaceholder }}" />
+</form>
+<div class="dropdown" ng-show="data.matches" uib-dropdown on-toggle="toggled(open)" is-open="dropdownOpened">
+  <ul class="dropdown-menu list-group list-group-flush" uib-dropdown-menu role="menu" id="jira-search-list"
+    aria-haspopup="true" aria-expanded="false">
+    <li class="list-group-item dropdown-item row" ng-if="data.matches.length > 0" ng-mouseover="onMouseOver($event)"
+      ng-repeat="match in data.matches track by $index" id="{{ match.sys_id }}" data-index="{{ match.sys_id }}"
+      role="menuitem" ng-click="goToIssue($event, match.link)">
+      <div class="col-md-10 col-xs-8 padder-l-sm padder-r-none">
+        <div class="row">
+          <div class="col-md-12 padder-l-none padder-r-none">
+            <span class="dropdown-item-title">{{ match.external_key }}</span>
+          </div>
+          <div class="col-md-12 padder-l-none padder-r-none">
+            <span class="dropdown-item-details">{{ match.short_description }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2 col-xs-3 padder-r-none padder-l-none">
+        <img ng-src="{{ match.priority.icon }}" alt="{{ match.priority.name }}" title="{{ match.priority.name }}"
+          class="jira-icon jira-icon-xs pull-right" />
+      </div>
+    </li>
+    <li class="list-group-item dropdown-item list-group-flush" ng-if="data.matches.length === 0" role="menuitem">
+      <span class="no-records">No records found</span>
+    </li>
+  </ul>
+</div>]]></template>
+    </sp_widget>
+</record_update>

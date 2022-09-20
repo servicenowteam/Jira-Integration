@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_angular_provider">
+    <sp_angular_provider action="INSERT_OR_UPDATE">
+        <name>jiraAttachmentHelper</name>
+        <script><![CDATA[function jiraAttachmentHelper(spModal, $http, spUtil) {
+
+  function TypesMap() {
+    this.extension = null;
+    this.contentType = null;
+    this.type = {
+      name: 'icon-document',
+      color: ''
+    };
+  }
+
+  TypesMap.prototype.types = Object.freeze({
+    pdf: {
+      name: 'icon-document-pdf',
+      color: 'red',
+      extensions: ['pdf'],
+      contentTypes: ['application/pdf']
+    },
+    image: {
+      image: true,
+      extensions: [
+        'jpg', 'jpeg', 'bmp',
+        'gif', 'tif', 'tiff',
+        'webp', 'png'
+      ],
+      contentTypes: [
+        'image/bmp',
+        'image/gif',
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/tiff',
+        'image/webp'
+      ]
+    },
+    word: {
+      name: 'icon-document-doc',
+      color: 'blue',
+      extensions: ['doc', 'docx', 'docm'],
+      contentTypes: [
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      ]
+    },
+    excel: {
+      name: 'icon-document-xls',
+      color: 'green',
+      extensions: ['xls', 'xlsx', 'csv', 'xlsm'],
+      contentTypes: [
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      ]
+    },
+    powerpoint: {
+      name: 'icon-document-ppt',
+      color: 'orange',
+      extensions: ['ppt', 'pptx', 'pptm'],
+      contentTypes: [
+        'application/vnd.ms-powerpoint',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+      ]
+    },
+    zip: {
+      name: 'icon-document-zip',
+      color: 'purple',
+      extensions: ['zip', 'gzip', 'rar', 'archive'],
+      contentTypes: [
+        'application/x-rar-compressed',
+        'application/zip',
+        'application/x-zip-compressed',
+        'multipart/x-zip'
+      ]
+    },
+    code: {
+      name: 'icon-document-code',
+      color: '',
+      extensions: [
+        'html', 'htm', 'hta',
+        'ts', 'js', 'ps1', 'java',
+        'jar', 'class', 'cs', 'c',
+        'cpp', 'h', 's', 'swift', 'vb',
+        'vbs', 'bat', 'cmd', 'py', 'pyc',
+        'pyb', 'vba', 'so'
+      ],
+      contentTypes: [
+        'text/html',
+        'application/html',
+        'application/xml',
+        'text/xml'
+      ]
+    }
+  });
+
+  TypesMap.prototype.setExtensionFromFilename = function (filename) {
+    var name = filename || '';
+    name = name.toLowerCase();
+    if (/\./gmi.test(name)) {
+      var arr = name.split('.');
+      this.extension = arr[arr.length - 1];
+    }
+  };
+
+  TypesMap.prototype.setContentType = function (contentType) {
+    this.contentType = contentType.toLowerCase();
+  };
+
+  TypesMap.prototype.getType = function () {
+    return this.type;
+  };
+
+  TypesMap.prototype.setType = function () {
+    var keys = Object.keys(this.types);
+
+    for (var k in keys) {
+      var key = keys[k];
+      var type = this.types[key];
+
+      if (this.contentType && type.contentTypes.includes(this.contentType)) {
+        this.type = type;
+        break;
+      }
+
+      if (this.extension && type.extensions.includes(this.extension)) {
+        this.type = type;
+        break;
+      }
+    }
+  };
+
+  function Icon(filename, contentType, attachmentId) {
+    this.icon = new TypesMap();
+    this.attachmentId = attachmentId;
+    this.icon.setContentType(contentType);
+    this.icon.setExtensionFromFilename(filename);
+    this.icon.setType();
+  }
+
+  Icon.prototype.toHtml = function () {
+    var icon = this.icon.getType();
+    var html = '<div class="jira-icon';
+    if (icon.image && this.attachmentId) {
+      html += ' jira-attachment-icon"><img class="img-responsive attachment-thumbnail" src="/sys_attachment.do?sys_id=' + this.attachmentId + '" />';
+    } else {
+      html += (icon.color ? ' jira-icon-' + icon.color : '') + '"><i class="' + icon.name + '"></i>';
+    }
+    html += '</div>';
+    return html;
+  };
+
+  Icon.prototype.toString = function () {
+    return this.icon.name;
+  };
+
+  Icon.prototype.get = function () {
+    if (this.url) {
+      var url = this.url;
+      return Object.assign({}, this.icon, {
+        url: url
+      });
+    }
+    return this.icon;
+  };
+
+
+
+
+  return {
+    createIcon: function (filename, contentType, attachmentId) {
+      var icon = new Icon(filename, contentType, attachmentId);
+      return icon;
+    },
+    isImage: function (filename, contentType) {
+      var map = new TypesMap();
+      map.setContentType(contentType);
+      map.setExtensionFromFilename(filename);
+      map.setType();
+      var type = map.getType();
+      return type.image ? true : false;
+    },
+    downloadAttachment: function (attachmentSysId, url) {
+      if (url) return url;
+      return '/sys_attachment.do?sys_id=' + attachmentSysId;
+    },
+    deleteAttachment: function (attachmentSysId, options) {
+      var opts = options || {};
+      if (opts.confirm) {
+        spModal.confirm('${Delete Attachment?}').then(function (confirmed) {
+          if (confirmed) {
+            $http({
+              method: 'DELETE',
+              url: '/api/now/attachment/' + attachmentSysId,
+              withCredentials: true
+            }).then(function (response) {}, function (error) {
+              spUtil.addErrorMessage('Error deleting attachment');
+            });
+          }
+        });
+      } else {
+        $http({
+          method: 'DELETE',
+          url: '/api/now/attachment/' + attachmentSysId,
+          withCredentials: true
+        }).then(function (response) {}, function (error) {
+          spUtil.addErrorMessage('Error deleting attachment');
+        });
+      }
+    }
+  };
+}]]></script>
+        <sys_class_name>sp_angular_provider</sys_class_name>
+        <sys_created_by>douglas.schamberg@movement.com</sys_created_by>
+        <sys_created_on>2020-07-18 12:03:58</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>7edbb68a1b8e5810f13655b61a4bcb17</sys_id>
+        <sys_mod_count>18</sys_mod_count>
+        <sys_name>jiraAttachmentHelper</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sp_angular_provider_7edbb68a1b8e5810f13655b61a4bcb17</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-07-18 15:11:02</sys_updated_on>
+        <type>factory</type>
+    </sp_angular_provider>
+</record_update>

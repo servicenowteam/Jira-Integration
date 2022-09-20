@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_relationship">
+    <sys_relationship action="DELETE">
+        <advanced>false</advanced>
+        <apply_to/>
+        <basic_apply_to>x_momo_jira_integr_issue</basic_apply_to>
+        <basic_query_from>x_momo_jira_integr_issue</basic_query_from>
+        <insert_callback/>
+        <name>Inward Linked Issues</name>
+        <query_from/>
+        <query_with><![CDATA[(function refineQuery(current, parent) {
+	parent.addEncodedQuery('linked_issuesIN' + current.sys_id.toString());
+})(current, parent);]]></query_with>
+        <reference_field>assigned_to</reference_field>
+        <related_list/>
+        <simple_reference>false</simple_reference>
+        <sys_class_name>sys_relationship</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-09 16:40:06</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>7e8c776a1b36c81048a242e58d4bcb4a</sys_id>
+        <sys_mod_count>16</sys_mod_count>
+        <sys_name>Inward Linked Issues</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_relationship_7e8c776a1b36c81048a242e58d4bcb4a</sys_update_name>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-09 17:35:29</sys_updated_on>
+    </sys_relationship>
+    <sys_translated_text action="DELETE" query="documentkey=7e8c776a1b36c81048a242e58d4bcb4a"/>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</application>
+        <file_path/>
+        <instance_id>94e8281edbb7470060a6f0e5bf9619f6</instance_id>
+        <instance_name>movementdev</instance_name>
+        <name>sys_relationship_7e8c776a1b36c81048a242e58d4bcb4a</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_relationship"&gt;&lt;sys_relationship action="INSERT_OR_UPDATE"&gt;&lt;advanced&gt;false&lt;/advanced&gt;&lt;apply_to/&gt;&lt;basic_apply_to&gt;x_momo_jira_integr_issue&lt;/basic_apply_to&gt;&lt;basic_query_from&gt;x_momo_jira_integr_issue&lt;/basic_query_from&gt;&lt;insert_callback/&gt;&lt;name&gt;Inward Linked Issues&lt;/name&gt;&lt;query_from/&gt;&lt;query_with&gt;&lt;![CDATA[(function refineQuery(current, parent) {
+	parent.addEncodedQuery('linked_issuesIN' + current.sys_id.toString());
+})(current, parent);]]&gt;&lt;/query_with&gt;&lt;reference_field&gt;assigned_to&lt;/reference_field&gt;&lt;related_list/&gt;&lt;simple_reference&gt;false&lt;/simple_reference&gt;&lt;sys_class_name&gt;sys_relationship&lt;/sys_class_name&gt;&lt;sys_created_by&gt;douglas.schamberg&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2020-02-09 16:40:06&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;false&lt;/sys_customer_update&gt;&lt;sys_id&gt;7e8c776a1b36c81048a242e58d4bcb4a&lt;/sys_id&gt;&lt;sys_mod_count&gt;16&lt;/sys_mod_count&gt;&lt;sys_name&gt;Inward Linked Issues&lt;/sys_name&gt;&lt;sys_package display_value="Jira Integration" source="x_momo_jira_integr"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Jira Integration"&gt;ec964aa3dbd2c810f25513296896194c&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_relationship_7e8c776a1b36c81048a242e58d4bcb4a&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;douglas.schamberg&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-02-09 17:35:29&lt;/sys_updated_on&gt;&lt;/sys_relationship&gt;&lt;sys_translated_text action="delete_multiple" query="documentkey=7e8c776a1b36c81048a242e58d4bcb4a"/&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>1542801961</payload_hash>
+        <record_name>Inward Linked Issues</record_name>
+        <reverted_from/>
+        <source>e4964aa3dbd2c810f25513296896194f</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-09 17:35:29</sys_created_on>
+        <sys_id>3169ccf61b76c81048a242e58d4bcbb8</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1702b0540cb0000001</sys_recorded_at>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-09 17:35:29</sys_updated_on>
+        <type>Relationship</type>
+        <update_guid>f569ccf65176c8101043d5b61bbbb6b7</update_guid>
+        <update_guid_history>f569ccf65176c8101043d5b61bbbb6b7:1542801961,e3c00cbe7036c810dc6c6d47ab51b723:-414293720,8cb08c7efb36c8105e2ecf6fa2c27b16:-683554307,09708c7e5936c810da1edf19ab337b11:-253334517,73204c7e3b36c810e58ac0484060b5e9:1002970959,85ff3b6e7836c8101065118ec3d3e2e5:1270961090,7ceff36e3436c810e8c78fd4d6c9980b:-517729695,22af3f2e9536c81013124d38edb912ea:-173796988,76fe3f6a5a36c810649ca73d60dd833d:-27419363,0ace7feaa136c8101f23e82c8cb0151d:86097693,75aeff6a6036c8101ac366de6ee7668b:-517729695,5addb3aa1336c810a945d6d783fde5c0:-1337051020,43bdbbaa5536c8106d79e170ef049ae7:-450539218,912d372a4b36c810917fbc31fd56c5c6:-372308805,1abc7f2a7436c810674308229165289d:-2070149444</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-13 09:06:55</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_db_object display_value="" name="sys_relationship">sys_relationship</sys_db_object>
+        <sys_id>8cc15ada97aa4434a093647b9ec62311</sys_id>
+        <sys_metadata>7e8c776a1b36c81048a242e58d4bcb4a</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Inward Linked Issues</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_parent display_value="">452d16f7db1a0c10f255132968961945</sys_parent>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_scope_delete display_value="">8ead14e9a7a04eb2a355afeaa4c6cb24</sys_scope_delete>
+        <sys_update_name>sys_relationship_7e8c776a1b36c81048a242e58d4bcb4a</sys_update_name>
+        <sys_update_version display_value="sys_relationship_7e8c776a1b36c81048a242e58d4bcb4a">3169ccf61b76c81048a242e58d4bcbb8</sys_update_version>
+        <sys_updated_by>douglas.schamberg</sys_updated_by>
+        <sys_updated_on>2020-02-13 09:06:55</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_momo_jira_integr.JiraStringUtils</api_name>
+        <caller_access>2</caller_access>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>JiraStringUtils</name>
+        <script><![CDATA[var JiraStringUtils = Class.create();
+JiraStringUtils.prototype = {
+  text: null,
+  initialize: function (text) {
+    this.text = text;
+  },
+  toMarkdown: function() {
+    if (!this.text) return this;
+  },
+  toHTML: function() {
+    if (!this.text) return this;
+  },
+  toPlainText: function (text) {
+    if (!this.text && !text) return this;
+    if (text) {
+      this.text = this._replaceToPlainText(text);
+    } else {
+      this.text = this._replaceToPlainText(this.text);
+    }
+    
+    return this;
+  },
+  getText: function(cb) {
+    if (!cb) return this.text;
+    if (typeof cb !== 'function') return this.text;
+    return cb.bind(this, this.text);
+  },
+  _replaceToPlainText: function(text) {
+    return text
+    .replace(/^[ \t]*(\*+)\s+/gm, function (match, stars) {
+      return Array(stars.length).join("  ");
+    })
+    // Un-ordered lists
+    .replace(/^[ \t]*(#+)\s+/gm, function (match, nums) {
+      return Array(nums.length).join("  ");
+    })
+    // Headers 1-6
+    .replace(/^h([0-6])\.(.*)$/gm, function (match, level, content) {
+      return content;
+    })
+    // Bold
+    .replace(/\*(\S.*)\*/g, '$1')
+    // Italic
+    .replace(/\_(\S.*)\_/g, '$1')
+    // Monospaced text
+    .replace(/\{\{([^}]+)\}\}/g, '$1')
+    // Inserts
+    .replace(/\+([^+]*)\+/g, '$1')
+    // Superscript
+    .replace(/\^([^^]*)\^/g, '$1')
+    // Subscript
+    .replace(/~([^~]*)~/g, '$1')
+    // Strikethrough
+    .replace(/(\s+)-(\S+.*?\S)-(\s+)/g, '$2')
+    // Code Block
+    .replace(/\{code(:([a-z]+))?([:|]?(title|borderStyle|borderColor|borderWidth|bgColor|titleBGColor)=.+?)*\}([^]*)\{code\}/gm, '$5')
+    // Pre-formatted text
+    .replace(/{noformat}/g, '')
+    // Un-named Links
+    .replace(/\[([^|]+)\]/g, '$1')
+    // Images
+    .replace(/!(.+)!/g, '$1')
+    // Named Links
+    .replace(/\[(.+?)\|(.+)\]/g, '$2')
+    // Single Paragraph Blockquote
+    .replace(/^bq\.\s+/gm, '')
+    // Remove color: unsupported in md
+    .replace(/\{color:[^}]+\}([^]*)\{color\}/gm, '$1')
+    // panel into table
+    .replace(/\{panel:title=([^}]*)\}\n?([^]*?)\n?\{panel\}/gm, '')
+    // table header
+    .replace(/^[ \t]*((?:\|\|.*?)+\|\|)[ \t]*$/gm, '')
+    .replace(/\{quote(:([a-z]+))?([:|]?(title|borderStyle|borderColor|borderWidth|bgColor|titleBGColor)=.+?)*\}(?:[\n]+)([^]*)\{quote\}/gmi, '$5')
+    .replace(/\{quote(:([a-z]+))?([:|]?(title|borderStyle|borderColor|borderWidth|bgColor|titleBGColor)=.+?)*\}([^]*)\{quote\}/gmi, '$5')
+    // remove leading-space of table headers and rows
+    .replace(/^[ \t]*\|/gm, '');
+  },
+  type: 'JiraStringUtils'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>douglas.schamberg</sys_created_by>
+        <sys_created_on>2020-02-22 12:01:44</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>9e99f5761b4f881048a242e58d4bcb64</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>JiraStringUtils</sys_name>
+        <sys_package display_value="Jira Integration" source="x_momo_jira_integr">ec964aa3dbd2c810f25513296896194c</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Jira Integration">ec964aa3dbd2c810f25513296896194c</sys_scope>
+        <sys_update_name>sys_script_include_9e99f5761b4f881048a242e58d4bcb64</sys_update_name>
+        <sys_updated_by>douglas.schamberg@movement.com</sys_updated_by>
+        <sys_updated_on>2020-02-22 12:50:23</sys_updated_on>
+    </sys_script_include>
+</record_update>
